@@ -62,8 +62,11 @@ public:
 	virtual bool				Trace( aasTrace_t& trace, const idVec3& start, const idVec3& end ) const;
 	virtual void				PrintInfo() const;
 // jmarshall
-	virtual bool				HasNewFeatures() const { return hasNewFeatures; }
-	float						GetFloorDistance(int areaNum, const idPlane& floorPlane, const idVec3& point, const float bboxHeight, const float maxEdgeDist);
+	virtual bool				HasNewFeatures() const
+	{
+		return hasNewFeatures;
+	}
+	float						GetFloorDistance( int areaNum, const idPlane& floorPlane, const idVec3& point, const float bboxHeight, const float maxEdgeDist );
 // jmarshall end
 public:
 	bool						Load( const idStr& fileName, unsigned int mapFileCRC );

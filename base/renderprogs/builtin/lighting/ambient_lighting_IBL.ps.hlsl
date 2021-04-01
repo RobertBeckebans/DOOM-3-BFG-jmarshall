@@ -149,7 +149,8 @@ void main( PS_IN fragment, out PS_OUT result )
 	//float2 screenTexCoord = vposToScreenPosTexCoord( fragment.position.xy );
 	float2 screenTexCoord = fragment.position.xy * rpWindowCoord.xy;
 
-	float ao = tex2D( samp4, screenTexCoord ).r;
+	float ao = 1.0;
+	ao = tex2D( samp4, screenTexCoord ).r;
 	//diffuseColor.rgb *= ao;
 
 	// evaluate diffuse IBL

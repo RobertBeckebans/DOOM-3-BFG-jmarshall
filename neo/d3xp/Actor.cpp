@@ -2551,19 +2551,20 @@ void idActor::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir
 		gameLocal.Error( "Unknown damageDef '%s'", damageDefName );
 		return;
 	}
-// jmarshall - added min/max damage support. 
+// jmarshall - added min/max damage support.
 	//int	damage = damageDef->GetInt( "damage" ) * damageScale;
-	int minDamage = damageDef->GetInt("minDamage", "-1");
-	int maxDamage = damageDef->GetInt("maxDamage", "-1");
+	int minDamage = damageDef->GetInt( "minDamage", "-1" );
+	int maxDamage = damageDef->GetInt( "maxDamage", "-1" );
 	int damage = -1;
-	if (minDamage == -1 || maxDamage == -1) {
-		int damageBase = damageDef->GetInt("damage");
-		minDamage = damageBase - (damageBase * 0.2f);
-		maxDamage = damageBase + (damageBase * 0.2f);
+	if( minDamage == -1 || maxDamage == -1 )
+	{
+		int damageBase = damageDef->GetInt( "damage" );
+		minDamage = damageBase - ( damageBase * 0.2f );
+		maxDamage = damageBase + ( damageBase * 0.2f );
 	}
 
-	damage = rvRandom::irand(minDamage, maxDamage) * damageScale;
-// jmarshall 
+	damage = rvRandom::irand( minDamage, maxDamage ) * damageScale;
+// jmarshall
 	damage = GetDamageForLocation( damage, location );
 
 	// inform the attacker that they hit someone

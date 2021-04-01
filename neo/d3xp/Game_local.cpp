@@ -6485,7 +6485,7 @@ void idGameLocal::AlertBots( idPlayer* player, idVec3 alert_position )
 		if( tr.fraction == 1.0f )
 		{
 			bot->SetEnemy( player, player->GetOrigin() );
-		}		
+		}
 	}
 }
 // jmarshall end

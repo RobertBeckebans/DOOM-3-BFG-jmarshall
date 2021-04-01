@@ -11,7 +11,7 @@
 rvmBot::state_Chase
 =====================
 */
-stateResult_t rvmBot::state_Chase(stateParms_t* parms)
+stateResult_t rvmBot::state_Chase( stateParms_t* parms )
 {
 	bot_goal_t goal;
 	idVec3 target, dir;
@@ -32,14 +32,14 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 	// respawn if dead.
 	if( BotIsDead( &bs ) )
 	{
-		stateThread.SetState("state_Respawn");
+		stateThread.SetState( "state_Respawn" );
 		return SRESULT_DONE_FRAME;
 	}
 
 	//if no enemy
 	if( bs.enemy < 0 )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -47,7 +47,7 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 	if( BotEntityVisibleTest( bs.entitynum, bs.eye, bs.viewangles, 360, bs.enemy, false ) )
 	{
 		//AIEnter_Battle_Fight(bs, "battle chase");
-		stateThread.SetState("state_BattleFight");
+		stateThread.SetState( "state_BattleFight" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -56,7 +56,7 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 	{
 		//AIEnter_Battle_Fight(bs, "battle chase: better enemy");
 		//stateThread.SetState("state_BattleFight");
-		stateThread.SetState("state_BattleFight");
+		stateThread.SetState( "state_BattleFight" );
 		return SRESULT_DONE_FRAME;
 	}
 	////there is no last enemy area
@@ -97,7 +97,7 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 		if( trace.fraction <= 0.9f )
 		{
 			//AIEnter_Seek_LTG(bs, "can't see last enemy position");
-			stateThread.SetState("state_SeekLTG");
+			stateThread.SetState( "state_SeekLTG" );
 			return SRESULT_DONE_FRAME;
 		}
 	}
@@ -114,7 +114,7 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 	if( !bs.chase_time || bs.chase_time < Bot_Time() - 10 )
 	{
 		//AIEnter_Seek_LTG(bs, "battle chase: time out");
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 	//check for nearby goals periodicly
@@ -129,7 +129,7 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 			bs.nbg_time = Bot_Time() + 0.1 * range + 1;
 			//BotResetLastAvoidReach(bs.ms);
 			//AIEnter_Battle_NBG(bs, "battle chase: nbg");
-			stateThread.SetState("state_BattleNBG");
+			stateThread.SetState( "state_BattleNBG" );
 			return SRESULT_DONE_FRAME;
 		}
 	}
@@ -186,10 +186,10 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 //		bs.ideal_viewangles[2] *= 0.5; // jmarshall <-- view angles!
 	}
 
-	if (BotEntityVisible(bs.entitynum, bs.eye, bs.viewangles, 360, bs.enemy))
+	if( BotEntityVisible( bs.entitynum, bs.eye, bs.viewangles, 360, bs.enemy ) )
 	{
 		//attack the enemy if possible
-		BotCheckAttack(&bs);
+		BotCheckAttack( &bs );
 	}
 
 	//if the weapon is used for the bot movement
@@ -200,7 +200,7 @@ stateResult_t rvmBot::state_Chase(stateParms_t* parms)
 	if( BotWantsToRetreat( &bs ) )
 	{
 		//AIEnter_Battle_Retreat(bs, "battle chase: wants to retreat");
-		stateThread.SetState("state_Retreat");
+		stateThread.SetState( "state_Retreat" );
 		return SRESULT_DONE_FRAME;
 	}
 

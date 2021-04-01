@@ -130,8 +130,11 @@ public:
 // jmarshall end
 
 // jmarshall
-	virtual idAASFile*			GetAASFile(void) { return file; }
-	virtual void				DrawArea(int areaNum) const;
+	virtual idAASFile*			GetAASFile( void )
+	{
+		return file;
+	}
+	virtual void				DrawArea( int areaNum ) const;
 // jmarshall end
 private:
 	idAASFile* 					file;

@@ -68,7 +68,7 @@ bot_character_t* idBotCharacterStatsManager::AllocBotCharacter( void )
 		*ch = *default_char_profile;
 	}
 
-	
+
 
 	return ch;
 }
@@ -101,7 +101,7 @@ bot_character_t* idBotCharacterStatsManager::BotLoadCharacterFromFile( const cha
 	// Check to see if we already loaded this bot file.
 	for( int i = 0; i < MAX_CHAR_STATS; i++ )
 	{
-		if(charStatsList[i].inUse && charStatsList[i].filename == charfile )
+		if( charStatsList[i].inUse && charStatsList[i].filename == charfile )
 		{
 			return &charStatsList[i];
 		}

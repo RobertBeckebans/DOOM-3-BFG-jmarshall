@@ -234,7 +234,7 @@ void idMultiplayerGame::SpawnPlayer( int clientNum )
 			p->tourneyRank++;
 		}
 // jmarshall
-		p->netname = lobby.GetLobbyUserName(lobbyUserID);
+		p->netname = lobby.GetLobbyUserName( lobbyUserID );
 // jmarshall end
 	}
 
@@ -470,31 +470,31 @@ void idMultiplayerGame::UpdatePlayerRanks()
 		}
 	}
 
-	if (common->IsServer())
+	if( common->IsServer() )
 	{
-		if ((si_fragLimit.GetInteger() - leadFragCount) == killsRemainingMessageState)
+		if( ( si_fragLimit.GetInteger() - leadFragCount ) == killsRemainingMessageState )
 		{
-			for (j = 0; j < gameLocal.numClients; j++)
+			for( j = 0; j < gameLocal.numClients; j++ )
 			{
-				if (playerStateSorted[j] == NULL)
+				if( playerStateSorted[j] == NULL )
 				{
 					continue;
 				}
 
-				if (!clientFeedbackList[j])
+				if( !clientFeedbackList[j] )
 				{
-					switch (killsRemainingMessageState)
+					switch( killsRemainingMessageState )
 					{
 						case 3:
-							PlayGlobalSound(playerStateSorted[j]->clientnum, SND_THREEFRAG, NULL);
+							PlayGlobalSound( playerStateSorted[j]->clientnum, SND_THREEFRAG, NULL );
 							break;
 
 						case 2:
-							PlayGlobalSound(playerStateSorted[j]->clientnum, SND_TWOFRAG, NULL);
+							PlayGlobalSound( playerStateSorted[j]->clientnum, SND_TWOFRAG, NULL );
 							break;
 
 						case 1:
-							PlayGlobalSound(playerStateSorted[j]->clientnum, SND_ONEFRAG, NULL);
+							PlayGlobalSound( playerStateSorted[j]->clientnum, SND_ONEFRAG, NULL );
 							break;
 					}
 				}
@@ -1581,7 +1581,7 @@ void idMultiplayerGame::NewState( gameState_t news, idPlayer* player )
 			outMsg.WriteLong( warmupEndTime );
 			session->GetActingGameStateLobbyBase().SendReliable( GAME_RELIABLE_MESSAGE_WARMUPTIME, outMsg, false );
 // jmarshall
-			PlayGlobalSound(-1, SND_PREPAREFORBATTLE);
+			PlayGlobalSound( -1, SND_PREPAREFORBATTLE );
 // jmarshall end
 			// Reset all the scores.
 			for( i = 0; i < gameLocal.numClients; i++ )

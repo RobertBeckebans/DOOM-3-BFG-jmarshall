@@ -4,23 +4,26 @@
 #include "precompiled.h"
 #include "../Game_local.h"
 
-const char *bot_kill_insult[] = {
+const char* bot_kill_insult[] =
+{
 	"%s: Try aiming next time %s",
 	"%s: Trust me when I say this %s, you suck.",
 	"%s: Maybe you should go back to go cart racing %s?",
 	"%s: Your technique reminds me of a story %s, a very dull one."
 };
 
-const char* bot_death_insult[] = {
+const char* bot_death_insult[] =
+{
 	"%s: Mmmmmmm. Was it good for you too %s?",
-	"%s: Well I guess %s won the lottery.",	
+	"%s: Well I guess %s won the lottery.",
 	"%s: My mother fragged me once %s. Once.",
 	"%s: I'm gonna pull out your bowels %s",
 	"%s: Beginners luck %s... Again",
 	"%s: So %s... you're up to what ... 3 frags an hour?"
 };
 
-const char* bot_death_praise[] = {
+const char* bot_death_praise[] =
+{
 	"%s: %s not bad for an amateur.",
 	"%s: %s alright that was pretty good. Your still a dousche.",
 	"%s: That was definitely ... um ... pretty good %s",
@@ -34,20 +37,21 @@ const char* bot_death_praise[] = {
 rvmBot::BotSendChatMessage
 ====================
 */
-void rvmBot::BotSendChatMessage(botChat_t chat, const char* targetName) {
-	switch (chat)
+void rvmBot::BotSendChatMessage( botChat_t chat, const char* targetName )
+{
+	switch( chat )
 	{
 		case KILL:
-			gameLocal.mpGame.AddChatLine(bot_kill_insult[rvRandom::irand(0, 3)], netname.c_str(), targetName);
+			gameLocal.mpGame.AddChatLine( bot_kill_insult[rvRandom::irand( 0, 3 )], netname.c_str(), targetName );
 			break;
 		case DEATH:
-			if (rvRandom::irand(0, 10) < 5)
+			if( rvRandom::irand( 0, 10 ) < 5 )
 			{
-				gameLocal.mpGame.AddChatLine(bot_death_insult[rvRandom::irand(0, 5)], netname.c_str(), targetName);
+				gameLocal.mpGame.AddChatLine( bot_death_insult[rvRandom::irand( 0, 5 )], netname.c_str(), targetName );
 			}
 			else
 			{
-				gameLocal.mpGame.AddChatLine(bot_death_praise[rvRandom::irand(0, 5)], netname.c_str(), targetName);
+				gameLocal.mpGame.AddChatLine( bot_death_praise[rvRandom::irand( 0, 5 )], netname.c_str(), targetName );
 			}
 			break;
 	}

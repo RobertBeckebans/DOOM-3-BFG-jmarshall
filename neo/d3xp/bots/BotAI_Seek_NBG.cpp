@@ -10,7 +10,7 @@
 rvmBot::state_SeekNBG
 =====================
 */
-stateResult_t rvmBot::state_SeekNBG(stateParms_t* parms)
+stateResult_t rvmBot::state_SeekNBG( stateParms_t* parms )
 {
 	bot_goal_t goal;
 	idVec3 target, dir;
@@ -29,7 +29,7 @@ stateResult_t rvmBot::state_SeekNBG(stateParms_t* parms)
 	// respawn if dead.
 	if( BotIsDead( &bs ) )
 	{
-		stateThread.SetState("state_Respawn");
+		stateThread.SetState( "state_Respawn" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -66,7 +66,7 @@ stateResult_t rvmBot::state_SeekNBG(stateParms_t* parms)
 		bs.check_time = Bot_Time() + 0.05;
 		//go back to seek ltg
 //		AIEnter_Seek_LTG(bs, "seek nbg: time out");
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -124,7 +124,7 @@ stateResult_t rvmBot::state_SeekNBG(stateParms_t* parms)
 		{
 			//keep the current long term goal and retreat
 			//AIEnter_Battle_NBG(bs, "seek nbg: found enemy");
-			stateThread.SetState("state_BattleNBG");
+			stateThread.SetState( "state_BattleNBG" );
 			return SRESULT_DONE_FRAME;
 		}
 		else
@@ -134,7 +134,7 @@ stateResult_t rvmBot::state_SeekNBG(stateParms_t* parms)
 			botGoalManager.BotEmptyGoalStack( bs.gs );
 			//go fight
 			//AIEnter_Battle_Fight(bs, "seek nbg: found enemy");
-			stateThread.SetState("state_BattleFight");
+			stateThread.SetState( "state_BattleFight" );
 			return SRESULT_DONE_FRAME;
 		}
 	}

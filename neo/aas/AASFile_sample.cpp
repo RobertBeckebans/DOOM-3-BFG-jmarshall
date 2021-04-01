@@ -698,7 +698,8 @@ idAASFileLocal::GetFloorDistance
 */
 
 // jmarshall
-float idAASFileLocal::GetFloorDistance(int areaNum, const idPlane& floorPlane, const idVec3& point, const float bboxHeight, const float maxEdgeDist) {
+float idAASFileLocal::GetFloorDistance( int areaNum, const idPlane& floorPlane, const idVec3& point, const float bboxHeight, const float maxEdgeDist )
+{
 	aasArea_t* area;
 	float distc, distd, diste, floorDist;
 	float result;
@@ -707,28 +708,28 @@ float idAASFileLocal::GetFloorDistance(int areaNum, const idPlane& floorPlane, c
 	aasIndex_t* edgeIndex;
 
 	area = &areas[areaNum];
-	
+
 	distc = floorPlane[0] * point.x + floorPlane[1] * point.y + floorPlane[2] * point.z;
-	distd = fabs(distc);
+	distd = fabs( distc );
 	diste = settings.invGravityDir.y * floorPlane[1] + floorPlane[0] * settings.invGravityDir.x + settings.invGravityDir.z * floorPlane[2];
 	floorDist = distd / diste;
 
 	result = floorDist;
-	if (bboxHeight <= floorDist)
+	if( bboxHeight <= floorDist )
 	{
 		bestEdgeDistSqr = 1.0e30;
 
-		if (area->numEdges > 0)
+		if( area->numEdges > 0 )
 		{
 			edgeIndex = &edgeIndex[area->firstEdge];
-			for (int i = 0; i < area->numEdges; i++, edgeIndex++)
+			for( int i = 0; i < area->numEdges; i++, edgeIndex++ )
 			{
 				int id;
 				aasEdge_t* edge;
 				aasVertex_t vertex, vertex2;
 				aasVertex_t edgeDir;
-			
-				id = abs(*edgeIndex);
+
+				id = abs( *edgeIndex );
 				edge = &edges[id];
 				vertex = vertices[edge->vertexNum[1]];
 				vertex2 = vertices[edge->vertexNum[0]];
@@ -742,7 +743,8 @@ float idAASFileLocal::GetFloorDistance(int areaNum, const idPlane& floorPlane, c
 				float dist;
 				dist = localProjection.x * localProjection.x + edgeDir[2] * edgeDir[2] + edgeDir[1] + edgeDir[1];
 
-				if (dist > 0.1) {
+				if( dist > 0.1 )
+				{
 					idVec3 localPoint;
 
 					localPoint.y = point.x - vertex2.x;
@@ -754,7 +756,7 @@ float idAASFileLocal::GetFloorDistance(int areaNum, const idPlane& floorPlane, c
 					float dista;
 
 					dista = localPoint.x / dist;
-					dista = idMath::ClampFloat(0.0, 1.0f, dista);
+					dista = idMath::ClampFloat( 0.0, 1.0f, dista );
 
 					localProjection.y = edgeDir.y * dista;
 					localProjection.z = edgeDir.z * dista;
@@ -766,9 +768,9 @@ float idAASFileLocal::GetFloorDistance(int areaNum, const idPlane& floorPlane, c
 
 					bestDelta = edgeDir - delta;
 					float distf;
-					
+
 					distf = bestDelta.x * bestDelta.x + delta.z * delta.z + delta.y * delta.y;
-					if (bestEdgeDistSqr > (double)distf)
+					if( bestEdgeDistSqr > ( double )distf )
 					{
 						bestEdgeDistSqr = bestDelta * bestDelta + delta.z * delta.z + delta.y * delta.y;
 						bestDelta.y = localPoint.y - localProjection.y;
@@ -781,12 +783,12 @@ float idAASFileLocal::GetFloorDistance(int areaNum, const idPlane& floorPlane, c
 
 		float distg = maxEdgeDist * maxEdgeDist;
 		float disth = this->settings.invGravityDir.y * bestDelta.z
-					+ this->settings.invGravityDir.x * bestDelta.y
-					+ this->settings.invGravityDir.z * bestDelta.x;
+					  + this->settings.invGravityDir.x * bestDelta.y
+					  + this->settings.invGravityDir.z * bestDelta.x;
 
-		float distb = fabs(disth);
+		float distb = fabs( disth );
 
-		if (distb >= result)
+		if( distb >= result )
 		{
 			result = floorDist;
 		}

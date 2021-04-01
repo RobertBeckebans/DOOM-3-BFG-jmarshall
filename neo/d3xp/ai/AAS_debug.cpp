@@ -178,8 +178,9 @@ void idAASLocal::DrawArea( int areaNum ) const
 		return;
 	}
 
-	if (!file->HasNewFeatures()) {
-		idLib::Warning("idAASLocal::DrawArea requires new features!\n");
+	if( !file->HasNewFeatures() )
+	{
+		idLib::Warning( "idAASLocal::DrawArea requires new features!\n" );
 		return;
 	}
 
@@ -189,7 +190,7 @@ void idAASLocal::DrawArea( int areaNum ) const
 
 	for( i = 0; i < numEdges; i++ )
 	{
-		DrawEdge(abs(file->GetEdgeIndex(firstEdge + i)), false);
+		DrawEdge( abs( file->GetEdgeIndex( firstEdge + i ) ), false );
 	}
 // jmarshall end
 }

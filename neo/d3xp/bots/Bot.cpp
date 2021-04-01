@@ -9,7 +9,7 @@ idCVar bot_goaldist( "bot_goaldist", "20", CVAR_INTEGER | CVAR_CHEAT, "" );
 idCVar bot_debugnav( "bot_debugnav", "0", CVAR_BOOL | CVAR_CHEAT, "draws navmesh paths for the bot" );
 idCVar bot_showstate( "bot_showstate", "0", CVAR_BOOL | CVAR_CHEAT, "draws the bot state above the bot" );
 idCVar bot_debug( "bot_debug", "0", CVAR_BOOL, "shows debug info for the bot" );
-idCVar bot_skill("bot_skill", "3", CVAR_INTEGER, "");
+idCVar bot_skill( "bot_skill", "3", CVAR_INTEGER, "" );
 
 CLASS_DECLARATION( idPlayer, rvmBot )
 END_CLASS
@@ -41,15 +41,15 @@ rvmBot::~rvmBot()
 rvmBot::SetEnemy
 ==================
 */
-void rvmBot::SetEnemy( idPlayer* player, idVec3 origin)
+void rvmBot::SetEnemy( idPlayer* player, idVec3 origin )
 {
-	if(bs.enemy == -1)
+	if( bs.enemy == -1 )
 	{
 		bs.enemy = player->entityNumber;
 		bs.aggressiveAttackTime = gameLocal.SysScriptTime() + 2.0f;
 		bs.lastenemyorigin = origin;
 		//bs.action = &botAIBattleRetreat;
-		stateThread.SetState("state_Attacked");
+		stateThread.SetState( "state_Attacked" );
 	}
 }
 
@@ -104,7 +104,7 @@ void rvmBot::Spawn( void )
 	char filename[256];
 	int errnum;
 
-	stateThread.SetOwner(this);
+	stateThread.SetOwner( this );
 
 	idPlayer::Spawn();
 
@@ -171,7 +171,7 @@ void rvmBot::Spawn( void )
 
 		bs.botinput.respawn = true;
 
-		stateThread.SetState("state_Respawn");
+		stateThread.SetState( "state_Respawn" );
 	}
 }
 
@@ -180,19 +180,19 @@ void rvmBot::Spawn( void )
 rvmBot::Think
 ===================
 */
-void rvmBot::BotMoveToGoalOrigin(idVec3 goalOrigin)
+void rvmBot::BotMoveToGoalOrigin( idVec3 goalOrigin )
 {
-	bs.botinput.dir = (goalOrigin - firstPersonViewOrigin);
+	bs.botinput.dir = ( goalOrigin - firstPersonViewOrigin );
 	idAngles desiredAngles = bs.botinput.dir.ToAngles();
 	if( bs.enemy >= 0 )
 	{
 		idPlayer* enemy = gameLocal.entities[bs.enemy]->Cast<idPlayer>();
 		if( enemy )
-		{			
-			desiredAngles = (enemy->firstPersonViewOrigin - firstPersonViewOrigin).ToAngles();
-		}		
+		{
+			desiredAngles = ( enemy->firstPersonViewOrigin - firstPersonViewOrigin ).ToAngles();
+		}
 	}
-	
+
 	bs.botinput.viewangles = desiredAngles;
 
 	bs.botinput.speed = pm_runspeed.GetInteger();
@@ -212,7 +212,7 @@ void rvmBot::SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_ang
 	if( common->IsServer() )
 	{
 		bs.ltg_time = 0;
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 	}
 }
 /*
@@ -220,7 +220,8 @@ void rvmBot::SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_ang
 rvmBot::StateThreadChanged
 ===================
 */
-void rvmBot::StateThreadChanged(void) {
+void rvmBot::StateThreadChanged( void )
+{
 	// Ensure if we are switching states, pop the last goal.
 	bs.ltg_time = 0;
 }
@@ -262,29 +263,29 @@ void rvmBot::ServerThink( void )
 
 	if( bot_debug.GetBool() )
 	{
-		if (bs.useRandomPosition)
+		if( bs.useRandomPosition )
 		{
-			aas->ShowWalkPath(GetOrigin(), goalArea, bs.random_move_position);
+			aas->ShowWalkPath( GetOrigin(), goalArea, bs.random_move_position );
 		}
 		else
 		{
-			aas->ShowWalkPath(GetOrigin(), goalArea, bs.currentGoal.origin);
+			aas->ShowWalkPath( GetOrigin(), goalArea, bs.currentGoal.origin );
 		}
 
 		aas->ShowArea( GetOrigin() );
 	}
 
-	if (bs.useRandomPosition)
+	if( bs.useRandomPosition )
 	{
-		aas->WalkPathToGoal(path, curAreaNum, org, goalArea, bs.random_move_position, TFL_WALK | TFL_AIR);
+		aas->WalkPathToGoal( path, curAreaNum, org, goalArea, bs.random_move_position, TFL_WALK | TFL_AIR );
 	}
 	else
 	{
-		aas->WalkPathToGoal(path, curAreaNum, org, goalArea, bs.currentGoal.origin, TFL_WALK | TFL_AIR);
+		aas->WalkPathToGoal( path, curAreaNum, org, goalArea, bs.currentGoal.origin, TFL_WALK | TFL_AIR );
 	}
-	
+
 	idVec3 moveGoal = path.moveGoal;
-	BotMoveToGoalOrigin(path.moveGoal);
+	BotMoveToGoalOrigin( path.moveGoal );
 
 	bs.viewangles = bs.botinput.viewangles;
 
@@ -303,20 +304,21 @@ void rvmBot::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir,
 	idPlayer::Damage( inflictor, attacker, dir, damageDefName, damageScale, location );
 
 	idPlayer* player = attacker->Cast<idPlayer>();
-	if (health <= 0)
-	{		
-		if (player)
+	if( health <= 0 )
+	{
+		if( player )
 		{
-			BotSendChatMessage(DEATH, player->netname );
+			BotSendChatMessage( DEATH, player->netname );
 		}
 	}
 
-	if (attacker == NULL) {
+	if( attacker == NULL )
+	{
 		return;
 	}
 
 	//bs.attackerEntity = attacker;
-	SetEnemy(player, attacker->GetOrigin());
+	SetEnemy( player, attacker->GetOrigin() );
 }
 
 /*
@@ -324,13 +326,14 @@ void rvmBot::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir,
 rvmBot::InflictedDamageEvent
 =======================
 */
-void rvmBot::InflictedDamageEvent(idEntity* target) {
+void rvmBot::InflictedDamageEvent( idEntity* target )
+{
 	idPlayer* player = target->Cast<idPlayer>();
 
 	// Don't flood the chat with death and insults.
-	if (!player->IsBot() && player->health <= 0)
+	if( !player->IsBot() && player->health <= 0 )
 	{
-		BotSendChatMessage(KILL, player->netname);
+		BotSendChatMessage( KILL, player->netname );
 	}
 }
 
@@ -395,15 +398,17 @@ void rvmBot::Think( void )
 		if( bot_debug.GetBool() )
 		{
 			idVec4 color;
-			color = idVec4(1, 1, 1, 1);
-			if (bs.enemy >= 0)
-				color = idVec4(1, 0, 0, 1);
+			color = idVec4( 1, 1, 1, 1 );
+			if( bs.enemy >= 0 )
+			{
+				color = idVec4( 1, 0, 0, 1 );
+			}
 
 			idBounds bounds = idBounds( idVec3( -10, -10, -10 ), idVec3( 10, 10, 10 ) );
 			common->RW()->DebugBounds( color, bounds, GetOrigin() );
 
 			idMat3 axis = viewAngles.ToMat3();
-			common->RW()->DrawTextA(stateThread.GetState()->state.c_str(), GetOrigin(), 1.0f, color, axis);
+			common->RW()->DrawTextA( stateThread.GetState()->state.c_str(), GetOrigin(), 1.0f, color, axis );
 		}
 	}
 

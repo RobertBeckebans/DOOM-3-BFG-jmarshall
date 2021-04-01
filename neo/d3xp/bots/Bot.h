@@ -741,7 +741,7 @@ struct bot_state_t
 		Reset();
 	}
 	void Reset()
-	{		
+	{
 		attackerEntity = NULL;
 		client = 0;
 		entitynum = 0;
@@ -845,8 +845,8 @@ public:
 	virtual void	Think( void ) override;
 	virtual void	SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_angles ) override;
 	virtual	void	Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location ) override;
-	virtual void	InflictedDamageEvent(idEntity* target) override;
-	virtual void	StateThreadChanged(void) override;
+	virtual void	InflictedDamageEvent( idEntity* target ) override;
+	virtual void	StateThreadChanged( void ) override;
 
 	void			SetEnemy( idPlayer* player, idVec3 origin );
 
@@ -855,7 +855,7 @@ public:
 
 	static void		PresenceTypeBoundingBox( int presencetype, idVec3& mins, idVec3& maxs );
 private:
-	void			BotSendChatMessage(botChat_t chat, const char *targetName);
+	void			BotSendChatMessage( botChat_t chat, const char* targetName );
 
 	void			BotInputToUserCommand( bot_input_t* bi, usercmd_t* ucmd, int time );
 
@@ -878,41 +878,41 @@ private:
 	int				weapon_plasmagun;
 	int				weapon_rocketlauncher;
 protected:
-	bool			BotIsDead(bot_state_t* bs);
-	bool			BotReachedGoal(bot_state_t* bs, bot_goal_t* goal);
-	int				BotGetItemLongTermGoal(bot_state_t* bs, int tfl, bot_goal_t* goal);
-	void			BotChooseWeapon(bot_state_t* bs);
-	int				BotFindEnemy(bot_state_t* bs, int curenemy);
-	bool			EntityIsDead(idEntity* entity);
-	float			BotEntityVisible(int viewer, idVec3 eye, idAngles viewangles, float fov, int ent);
-	float			BotEntityVisibleTest(int viewer, idVec3 eye, idAngles viewangles, float fov, int ent, bool allowHeightTest);
-	void			BotUpdateBattleInventory(bot_state_t* bs, int enemy);
-	float			BotAggression(bot_state_t* bs);
-	int				BotWantsToRetreat(bot_state_t* bs);
-	void			BotBattleUseItems(bot_state_t* bs);
-	void			BotAimAtEnemy(bot_state_t* bs);
-	void			BotCheckAttack(bot_state_t* bs);
-	bool			BotWantsToChase(bot_state_t* bs);
-	int				BotNearbyGoal(bot_state_t* bs, int tfl, bot_goal_t* ltg, float range);
-	void			BotGetRandomPointNearPosition(idVec3 point, idVec3& randomPoint, float radius);
-	int				BotMoveInRandomDirection(bot_state_t* bs);
-	void			BotMoveToGoal(bot_state_t* bs, bot_goal_t* goal);
+	bool			BotIsDead( bot_state_t* bs );
+	bool			BotReachedGoal( bot_state_t* bs, bot_goal_t* goal );
+	int				BotGetItemLongTermGoal( bot_state_t* bs, int tfl, bot_goal_t* goal );
+	void			BotChooseWeapon( bot_state_t* bs );
+	int				BotFindEnemy( bot_state_t* bs, int curenemy );
+	bool			EntityIsDead( idEntity* entity );
+	float			BotEntityVisible( int viewer, idVec3 eye, idAngles viewangles, float fov, int ent );
+	float			BotEntityVisibleTest( int viewer, idVec3 eye, idAngles viewangles, float fov, int ent, bool allowHeightTest );
+	void			BotUpdateBattleInventory( bot_state_t* bs, int enemy );
+	float			BotAggression( bot_state_t* bs );
+	int				BotWantsToRetreat( bot_state_t* bs );
+	void			BotBattleUseItems( bot_state_t* bs );
+	void			BotAimAtEnemy( bot_state_t* bs );
+	void			BotCheckAttack( bot_state_t* bs );
+	bool			BotWantsToChase( bot_state_t* bs );
+	int				BotNearbyGoal( bot_state_t* bs, int tfl, bot_goal_t* ltg, float range );
+	void			BotGetRandomPointNearPosition( idVec3 point, idVec3& randomPoint, float radius );
+	int				BotMoveInRandomDirection( bot_state_t* bs );
+	void			BotMoveToGoal( bot_state_t* bs, bot_goal_t* goal );
 
-	void			MoveToCoverPoint(void);
+	void			MoveToCoverPoint( void );
 
 	static int	WP_MACHINEGUN;
 	static int	WP_SHOTGUN;
 	static int	WP_PLASMAGUN;
 	static int	WP_ROCKET_LAUNCHER;
 private:
-	stateResult_t	state_Chase(stateParms_t* parms);
-	stateResult_t	state_BattleFight(stateParms_t* parms);
-	stateResult_t	state_BattleNBG(stateParms_t* parms);
-	stateResult_t	state_Retreat(stateParms_t* parms);
-	stateResult_t	state_Respawn(stateParms_t* parms);
-	stateResult_t	state_SeekNBG(stateParms_t* parms);
-	stateResult_t	state_SeekLTG(stateParms_t* parms);
-	stateResult_t	state_Attacked(stateParms_t* parms);
+	stateResult_t	state_Chase( stateParms_t* parms );
+	stateResult_t	state_BattleFight( stateParms_t* parms );
+	stateResult_t	state_BattleNBG( stateParms_t* parms );
+	stateResult_t	state_Retreat( stateParms_t* parms );
+	stateResult_t	state_Respawn( stateParms_t* parms );
+	stateResult_t	state_SeekNBG( stateParms_t* parms );
+	stateResult_t	state_SeekLTG( stateParms_t* parms );
+	stateResult_t	state_Attacked( stateParms_t* parms );
 private:
 	idAAS*			aas;
 };

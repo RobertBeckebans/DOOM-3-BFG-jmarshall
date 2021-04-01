@@ -777,7 +777,7 @@ bool idAASFileLocal::Write( const idStr& fileName, unsigned int mapFileCRC )
 		return false;
 	}
 // jmarshall
-	aasFile->WriteFloatString( "%s \"%s\"\n\n", AAS_FILEID, AAS_ICE_FILEVERSION);
+	aasFile->WriteFloatString( "%s \"%s\"\n\n", AAS_FILEID, AAS_ICE_FILEVERSION );
 // jmarshall end
 	aasFile->WriteFloatString( "%u\n\n", mapFileCRC );
 
@@ -1159,7 +1159,7 @@ bool idAASFileLocal::ParseAreas( idLexer& src )
 		area.cluster = src.ParseInt();
 		area.clusterAreaNum = src.ParseInt();
 // jmarshall
-		if (HasNewFeatures())
+		if( HasNewFeatures() )
 		{
 			area.firstEdge = src.ParseInt();
 			area.numEdges = src.ParseInt();
@@ -1320,7 +1320,7 @@ bool idAASFileLocal::Load( const idStr& fileName, unsigned int mapFileCRC )
 	{
 		return false;
 	}
-	
+
 	if( !src.ExpectTokenString( AAS_FILEID ) )
 	{
 		common->Warning( "Not an AAS file: '%s'", name.c_str() );
@@ -1328,16 +1328,19 @@ bool idAASFileLocal::Load( const idStr& fileName, unsigned int mapFileCRC )
 	}
 // jmarshall
 	// Check the ident.
-	src.ReadToken(&token);
-	if (token == AAS_ICE_FILEVERSION) {
+	src.ReadToken( &token );
+	if( token == AAS_ICE_FILEVERSION )
+	{
 		hasNewFeatures = true;
 	}
-	else if (token == AAS_FILEVERSION) {
+	else if( token == AAS_FILEVERSION )
+	{
 		hasNewFeatures = false;
-		common->Warning("Loading legacy AAS file!\n");
+		common->Warning( "Loading legacy AAS file!\n" );
 	}
-	else {
-		common->Warning("AAS file '%s' has version %s instead of %s", name.c_str(), token.c_str(), AAS_ICE_FILEVERSION);
+	else
+	{
+		common->Warning( "AAS file '%s' has version %s instead of %s", name.c_str(), token.c_str(), AAS_ICE_FILEVERSION );
 		return false;
 	}
 // jmarshall end

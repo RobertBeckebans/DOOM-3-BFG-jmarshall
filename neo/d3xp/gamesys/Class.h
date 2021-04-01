@@ -263,7 +263,7 @@ public:
 		return this ? ( IsType( T::Type ) ? static_cast<const T*>( this ) : NULL ) : NULL;
 	}
 
-	virtual void			StateThreadChanged(void) { };
+	virtual void			StateThreadChanged( void ) { };
 // jmarshall end
 
 	virtual idClass* InvokeChild()

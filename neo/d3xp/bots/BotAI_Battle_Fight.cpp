@@ -10,7 +10,7 @@
 rvmBot::state_BattleFight
 =====================
 */
-stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
+stateResult_t rvmBot::state_BattleFight( stateParms_t* parms )
 {
 	int areanum;
 	idVec3 target;
@@ -19,7 +19,7 @@ stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
 	// respawn if dead.
 	if( BotIsDead( &bs ) )
 	{
-		stateThread.SetState("state_Respawn");
+		stateThread.SetState( "state_Respawn" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -32,7 +32,7 @@ stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
 	//if no enemy
 	if( bs.enemy < 0 )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -59,7 +59,7 @@ stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
 			//			else {
 			bs.ltg_time = 0;
 			//AIEnter_Seek_LTG(bs, "battle fight: enemy dead");
-			stateThread.SetState("state_SeekLTG");
+			stateThread.SetState( "state_SeekLTG" );
 			//			}
 			// jmarshall end
 			return SRESULT_DONE_FRAME;
@@ -120,13 +120,13 @@ stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
 		if( BotWantsToChase( &bs ) )
 		{
 			//AIEnter_Battle_Chase(bs, "battle fight: enemy out of sight");
-			stateThread.SetState("state_Chase");
+			stateThread.SetState( "state_Chase" );
 			return SRESULT_DONE_FRAME;
 		}
 		else
 		{
 			//AIEnter_Seek_LTG(bs, "battle fight: enemy out of sight");
-			stateThread.SetState("state_SeekLTG");
+			stateThread.SetState( "state_SeekLTG" );
 			return SRESULT_DONE_FRAME;
 		}
 	}
@@ -145,13 +145,13 @@ stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
 	BotChooseWeapon( &bs );
 
 	// Move randomly around our AAS area.
-	BotMoveInRandomDirection(&bs);
+	BotMoveInRandomDirection( &bs );
 
 	//aim at the enemy
 	BotAimAtEnemy( &bs );
 
 	//attack the enemy if possible
-	BotCheckAttack( &bs );	
+	BotCheckAttack( &bs );
 
 	//if the bot wants to retreat
 	if( !( bs.flags & BFL_FIGHTSUICIDAL ) )
@@ -159,7 +159,7 @@ stateResult_t rvmBot::state_BattleFight(stateParms_t* parms)
 		if( BotWantsToRetreat( &bs ) )
 		{
 			//AIEnter_Battle_Retreat(bs, "battle fight: wants to retreat");
-			stateThread.SetState("state_Retreat");
+			stateThread.SetState( "state_Retreat" );
 			return SRESULT_DONE_FRAME;
 		}
 	}

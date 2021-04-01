@@ -51,9 +51,16 @@ struct rvmLightStyleState_t
 	int				dl_oldframe;
 	int				dl_time;
 	float			dl_backlerp;
+
+	void			Reset();
 };
 
 ID_INLINE rvmLightStyleState_t::rvmLightStyleState_t()
+{
+	Reset();
+}
+
+ID_INLINE void rvmLightStyleState_t::Reset()
 {
 	dl_frame = 0;
 	dl_framef = 0;
@@ -62,6 +69,8 @@ ID_INLINE rvmLightStyleState_t::rvmLightStyleState_t()
 	dl_backlerp = 0;
 }
 // jmarshall end
+
+
 
 class idLight : public idEntity
 {

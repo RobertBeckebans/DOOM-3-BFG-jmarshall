@@ -436,7 +436,7 @@ public:
 	virtual idBounds			EdgeBounds( int edgeNum ) const = 0;
 	virtual idBounds			FaceBounds( int faceNum ) const = 0;
 	virtual idBounds			AreaBounds( int areaNum ) const = 0;
-// jmarshall 
+// jmarshall
 	virtual bool				HasNewFeatures() const = 0;
 // jmarshall end
 

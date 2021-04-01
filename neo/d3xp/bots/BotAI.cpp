@@ -221,7 +221,7 @@ float rvmBot::BotEntityVisibleTest( int viewer, idVec3 eye, idAngles viewangles,
 	dir = middle - eye;
 	entangles = dir.ToAngles();
 
-	if (!viewEnt->CheckFOV(entinfo->GetOrigin()))
+	if( !viewEnt->CheckFOV( entinfo->GetOrigin() ) )
 	{
 		return 0;
 	}
@@ -572,7 +572,8 @@ int rvmBot::BotFindEnemy( bot_state_t* bs, int curenemy )
 			continue;
 		}
 
-		if (entinfo->spectating) {
+		if( entinfo->spectating )
+		{
 			continue;
 		}
 
@@ -1140,14 +1141,14 @@ void rvmBot::BotGetRandomPointNearPosition( idVec3 point, idVec3& randomPoint, f
 	idAAS* aas = gameLocal.GetBotAAS();
 	idAASFile* file = aas->GetAASFile();
 
-	int areaNum = aas->PointAreaNum(point);
-	const aasArea_t& area = file->GetArea(areaNum);
+	int areaNum = aas->PointAreaNum( point );
+	const aasArea_t& area = file->GetArea( areaNum );
 	int firstEdge = area.firstEdge;
-	int i = rvRandom::irand(0, area.numEdges);
+	int i = rvRandom::irand( 0, area.numEdges );
 
-	const aasEdge_t &edge = file->GetEdge(abs(file->GetEdgeIndex(firstEdge + i)));
+	const aasEdge_t& edge = file->GetEdge( abs( file->GetEdgeIndex( firstEdge + i ) ) );
 
-	randomPoint = file->GetVertex(edge.vertexNum[0]);
+	randomPoint = file->GetVertex( edge.vertexNum[0] );
 }
 
 /*
@@ -1188,7 +1189,7 @@ int rvmBot::BotMoveInRandomDirection( bot_state_t* bs )
 rvmBot::ShowHideArea
 ============
 */
-void rvmBot::MoveToCoverPoint(void)
+void rvmBot::MoveToCoverPoint( void )
 {
 	int areaNum, numObstacles;
 	idVec3 target;
@@ -1197,15 +1198,15 @@ void rvmBot::MoveToCoverPoint(void)
 	idVec3 origin = GetOrigin();
 	idAAS* aas = gameLocal.GetBotAAS();
 
-	areaNum = gameLocal.GetBotAAS()->PointReachableAreaNum(origin, aas->DefaultSearchBounds(), (AREA_REACHABLE_WALK | AREA_REACHABLE_FLY));
-	target = aas->AreaCenter(aas->PointAreaNum(gameLocal.GetLocalPlayer()->GetOrigin()));
+	areaNum = gameLocal.GetBotAAS()->PointReachableAreaNum( origin, aas->DefaultSearchBounds(), ( AREA_REACHABLE_WALK | AREA_REACHABLE_FLY ) );
+	target = aas->AreaCenter( aas->PointAreaNum( gameLocal.GetLocalPlayer()->GetOrigin() ) );
 
 	// consider the target an obstacle
-	obstacles[0].absBounds = idBounds(target).Expand(16);
+	obstacles[0].absBounds = idBounds( target ).Expand( 16 );
 	numObstacles = 1;
 
-	idAASCallback_FindCoverArea findCover(target);
-	if (aas->FindNearestGoal(goal, areaNum, origin, target, TFL_WALK | TFL_AIR, obstacles, numObstacles, findCover))
+	idAASCallback_FindCoverArea findCover( target );
+	if( aas->FindNearestGoal( goal, areaNum, origin, target, TFL_WALK | TFL_AIR, obstacles, numObstacles, findCover ) )
 	{
 		bs.currentGoal.origin = goal.origin;
 	}

@@ -10,7 +10,7 @@
 rvmBot::state_Retreat
 =====================
 */
-stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
+stateResult_t rvmBot::state_Retreat( stateParms_t* parms )
 {
 	bot_goal_t goal;
 	idPlayer* entinfo;
@@ -21,14 +21,14 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 	// respawn if dead.
 	if( BotIsDead( &bs ) )
 	{
-		stateThread.SetState("state_Respawn");
+		stateThread.SetState( "state_Respawn" );
 		return SRESULT_DONE_FRAME;
 	}
 
 	// if no enemy.
 	if( bs.enemy < 0 )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -36,7 +36,7 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 	entinfo = gameLocal.entities[bs.enemy]->Cast<idPlayer>();
 	if( !entinfo )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -45,7 +45,7 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 	// If our enemy is dead, search for another LTG.
 	if( EntityIsDead( entinfo ) )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -66,7 +66,7 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 
 		//go chase the enemy
 		//AIEnter_Battle_Chase(bs, "battle retreat: wants to chase");
-		stateThread.SetState("state_Chase");
+		stateThread.SetState( "state_Chase" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -81,7 +81,7 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 	//if the enemy is NOT visible for 4 seconds
 	if( bs.enemyvisible_time < Bot_Time() - 4 )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 	//else if the enemy is NOT visible
@@ -91,7 +91,7 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 		if( BotFindEnemy( &bs, -1 ) )
 		{
 			//AIEnter_Battle_Fight(bs, "battle retreat: another enemy");
-			stateThread.SetState("state_BattleFight");
+			stateThread.SetState( "state_BattleFight" );
 			return SRESULT_DONE_FRAME;
 		}
 	}
@@ -103,7 +103,7 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 	if( !BotGetItemLongTermGoal( &bs, 0, &bs.currentGoal ) )
 	{
 		//AIEnter_Battle_SuicidalFight(bs, "battle retreat: no way out");
-		stateThread.SetState("state_BattleFight");
+		stateThread.SetState( "state_BattleFight" );
 		bs.flags |= BFL_FIGHTSUICIDAL;
 		return SRESULT_DONE_FRAME;
 	}
@@ -121,14 +121,14 @@ stateResult_t rvmBot::state_Retreat(stateParms_t* parms)
 			//time the bot gets to pick up the nearby goal item
 			bs.nbg_time = Bot_Time() + range / 100 + 1;
 			//AIEnter_Battle_NBG(bs, "battle retreat: nbg");
-			stateThread.SetState("state_BattleNBG");
+			stateThread.SetState( "state_BattleNBG" );
 			return SRESULT_DONE_FRAME;
 		}
 	}
 
 	MoveToCoverPoint();
 
-	if (bot_skill.GetInteger() > 1)
+	if( bot_skill.GetInteger() > 1 )
 	{
 		bs.firethrottlewait_time = 0;
 	}

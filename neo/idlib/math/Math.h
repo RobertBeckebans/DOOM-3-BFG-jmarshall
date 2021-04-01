@@ -1647,33 +1647,40 @@ ID_INLINE float idMath::RSqrt( float x )
 
 // This is the VC libc version of rand() without multiple seeds per thread or 12 levels
 // of subroutine calls.
-// Both calls have been designed to minimise the inherent number of float <--> int 
+// Both calls have been designed to minimise the inherent number of float <--> int
 // conversions and the additional math required to get the desired value.
 // eg the typical tint = (rand() * 255) / 32768
 // becomes tint = rvRandom::irand( 0, 255 )
 
-class rvRandom {
+class rvRandom
+{
 private:
 	static	unsigned long	mSeed;
 public:
-	rvRandom(void) { mSeed = 0x89abcdef; }
+	rvRandom( void )
+	{
+		mSeed = 0x89abcdef;
+	}
 
 	// for a non seed based init
-	static	int				Init(void);
+	static	int				Init( void );
 
 	// Init the seed to a unique number
-	static	void			Init(unsigned long seed) { mSeed = seed; }
+	static	void			Init( unsigned long seed )
+	{
+		mSeed = seed;
+	}
 
 	// Returns a float min <= x < max (exclusive; will get max - 0.00001; but never max)
-	static	float			flrand(float min, float max);
+	static	float			flrand( float min, float max );
 
 	// Returns a float min <= 0 < 1.0
 	static	float			flrand();
 
-	static	float			flrand(const idVec2& v);
+	static	float			flrand( const idVec2& v );
 
 	// Returns an integer min <= x <= max (ie inclusive)
-	static	int				irand(int min, int max);
+	static	int				irand( int min, int max );
 };
 
 // RAVEN END

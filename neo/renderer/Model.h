@@ -84,9 +84,6 @@ struct srfTriangles_t
 	int							numDupVerts;			// number of duplicate vertexes
 	int* 						dupVerts;				// pairs of the number of the first vertex and the number of the duplicate vertex
 
-	//int							numSilEdges;			// number of silhouette edges
-	//silEdge_t* 					silEdges;				// silhouette edges
-
 	dominantTri_t* 				dominantTris;			// [numVerts] for deformed surface fast tangent calculation
 
 	int							shadowCapPlaneBits;		// bits 0-5 are set when that plane of the interacting light has triangles

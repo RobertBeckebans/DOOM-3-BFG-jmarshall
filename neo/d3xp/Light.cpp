@@ -166,6 +166,7 @@ void idGameEdit::ParseSpawnArgsToRenderLight( const idDict* args, renderLight_t*
 	args->GetBool( "parallel", "0", renderLight->parallel );
 
 	args->GetString( "texture", "lights/squarelight1", &texture );
+
 	// allow this to be NULL
 	renderLight->shader = declManager->FindMaterial( texture, false );
 }
@@ -177,6 +178,12 @@ idLight::UpdateChangeableSpawnArgs
 */
 void idLight::UpdateChangeableSpawnArgs( const idDict* source )
 {
+// jmarshall
+	lightStyleFrameTime = spawnArgs.GetInt( "ls_frametime", "100" );
+	lightStyle = spawnArgs.GetInt( "style", -1 );
+
+	lightStyleState.Reset();
+// jmarshall end
 
 	idEntity::UpdateChangeableSpawnArgs( source );
 
@@ -221,6 +228,14 @@ idLight::idLight():
 	fadeStart			= 0;
 	fadeEnd				= 0;
 	soundWasPlaying		= false;
+
+// RB begin
+	lightStyle			= -1;
+	lightStyleFrameTime = 100;
+	lightStyleBase.Set( 300, 300, 300 );
+
+	lightStyleState.Reset();
+// RB end
 }
 
 /*
@@ -401,14 +416,26 @@ void idLight::Spawn()
 	spawnArgs.GetInt( "count", "1", count );
 
 // jmarshall
-	lightStyleFrameTime = spawnArgs.GetInt( "ls_frametime", "0" );
-	lightStyle = spawnArgs.GetInt( "style", 0 );
+	lightStyleFrameTime = spawnArgs.GetInt( "ls_frametime", "100" );
+	lightStyle = spawnArgs.GetInt( "style", -1 );
 
 	int numStyles = spawnArgs.GetInt( "num_styles", "0" );
-	for( int i = 0; i < numStyles; i++ )
+	if( numStyles > 0 )
 	{
-		idStr style = spawnArgs.GetString( va( "light_style%d", i ) );
-		light_styles.Append( style );
+		for( int i = 0; i < numStyles; i++ )
+		{
+			idStr style = spawnArgs.GetString( va( "light_style%d", i ) );
+			light_styles.Append( style );
+		}
+	}
+	else
+	{
+		// RB: it's not defined in entityDef light so use predefined Quake 1 table
+		for( int i = 0; i < 12; i++ )
+		{
+			idStr style = spawnArgs.GetString( va( "light_style%d", i ), predef_lightstyles[ i ] );
+			light_styles.Append( style );
+		}
 	}
 // jmarshall end
 
@@ -910,7 +937,6 @@ idLight::SharedThink
 void idLight::SharedThink()
 {
 	float lightval;
-	int cl;
 	int stringlength;
 	float offset;
 	int offsetwhole;
@@ -924,7 +950,7 @@ void idLight::SharedThink()
 
 	if( lightStyle > light_styles.Num() )
 	{
-		gameLocal.Error( "Light style out of range\n" );
+		//gameLocal.Error( "Light style out of range\n" );
 		return;
 	}
 
@@ -981,7 +1007,7 @@ void idLight::SharedThink()
 	lightval = max( 0.0f, lightval );
 	lightval = min( 1000.0f, lightval );
 #else
-	lightval *= 0.071429;
+	lightval *= 0.071429f;
 	lightval = Max( 0.0f, lightval );
 	lightval = Min( 20.0f, lightval );
 #endif

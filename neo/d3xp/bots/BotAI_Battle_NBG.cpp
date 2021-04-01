@@ -10,7 +10,7 @@
 rvmBot::state_BattleNBG
 =====================
 */
-stateResult_t rvmBot::state_BattleNBG(stateParms_t* parms)
+stateResult_t rvmBot::state_BattleNBG( stateParms_t* parms )
 {
 	int areanum;
 	bot_goal_t goal;
@@ -33,14 +33,14 @@ stateResult_t rvmBot::state_BattleNBG(stateParms_t* parms)
 	// respawn if dead.
 	if( BotIsDead( &bs ) )
 	{
-		stateThread.SetState("state_Respawn");
+		stateThread.SetState( "state_Respawn" );
 		return SRESULT_DONE_FRAME;
 	}
 
 	// if no enemy.
 	if( bs.enemy < 0 )
 	{
-		stateThread.SetState("state_SeekLTG");
+		stateThread.SetState( "state_SeekLTG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -49,7 +49,7 @@ stateResult_t rvmBot::state_BattleNBG(stateParms_t* parms)
 	if( entinfo->health <= 0 )
 	{
 		//AIEnter_Seek_NBG(bs, "battle nbg: enemy dead");
-		stateThread.SetState("state_SeekNBG");
+		stateThread.SetState( "state_SeekNBG" );
 		return SRESULT_DONE_FRAME;
 	}
 
@@ -108,12 +108,12 @@ stateResult_t rvmBot::state_BattleNBG(stateParms_t* parms)
 		if( botGoalManager.BotGetTopGoal( bs.gs, &goal ) )
 		{
 			//AIEnter_Battle_Retreat(bs, "battle nbg: time out");
-			stateThread.SetState("state_Retreat");
+			stateThread.SetState( "state_Retreat" );
 		}
 		else
 		{
 			//AIEnter_Battle_Fight(bs, "battle nbg: time out");
-			stateThread.SetState("state_BattleFight");
+			stateThread.SetState( "state_BattleFight" );
 		}
 
 		return SRESULT_DONE_FRAME;

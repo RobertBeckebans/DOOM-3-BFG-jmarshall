@@ -9523,14 +9523,15 @@ void idPlayer::CalcDamagePoints( idEntity* inflictor, idEntity* attacker, const 
 	damageDef->GetInt( "damage", "20", damage );
 // jmarshall
 	//damage = GetDamageForLocation( damage, location );
-	int minDamage = damageDef->GetInt("minDamage", "-1");
-	int maxDamage = damageDef->GetInt("maxDamage", "-1");
-	if (minDamage == -1 || maxDamage == -1) {
-		int damageBase = damageDef->GetInt("damage");
-		minDamage = damageBase - (damageBase * 0.2f);
-		maxDamage = damageBase + (damageBase * 0.2f);
+	int minDamage = damageDef->GetInt( "minDamage", "-1" );
+	int maxDamage = damageDef->GetInt( "maxDamage", "-1" );
+	if( minDamage == -1 || maxDamage == -1 )
+	{
+		int damageBase = damageDef->GetInt( "damage" );
+		minDamage = damageBase - ( damageBase * 0.2f );
+		maxDamage = damageBase + ( damageBase * 0.2f );
 	}
-	damage = rvRandom::irand(minDamage, maxDamage);
+	damage = rvRandom::irand( minDamage, maxDamage );
 // jmarshall end
 
 	idPlayer* player = attacker->IsType( idPlayer::Type ) ? static_cast<idPlayer*>( attacker ) : NULL;
@@ -9971,9 +9972,9 @@ void idPlayer::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& di
 		// Server will deal his damage normally
 		ServerDealDamage( finalDamage, *inflictor, *attacker, dir, damageDefName, location );
 // jmarshall
-		if (attacker->IsType(rvmBot::Type))
+		if( attacker->IsType( rvmBot::Type ) )
 		{
-			attacker->InflictedDamageEvent(this);
+			attacker->InflictedDamageEvent( this );
 		}
 // jmarshall end
 	}
