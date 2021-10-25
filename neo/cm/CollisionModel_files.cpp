@@ -37,14 +37,12 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
-
 #include "CollisionModel_local.h"
 
 #define CM_FILE_EXT			"cm"
 #define CM_BINARYFILE_EXT	"bcm"
 #define CM_FILEID			"CM"
 #define CM_FILEVERSION		"1.00"
-
 
 /*
 ===============================================================================
@@ -548,7 +546,6 @@ cm_model_t* idCollisionModelManagerLocal::ParseCollisionModel( idLexer* src )
 	src->ExpectTokenString( "{" );
 	while( !src->CheckTokenString( "}" ) )
 	{
-
 		src->ReadToken( &token );
 
 		if( token == "vertices" )
