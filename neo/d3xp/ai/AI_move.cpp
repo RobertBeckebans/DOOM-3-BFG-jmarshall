@@ -1,5 +1,5 @@
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 
 #include "../Game_local.h"
 #include "AASCallback_FindAreaOutOfRange.h"

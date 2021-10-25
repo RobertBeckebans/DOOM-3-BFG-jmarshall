@@ -1,8 +1,8 @@
 // weapon_fist.cpp
 //
 
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 #include "../Game_local.h"
 
 CLASS_DECLARATION( rvmWeaponObject, rvmWeaponFist )

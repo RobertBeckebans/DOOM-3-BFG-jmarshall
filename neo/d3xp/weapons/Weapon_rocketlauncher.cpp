@@ -1,8 +1,8 @@
 // Weapon_rocketlauncher.cpp
 //
 
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 #include "../Game_local.h"
 
 CLASS_DECLARATION( rvmWeaponObject, rvmWeaponRocketLauncher )

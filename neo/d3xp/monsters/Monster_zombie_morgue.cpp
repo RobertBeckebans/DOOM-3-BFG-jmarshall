@@ -1,8 +1,8 @@
 // Monster_zombie_morgue.cpp
 //
 
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 
 #include "../Game_local.h"
 

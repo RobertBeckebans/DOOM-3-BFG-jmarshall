@@ -1,8 +1,8 @@
 // Monster_zombie_sawyer.cpp
 //
 
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 #include "../Game_local.h"
 
 #define SAWYER_SMOKE_PARTICLES	0

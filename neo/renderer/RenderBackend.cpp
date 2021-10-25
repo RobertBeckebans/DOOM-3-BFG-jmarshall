@@ -29,8 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 
 #include "framework/Common_local.h"
 #include "RenderCommon.h"
@@ -6036,7 +6036,7 @@ void idRenderBackend::PostProcess( const void* data )
 		/*
 		 * The shader has three passes, chained together as follows:
 		 *
-		 *                           |input|------------------·
+		 *                           |input|------------------ï¿½
 		 *                              v                     |
 		 *                    [ SMAA*EdgeDetection ]          |
 		 *                              v                     |
@@ -6046,7 +6046,7 @@ void idRenderBackend::PostProcess( const void* data )
 		 *                              v                     |
 		 *                          |blendTex|                |
 		 *                              v                     |
-		 *                [ SMAANeighborhoodBlending ] <------·
+		 *                [ SMAANeighborhoodBlending ] <------ï¿½
 		 *                              v
 		 *                           |output|
 		*/

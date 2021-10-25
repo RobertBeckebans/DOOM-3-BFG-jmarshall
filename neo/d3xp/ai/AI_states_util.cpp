@@ -1,8 +1,8 @@
 // AI_states_util.cpp
 //
 
-#pragma hdrstop
 #include "precompiled.h"
+#pragma hdrstop
 
 #include "../Game_local.h"
 
