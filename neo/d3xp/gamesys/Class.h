@@ -123,6 +123,7 @@ public:
 /*
 ================
 CLASS_PROTOTYPE
+
 This macro must be included in the definition of any subclass of idClass.
 It prototypes variables used in class instanciation and type checking.
 Use this on single inheritance concrete classes only.

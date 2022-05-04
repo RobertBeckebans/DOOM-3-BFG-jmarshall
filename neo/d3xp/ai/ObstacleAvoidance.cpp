@@ -182,7 +182,7 @@ void idObstacleAvoidance::GetPointOutsideObstacles( idVec2& point, int* obstacle
 	}
 
 	const idWinding2D& w = obstacles[bestObstacle].winding;
-	bestd = idMath::INFINITY;
+	bestd = idMath::INFINITUM;
 	bestEdgeNum = -1;
 	for( i = 0; i < w.GetNumPoints(); i++ )
 	{
@@ -235,7 +235,7 @@ void idObstacleAvoidance::GetPointOutsideObstacles( idVec2& point, int* obstacle
 	memset( obstacleVisited, 0, obstacles.Num() * sizeof( obstacleVisited[0] ) );
 	obstacleVisited[bestObstacle] = true;
 
-	bestd = idMath::INFINITY;
+	bestd = idMath::INFINITUM;
 	for( i = queue[0]; queueStart < queueEnd; i = queue[++queueStart] )
 	{
 		w1 = obstacles[i].winding;
@@ -290,7 +290,7 @@ void idObstacleAvoidance::GetPointOutsideObstacles( idVec2& point, int* obstacle
 			}
 		}
 
-		if( bestd < idMath::INFINITY )
+		if( bestd < idMath::INFINITUM )
 		{
 			point = bestPoint;
 			if( obstacle )
@@ -325,7 +325,7 @@ bool idObstacleAvoidance::GetFirstBlockingObstacle( int skipObstacle, const idVe
 	bounds[IEEE_FLT_SIGNBITNOTSET( delta.y )].y += delta.y;
 
 	// test for obstacles blocking the path
-	blockingScale = idMath::INFINITY;
+	blockingScale = idMath::INFINITUM;
 	dist = delta.Length();
 	for( i = 0; i < obstacles.Num(); i++ )
 	{
@@ -880,7 +880,7 @@ void idObstacleAvoidance::PrunePathTree( pathNode_t* root, const idVec2& seekPos
 		{
 
 			// find the node closest to the goal along this path
-			bestDist = idMath::INFINITY;
+			bestDist = idMath::INFINITUM;
 			bestNode = node;
 			for( n = node; n; n = n->parent )
 			{
@@ -1039,7 +1039,7 @@ void idObstacleAvoidance::FindOptimalPath( const pathNode_t* root, const float h
 
 	bestNode = root;
 	bestNumPathPoints = 0;
-	bestPathLength = idMath::INFINITY;
+	bestPathLength = idMath::INFINITUM;
 
 	node = root;
 	while( node )
@@ -1230,7 +1230,7 @@ bool idObstacleAvoidance::FindPathAroundObstacles( const idBounds& bounds, const
 	path.startPosObstacle = OBSTACLE_ID_INVALID;
 	path.seekPosOutsideObstacles = cappedSeekPos;
 	path.seekPosObstacle = OBSTACLE_ID_INVALID;
-	path.pathLength = idMath::INFINITY;
+	path.pathLength = idMath::INFINITUM;
 	path.hasValidPath = true;
 
 	// get the AAS area number and a valid point inside that area

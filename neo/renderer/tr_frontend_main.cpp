@@ -409,7 +409,7 @@ static void R_SetupSplitFrustums( viewDef_t* viewDef )
 
 	for( int i = 0; i < 6; i++ )
 	{
-		tr.viewDef->frustumSplitDistances[i] = idMath::INFINITY;
+		tr.viewDef->frustumSplitDistances[i] = idMath::INFINITUM;
 	}
 
 	for( int i = 1; i <= ( r_shadowMapSplits.GetInteger() + 1 ) && i < MAX_FRUSTUMS; i++ )
@@ -542,7 +542,7 @@ void R_RenderView( viewDef_t* parms )
 	// RB: find closest environment probe
 	if( tr.viewDef->areaNum != -1 && !tr.viewDef->isSubview )
 	{
-		float bestDist = idMath::INFINITY;
+		float bestDist = idMath::INFINITUM;
 
 		tr.viewDef->irradianceImage = globalImages->defaultUACIrradianceCube;
 		tr.viewDef->radianceImage = globalImages->defaultUACRadianceCube;

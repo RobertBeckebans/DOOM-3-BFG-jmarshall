@@ -77,7 +77,7 @@ void idSIMD::InitProcessor( const char* module, bool forceGeneric )
 
 		if( processor == NULL )
 		{
-#if defined(USE_INTRINSICS)
+#if defined(USE_INTRINSICS_SSE)
 			if( ( cpuid & CPUID_MMX ) && ( cpuid & CPUID_SSE ) )
 			{
 				processor = new( TAG_MATH ) idSIMD_SSE;
@@ -285,8 +285,8 @@ void TestMinMax()
 	bestClocksGeneric = 0;
 	for( i = 0; i < NUMTESTS; i++ )
 	{
-		min = idMath::INFINITY;
-		max = -idMath::INFINITY;
+		min = idMath::INFINITUM;
+		max = -idMath::INFINITUM;
 		StartRecordTime( start );
 		p_generic->MinMax( min, max, fsrc0, COUNT );
 		StopRecordTime( end );
@@ -1389,7 +1389,7 @@ void idSIMD::Test_f( const idCmdArgs& args )
 
 		argString.Replace( " ", "" );
 
-#if defined(USE_INTRINSICS)
+#if defined(USE_INTRINSICS_SSE)
 		if( idStr::Icmp( argString, "SSE" ) == 0 )
 		{
 			if( !( cpuid & CPUID_MMX ) || !( cpuid & CPUID_SSE ) )

@@ -1488,7 +1488,7 @@ idEntity* idAI::GetClosestHiddenTarget( const char* type )
 	}
 
 	bestEnt = NULL;
-	bestTime = idMath::INFINITY;
+	bestTime = idMath::INFINITUM;
 	for( i = 0; i < targets.Num(); i++ )
 	{
 		ent = targets[i].GetEntity();
