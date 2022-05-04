@@ -40,12 +40,12 @@ class idVec4;
 ===============================================================================
 */
 
-#ifdef INFINITY
-	#undef INFINITY
+#ifdef INFINITUM
+	#undef INFINITUM
 #endif
 
-#ifdef FLT_EPSILON
-	#undef FLT_EPSILON
+#ifdef FLOAT_EPSILON
+	#undef FLOAT_EPSILON
 #endif
 
 #define DEG2RAD(a)				( (a) * idMath::M_DEG2RAD )
@@ -484,8 +484,8 @@ public:
 	static const float			M_RAD2DEG;					// radians to degrees multiplier
 	static const float			M_SEC2MS;					// seconds to milliseconds multiplier
 	static const float			M_MS2SEC;					// milliseconds to seconds multiplier
-	static const float			INFINITY;					// huge number which should be larger than any valid number used
-	static const float			FLT_EPSILON;				// smallest positive number such that 1.0+FLT_EPSILON != 1.0
+	static const float			INFINITUM;					// huge number which should be larger than any valid number used
+	static const float			FLOAT_EPSILON;				// smallest positive number such that 1.0+FLOAT_EPSILON != 1.0
 	static const float			FLT_SMALLEST_NON_DENORMAL;	// smallest non-denormal 32-bit floating point value
 
 #if defined(USE_INTRINSICS_SSE)
@@ -536,7 +536,7 @@ idMath::InvSqrt
 ID_INLINE float idMath::InvSqrt( float x )
 {
 
-	return ( x > FLT_SMALLEST_NON_DENORMAL ) ? sqrtf( 1.0f / x ) : INFINITY;
+	return ( x > FLT_SMALLEST_NON_DENORMAL ) ? sqrtf( 1.0f / x ) : INFINITUM;
 
 }
 
@@ -547,7 +547,7 @@ idMath::InvSqrt16
 */
 ID_INLINE float idMath::InvSqrt16( float x )
 {
-	return ( x > FLT_SMALLEST_NON_DENORMAL ) ? sqrtf( 1.0f / x ) : INFINITY;
+	return ( x > FLT_SMALLEST_NON_DENORMAL ) ? sqrtf( 1.0f / x ) : INFINITUM;
 }
 
 /*
@@ -989,7 +989,9 @@ idMath::ATan
 */
 ID_INLINE float idMath::ATan( float y, float x )
 {
-	assert( fabs( y ) > idMath::FLT_SMALLEST_NON_DENORMAL || fabs( x ) > idMath::FLT_SMALLEST_NON_DENORMAL );
+	// SRS - Don't need this assertion since atan2f(y,x) handles x=0, y=0 and x=0, y>0 or y<0 cases properly
+	// SRS - This assertion can cause game to stop prematurely when _DEBUG is defined and asserts are enabled
+	//assert( fabs( y ) > idMath::FLT_SMALLEST_NON_DENORMAL || fabs( x ) > idMath::FLT_SMALLEST_NON_DENORMAL );
 	return atan2f( y, x );
 }
 
