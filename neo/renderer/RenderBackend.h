@@ -48,7 +48,7 @@ struct tmu_t
 	unsigned int	currentCubeMap;
 };
 
-const int MAX_MULTITEXTURE_UNITS =	8;
+const int MAX_MULTITEXTURE_UNITS = 14;
 
 enum stencilFace_t
 {
@@ -113,7 +113,8 @@ void RB_SetVertexColorParms( stageVertexColor_t svc );
 
 #if defined( USE_VULKAN )
 
-#if defined(__linux__)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	#include <SDL.h>
 	#include <SDL_vulkan.h>
 #endif
@@ -133,7 +134,8 @@ struct gpuInfo_t
 struct vulkanContext_t
 {
 	// Eric: If on linux, use this to pass SDL_Window pointer to the SDL_Vulkan_* methods not in sdl_vkimp.cpp file.
-#if defined(__linux__)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	SDL_Window*						sdlWindow = nullptr;
 #endif
 	uint64							frameCounter;
@@ -162,6 +164,7 @@ struct vulkanContext_t
 
 	bool							debugMarkerSupportAvailable;
 	bool							debugUtilsSupportAvailable;
+	bool                            deviceProperties2Available;     // SRS - For getting device properties in support of gfxInfo
 
 	// selected GPU
 	gpuInfo_t* 						gpu;
@@ -425,6 +428,7 @@ private:
 	void				DBG_ShowDominantTris( drawSurf_t** drawSurfs, int numDrawSurfs );
 	void				DBG_ShowEdges( drawSurf_t** drawSurfs, int numDrawSurfs );
 	void				DBG_ShowLights();
+	void				DBG_ShowLightGrid(); // RB
 	void				DBG_ShowViewEnvprobes(); // RB
 	void				DBG_ShowShadowMapLODs(); // RB
 	void				DBG_ShowPortals();

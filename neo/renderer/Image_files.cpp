@@ -4,6 +4,7 @@
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2012-2021 Robert Beckebans
+Copyright (C) 2022 Stephen Pridham
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -130,7 +131,7 @@ void R_WriteTGA( const char* filename, const byte* data, int width, int height, 
 	fileSystem->WriteFile( filename, buffer, bufferSize, basePath );
 }
 
-static void LoadTGA( const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp );
+void LoadTGA( const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp );
 static void LoadJPG( const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp );
 
 /*
@@ -164,7 +165,7 @@ TARGA LOADING
 LoadTGA
 =============
 */
-static void LoadTGA( const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp )
+void LoadTGA( const char* name, byte** pic, int* width, int* height, ID_TIME_T* timestamp )
 {
 	int		columns, rows, numPixels, fileSize, numBytes;
 	byte*	pixbuf;
@@ -668,7 +669,7 @@ extern "C"
 LoadPNG
 =============
 */
-static void LoadPNG( const char* filename, unsigned char** pic, int* width, int* height, ID_TIME_T* timestamp )
+void LoadPNG( const char* filename, unsigned char** pic, int* width, int* height, ID_TIME_T* timestamp )
 {
 	byte*	fbuffer;
 #if PNG_LIBPNG_VER_MAJOR > 1 || PNG_LIBPNG_VER_MINOR > 4
@@ -992,19 +993,20 @@ static void LoadEXR( const char* filename, unsigned char** pic, int* width, int*
 R_WriteEXR
 ================
 */
-// miniexr.cpp - v0.2 - public domain - 2013 Aras Pranckevicius / Unity Technologies
-//
-// Writes OpenEXR RGB files out of half-precision RGBA or RGB data.
-//
-// Only tested on Windows (VS2008) and Mac (clang 3.3), little endian.
-// Testing status: "works for me".
-//
-// History:
-// 0.2 Source data can be RGB or RGBA now.
-// 0.1 Initial release.
-
 void R_WriteEXR( const char* filename, const void* rgba16f, int channelsPerPixel, int width, int height, const char* basePath )
 {
+#if 0
+	// miniexr.cpp - v0.2 - public domain - 2013 Aras Pranckevicius / Unity Technologies
+	//
+	// Writes OpenEXR RGB files out of half-precision RGBA or RGB data.
+	//
+	// Only tested on Windows (VS2008) and Mac (clang 3.3), little endian.
+	// Testing status: "works for me".
+	//
+	// History:
+	// 0.2 Source data can be RGB or RGBA now.
+	// 0.1 Initial release.
+
 	const unsigned ww = width - 1;
 	const unsigned hh = height - 1;
 	const unsigned char kHeader[] =
@@ -1140,6 +1142,86 @@ void R_WriteEXR( const char* filename, const void* rgba16f, int channelsPerPixel
 	fileSystem->WriteFile( filename, buf, bufSize, basePath );
 
 	Mem_Free( buf );
+
+#else
+
+	// TinyEXR version with compression to save disc size
+
+	if( channelsPerPixel != 3 )
+	{
+		common->Error( "R_WriteEXR( %s ): channelsPerPixel = %i not supported", filename, channelsPerPixel );
+	}
+
+	EXRHeader header;
+	InitEXRHeader( &header );
+
+	EXRImage image;
+	InitEXRImage( &image );
+
+	image.num_channels = 3;
+
+	std::vector<halfFloat_t> images[3];
+	images[0].resize( width * height );
+	images[1].resize( width * height );
+	images[2].resize( width * height );
+
+	halfFloat_t* rgb = ( halfFloat_t* ) rgba16f;
+
+	for( int i = 0; i < width * height; i++ )
+	{
+		images[0][i] = ( rgb[3 * i + 0] );
+		images[1][i] = ( rgb[3 * i + 1] );
+		images[2][i] = ( rgb[3 * i + 2] );
+	}
+
+	halfFloat_t* image_ptr[3];
+	image_ptr[0] = &( images[2].at( 0 ) ); // B
+	image_ptr[1] = &( images[1].at( 0 ) ); // G
+	image_ptr[2] = &( images[0].at( 0 ) ); // R
+
+	image.images = ( unsigned char** )image_ptr;
+	image.width = width;
+	image.height = height;
+
+	header.num_channels = 3;
+	header.channels = ( EXRChannelInfo* )malloc( sizeof( EXRChannelInfo ) * header.num_channels );
+
+	// Must be BGR(A) order, since most of EXR viewers expect this channel order.
+	strncpy( header.channels[0].name, "B", 255 );
+	header.channels[0].name[strlen( "B" )] = '\0';
+	strncpy( header.channels[1].name, "G", 255 );
+	header.channels[1].name[strlen( "G" )] = '\0';
+	strncpy( header.channels[2].name, "R", 255 );
+	header.channels[2].name[strlen( "R" )] = '\0';
+
+	header.pixel_types = ( int* )malloc( sizeof( int ) * header.num_channels );
+	header.requested_pixel_types = ( int* )malloc( sizeof( int ) * header.num_channels );
+	for( int i = 0; i < header.num_channels; i++ )
+	{
+		header.pixel_types[i] = TINYEXR_PIXELTYPE_FLOAT; // pixel type of input image
+		header.requested_pixel_types[i] = TINYEXR_PIXELTYPE_HALF; // pixel type of output image to be stored in .EXR
+	}
+
+	header.compression_type = TINYEXR_COMPRESSIONTYPE_ZIP;
+
+	byte* buffer = NULL;
+	const char* err;
+	size_t size = SaveEXRImageToMemory( &image, &header, &buffer, &err );
+	if( size == 0 )
+	{
+		common->Error( "R_WriteEXR( %s ): Save EXR err: %s\n", filename, err );
+
+		goto cleanup;
+	}
+
+	fileSystem->WriteFile( filename, buffer, size, basePath );
+
+cleanup:
+	free( header.channels );
+	free( header.pixel_types );
+	free( header.requested_pixel_types );
+
+#endif
 }
 // RB end
 
@@ -1433,7 +1515,7 @@ R_LoadCubeImages
 Loads six files with proper extensions
 =======================
 */
-bool R_LoadCubeImages( const char* imgName, cubeFiles_t extensions, byte* pics[6], int* outSize, ID_TIME_T* timestamp )
+bool R_LoadCubeImages( const char* imgName, cubeFiles_t extensions, byte* pics[6], int* outSize, ID_TIME_T* timestamp, int cubeMapSize )
 {
 	int		i, j;
 	const char*	cameraSides[6] =  { "_forward.tga", "_back.tga", "_left.tga", "_right.tga",
@@ -1463,6 +1545,74 @@ bool R_LoadCubeImages( const char* imgName, cubeFiles_t extensions, byte* pics[6
 	if( timestamp )
 	{
 		*timestamp = 0;
+	}
+
+	if( extensions == CF_SINGLE && cubeMapSize != 0 )
+	{
+		ID_TIME_T thisTime;
+		byte* thisPic[1];
+		thisPic[0] = nullptr;
+
+		if( pics )
+		{
+			R_LoadImageProgram( imgName, thisPic, &width, &height, &thisTime );
+		}
+		else
+		{
+			// load just the timestamps
+			R_LoadImageProgram( imgName, nullptr, &width, &height, &thisTime );
+		}
+
+
+		if( thisTime == FILE_NOT_FOUND_TIMESTAMP )
+		{
+			return false;
+		}
+
+		if( timestamp )
+		{
+			if( thisTime > *timestamp )
+			{
+				*timestamp = thisTime;
+			}
+		}
+
+		if( pics )
+		{
+			*outSize = cubeMapSize;
+
+			for( int i = 0; i < 6; i++ )
+			{
+				pics[i] = R_GenerateCubeMapSideFromSingleImage( thisPic[0], width, height, cubeMapSize, i );
+				switch( i )
+				{
+					case 0:	// forward
+						R_RotatePic( pics[i], cubeMapSize );
+						break;
+					case 1:	// back
+						R_RotatePic( pics[i], cubeMapSize );
+						R_HorizontalFlip( pics[i], cubeMapSize, cubeMapSize );
+						R_VerticalFlip( pics[i], cubeMapSize, cubeMapSize );
+						break;
+					case 2:	// left
+						R_VerticalFlip( pics[i], cubeMapSize, cubeMapSize );
+						break;
+					case 3:	// right
+						R_HorizontalFlip( pics[i], cubeMapSize, cubeMapSize );
+						break;
+					case 4:	// up
+						R_RotatePic( pics[i], cubeMapSize );
+						break;
+					case 5: // down
+						R_RotatePic( pics[i], cubeMapSize );
+						break;
+				}
+			}
+
+			R_StaticFree( thisPic[0] );
+		}
+
+		return true;
 	}
 
 	for( i = 0 ; i < 6 ; i++ )

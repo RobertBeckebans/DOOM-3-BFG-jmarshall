@@ -26,8 +26,8 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-#include "precompiled.h"
 #pragma hdrstop
+#include "precompiled.h"
 #include "../snd_local.h"
 #if defined(USE_DOOMCLASSIC)
 	#include "../../../doomclassic/doom/i_sound.h"
@@ -434,7 +434,7 @@ void idSoundHardware_XAudio2::Init()
 			pMasterVoice->GetChannelMask( &win8_channelMask );
 
 			channelMask = ( unsigned int )win8_channelMask;
-			idLib::Printf( "Using device %S\n", selectedDevice.name );
+			idLib::Printf( "Using device: %S\n", selectedDevice.name.c_str() );
 		}
 		else
 		{

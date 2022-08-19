@@ -5,6 +5,7 @@ Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2014-2020 Robert Beckebans
 Copyright (C) 2014-2016 Kot in Action Creative Artel
+Copyright (C) 2022 Stephen Pridham
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -30,6 +31,14 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
+
+
+// RB: define this to use the id Tech 4.5 UI interface for ImGui instead of OpenGL or Vulkan
+// this allows to have the com_showFPS stats in screenshots
+
+//#if defined( USE_VULKAN )
+#define IMGUI_BFGUI 1
+//#endif
 
 /*
 ===============================================================================
@@ -89,7 +98,9 @@ typedef enum
 	DI_CUBE_RENDER,
 	DI_MIRROR_RENDER,
 	DI_XRAY_RENDER,
-	DI_REMOTE_RENDER
+	DI_REMOTE_RENDER,
+	DI_GUI_RENDER,
+	DI_RENDER_TARGET,
 } dynamicidImage_t;
 
 // note: keep opNames[] in sync with changes
@@ -197,6 +208,61 @@ typedef enum
 	SVC_INVERSE_MODULATE
 } stageVertexColor_t;
 
+// SP Begin
+typedef enum
+{
+	STENCIL_COMP_GREATER,
+	STENCIL_COMP_GEQUAL,
+	STENCIL_COMP_LESS,
+	STENCIL_COMP_LEQUAL,
+	STENCIL_COMP_EQUAL,
+	STENCIL_COMP_NOTEQUAL,
+	STENCIL_COMP_ALWAYS,
+	STENCIL_COMP_NEVER
+} stencilComp_t;
+
+typedef enum
+{
+	STENCIL_OP_KEEP,
+	STENCIL_OP_ZERO,
+	STENCIL_OP_REPLACE,
+	STENCIL_OP_INCRSAT,
+	STENCIL_OP_DECRSAT,
+	STENCIL_OP_INVERT,
+	STENCIL_OP_INCRWRAP,
+	STENCIL_OP_DECRWRAP
+} stencilOperation_t;
+
+struct stencilStage_t
+{
+	// The value to be compared against (if Comp is anything else than always) and/or the value to be written to the buffer
+	// (if either Pass, Fail or ZFail is set to replace).
+	byte ref = 0;
+
+	// An 8 bit mask as an 0�255 integer, used when comparing the reference value with the contents of the buffer
+	// (referenceValue & readMask) comparisonFunction (stencilBufferValue & readMask).
+	byte readMask = 255;
+
+	// An 8 bit mask as an 0�255 integer, used when writing to the buffer.Note that, like other write masks,
+	// it specifies which bits of stencil buffer will be affected by write
+	// (i.e.WriteMask 0 means that no bits are affected and not that 0 will be written).
+	byte writeMask = 255;
+
+	// Function used to compare the reference value to the current contents of the buffer.
+	stencilComp_t comp = STENCIL_COMP_ALWAYS;
+
+	// What to do with the contents of the buffer if the stencil test(and the depth test) passes.
+	stencilOperation_t pass = STENCIL_OP_KEEP;
+
+	// What to do with the contents of the buffer if the stencil test fails.
+	stencilOperation_t fail = STENCIL_OP_KEEP;
+
+	// What to do with the contents of the buffer if the stencil test passes, but the depth test fails.
+	stencilOperation_t zFail = STENCIL_OP_KEEP;
+};
+// SP End
+
+
 static const int	MAX_FRAGMENT_IMAGES = 8;
 static const int	MAX_VERTEX_PARMS = 4;
 
@@ -226,6 +292,7 @@ typedef struct
 	// if the surface is alpha tested
 	float				privatePolygonOffset;	// a per-stage polygon offset
 
+	stencilStage_t*     stencilStage;
 	newShaderStage_t*	newStage;			// vertex / fragment program based stage
 } shaderStage_t;
 
@@ -259,6 +326,13 @@ typedef enum
 	SS_POST_PROCESS = 100	// after a screen copy to texture
 } materialSort_t;
 
+enum SubViewType : uint16_t
+{
+	SUBVIEW_NONE,
+	SUBVIEW_MIRROR,
+	SUBVIEW_DIRECT_PORTAL
+};
+
 typedef enum
 {
 	CT_FRONT_SIDED,
@@ -290,7 +364,10 @@ typedef enum
 	MF_LOD2						= BIT( 8 ),	 // motorsep 11-24-2014; material flag for LOD2 iteration
 	MF_LOD3						= BIT( 9 ),	 // motorsep 11-24-2014; material flag for LOD3 iteration
 	MF_LOD4						= BIT( 10 ), // motorsep 11-24-2014; material flag for LOD4 iteration
-	MF_LOD_PERSISTENT			= BIT( 11 )	 // motorsep 11-24-2014; material flag for persistent LOD iteration
+	MF_LOD_PERSISTENT			= BIT( 11 ), // motorsep 11-24-2014; material flag for persistent LOD iteration
+	MF_GUITARGET				= BIT( 12 ), // Admer: this GUI surface is used to compute a GUI render map, but a GUI should NOT be drawn on it
+	MF_AUTOGEN_TEMPLATE			= BIT( 13 ), // Admer: this material is a template for auto-generated templates
+	MF_ORIGIN					= BIT( 14 ), // Admer: for origin brushes
 } materialFlags_t;
 
 // contents flags, NOTE: make sure to keep the defines in doom_defs.script up to date with these!
@@ -313,16 +390,19 @@ typedef enum
 	CONTENTS_AAS_OBSTACLE		= BIT( 14 ),	// used to compile an obstacle into AAS that can be enabled/disabled
 	CONTENTS_FLASHLIGHT_TRIGGER	= BIT( 15 ),	// used for triggers that are activated by the flashlight
 
+	// jmarshall: used by Quake 3 bots
+	CONTENTS_SLIME				= BIT(16),	// used for slime
+	CONTENTS_FOG				= BIT(17),	// used for fog
+	CONTENTS_LAVA				= BIT(18),
+	// jmarshall end
+
 	// contents used by utils
 	CONTENTS_AREAPORTAL			= BIT( 20 ),	// portal separating renderer areas
 	CONTENTS_NOCSG				= BIT( 21 ),	// don't cut this brush with CSG operations in the editor
+	CONTENTS_ORIGIN				= BIT( 22 ),
 
 	CONTENTS_REMOVE_UTIL		= ~( CONTENTS_AREAPORTAL | CONTENTS_NOCSG )
 } contentsFlags_t;
-
-#define CONTENTS_SLIME  BIT(14)	// used for slime
-#define CONTENTS_FOG  BIT(15)	// used for fog
-#define CONTENTS_LAVA BIT(16)
 
 // surface types
 const int NUM_SURFACE_BITS		= 4;
@@ -369,10 +449,11 @@ typedef enum
 								  // won't collect light from any angle
 } surfaceFlags_t;
 
+
 class idSoundEmitter;
 
 // RB: predefined Quake 1 light styles
-static char* predef_lightstyles[] =
+static const char* predef_lightstyles[] =
 {
 	"m",
 	"mmnmmommommnonmmonqnmmo",
@@ -388,7 +469,7 @@ static char* predef_lightstyles[] =
 	"abcdefghijklmnopqrrqponmlkjihgfedcba"
 };
 
-static char* predef_lightstylesinfo[] =
+static const char* predef_lightstylesinfo[] =
 {
 	"Normal",
 	"Flicker A",
@@ -487,6 +568,16 @@ public:
 	bool				HasSubview() const
 	{
 		return hasSubview;
+	}
+
+	bool                IsPortalSubView() const
+	{
+		return subViewType == SubViewType::SUBVIEW_DIRECT_PORTAL;
+	}
+
+	bool                IsMirrorSubView() const
+	{
+		return subViewType == SubViewType::SUBVIEW_MIRROR;
 	}
 
 	// returns true if the material will generate shadows, not making a
@@ -803,6 +894,7 @@ public:
 
 	// gets an image for the editor to use
 	idImage* 			GetEditorImage() const;
+	idImage* 			GetLightEditorImage() const; // RB
 	int					GetImageWidth() const;
 	int					GetImageHeight() const;
 
@@ -873,13 +965,16 @@ private:
 	void				ParseVertexParm( idLexer& src, newShaderStage_t* newStage );
 	void				ParseVertexParm2( idLexer& src, newShaderStage_t* newStage );
 	void				ParseFragmentMap( idLexer& src, newShaderStage_t* newStage );
+	void                ParseStencilCompare( const idToken& token, stencilComp_t* stencilComp );
+	void                ParseStencilOperation( const idToken& token, stencilOperation_t* stencilOp );
+	void                ParseStencil( idLexer& src, stencilStage_t* stencilStage );
 	void				ParseStage( idLexer& src, const textureRepeat_t trpDefault = TR_REPEAT );
 	void				ParseDeform( idLexer& src );
 	void				ParseDecalInfo( idLexer& src );
 	bool				CheckSurfaceParm( idToken* token );
 	int					GetExpressionConstant( float f );
 	int					GetExpressionTemporary();
-	expOp_t*				GetExpressionOp();
+	expOp_t*			GetExpressionOp();
 	int					EmitOp( int a, int b, expOpType_t opType );
 	int					ParseEmitOp( idLexer& src, int a, expOpType_t opType, int priority );
 	int					ParseTerm( idLexer& src );
@@ -920,7 +1015,6 @@ private:
 
 	decalInfo_t			decalInfo;
 
-
 	mutable	float		sort;				// lower numbered shaders draw before higher numbered
 	int					stereoEye;
 	deform_t			deform;
@@ -931,6 +1025,7 @@ private:
 
 	materialCoverage_t	coverage;
 	cullType_t			cullType;			// CT_FRONT_SIDED, CT_BACK_SIDED, or CT_TWO_SIDED
+	SubViewType         subViewType;        // SP added
 	bool				shouldCreateBackSides;
 
 	bool				fogLight;

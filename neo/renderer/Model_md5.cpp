@@ -127,11 +127,7 @@ void idMD5Mesh::ParseMesh( idLexer& parser, int numJoints, const idJointMat* joi
 	parser.ReadToken( &token );
 	idStr shaderName = token;
 
-	shader = declManager->FindMaterial( shaderName, false );
-	if( shader == NULL )
-	{
-		shader = declManager->FindMaterial( "textures/default_lit" );
-	}
+	shader = declManager->FindMaterial( shaderName );
 
 	//
 	// parse texture coordinates
@@ -526,6 +522,8 @@ void idMD5Mesh::UpdateSurface( const struct renderEntity_s* ent, const idJointMa
 	tri->mirroredVerts = deformInfo->mirroredVerts;
 	tri->numDupVerts = deformInfo->numDupVerts;
 	tri->dupVerts = deformInfo->dupVerts;
+	tri->numSilEdges = deformInfo->numSilEdges;
+	tri->silEdges = deformInfo->silEdges;
 
 	tri->indexCache = deformInfo->staticIndexCache;
 
@@ -721,7 +719,6 @@ idRenderModelMD5::LoadBinaryModel
 */
 bool idRenderModelMD5::LoadBinaryModel( idFile* file, const ID_TIME_T sourceTimeStamp )
 {
-
 	if( !idRenderModelStatic::LoadBinaryModel( file, sourceTimeStamp ) )
 	{
 		return false;
@@ -784,11 +781,7 @@ bool idRenderModelMD5::LoadBinaryModel( idFile* file, const ID_TIME_T sourceTime
 		}
 		else
 		{
-			meshes[i].shader = declManager->FindMaterial( materialName, false );
-			if( meshes[i].shader == NULL )
-			{
-				meshes[i].shader = declManager->FindMaterial( "engine/default_lit" );
-			}
+			meshes[i].shader = declManager->FindMaterial( materialName );
 		}
 
 		file->ReadBig( meshes[i].numVerts );
@@ -807,9 +800,7 @@ bool idRenderModelMD5::LoadBinaryModel( idFile* file, const ID_TIME_T sourceTime
 		file->ReadBig( deform.numIndexes );
 		file->ReadBig( deform.numMirroredVerts );
 		file->ReadBig( deform.numDupVerts );
-
-		int numSilEdges;
-		file->ReadBig( numSilEdges );
+		file->ReadBig( deform.numSilEdges );
 
 		srfTriangles_t	tri;
 		memset( &tri, 0, sizeof( srfTriangles_t ) );
@@ -844,19 +835,20 @@ bool idRenderModelMD5::LoadBinaryModel( idFile* file, const ID_TIME_T sourceTime
 			deform.dupVerts = tri.dupVerts;
 			file->ReadBigArray( deform.dupVerts, deform.numDupVerts * 2 );
 		}
-// jmarshall - compatibility
-		if( numSilEdges > 0 )
+
+		if( deform.numSilEdges > 0 )
 		{
-			for( int j = 0; j < numSilEdges; j++ )
+			R_AllocStaticTriSurfSilEdges( &tri, deform.numSilEdges );
+			deform.silEdges = tri.silEdges;
+			assert( deform.silEdges != NULL );
+			for( int j = 0; j < deform.numSilEdges; j++ )
 			{
-				triIndex_t stub;
-				file->ReadBig( stub );
-				file->ReadBig( stub );
-				file->ReadBig( stub );
-				file->ReadBig( stub );
+				file->ReadBig( deform.silEdges[j].p1 );
+				file->ReadBig( deform.silEdges[j].p2 );
+				file->ReadBig( deform.silEdges[j].v1 );
+				file->ReadBig( deform.silEdges[j].v2 );
 			}
 		}
-// jmarshall end
 
 		idShadowVertSkinned* shadowVerts = ( idShadowVertSkinned* ) Mem_Alloc( ALIGN( deform.numOutputVerts * 2 * sizeof( idShadowVertSkinned ), 16 ), TAG_MODEL );
 		idShadowVertSkinned::CreateShadowCache( shadowVerts, deform.verts, deform.numOutputVerts );
@@ -945,7 +937,7 @@ void idRenderModelMD5::WriteBinaryModel( idFile* file, ID_TIME_T* _timeStamp ) c
 		file->WriteBig( deform.numIndexes );
 		file->WriteBig( deform.numMirroredVerts );
 		file->WriteBig( deform.numDupVerts );
-		file->WriteBig( 0 ); // deform.numSilEdges
+		file->WriteBig( deform.numSilEdges );
 
 		if( deform.numOutputVerts > 0 )
 		{
@@ -966,6 +958,17 @@ void idRenderModelMD5::WriteBinaryModel( idFile* file, ID_TIME_T* _timeStamp ) c
 		if( deform.numDupVerts > 0 )
 		{
 			file->WriteBigArray( deform.dupVerts, deform.numDupVerts * 2 );
+		}
+
+		if( deform.numSilEdges > 0 )
+		{
+			for( int j = 0; j < deform.numSilEdges; j++ )
+			{
+				file->WriteBig( deform.silEdges[j].p1 );
+				file->WriteBig( deform.silEdges[j].p2 );
+				file->WriteBig( deform.silEdges[j].v1 );
+				file->WriteBig( deform.silEdges[j].v2 );
+			}
 		}
 
 		file->WriteBig( meshes[i].surfaceNum );

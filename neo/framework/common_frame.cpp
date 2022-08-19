@@ -195,7 +195,7 @@ gameReturn_t idGameThread::RunGameAndDraw( int numGameFrames_, idUserCmdMgr& use
 
 	// start the thread going
 	// foresthale 2014-05-12: also check com_editors as many of them are not particularly thread-safe (editLights for example)
-	if( com_smp.GetBool() == false || com_editors != 0 )
+	if( com_smp.GetInteger() <= 0 || com_editors != 0 )
 	{
 		// run it in the main thread so PIX profiling catches everything
 		Run();
@@ -347,7 +347,8 @@ void idCommonLocal::Draw()
 	}
 	else if( readDemo )
 	{
-		AdvanceRenderDemo( true );
+		// SRS - Advance demo inside Frame() instead of Draw() to support smp mode playback
+		// AdvanceRenderDemo( true );
 		renderWorld->RenderScene( &currentDemoRenderView );
 		renderSystem->DrawDemoPics();
 	}
@@ -408,7 +409,7 @@ This is an out-of-sequence screen update, not the normal game rendering
 // DG: added possibility to *not* release mouse in UpdateScreen(), it fucks up the view angle for screenshots
 void idCommonLocal::UpdateScreen( bool captureToImage, bool releaseMouse )
 {
-	if( insideUpdateScreen )
+	if( insideUpdateScreen || com_shuttingDown )
 	{
 		return;
 	}
@@ -426,6 +427,7 @@ void idCommonLocal::UpdateScreen( bool captureToImage, bool releaseMouse )
 
 	// build all the draw commands without running a new game tic
 	Draw();
+	frameTiming.finishDrawTime = Sys_Microseconds();    // SRS - Added frame timing for out-of-sequence updates (e.g. used in timedemo "twice" mode)
 
 	// foresthale 2014-03-01: note: the only place that has captureToImage=true is idAutoRender::StartBackgroundAutoSwaps
 	if( captureToImage )
@@ -437,7 +439,9 @@ void idCommonLocal::UpdateScreen( bool captureToImage, bool releaseMouse )
 	const emptyCommand_t* cmd = renderSystem->SwapCommandBuffers( &time_frontend, &time_backend, &time_shadows, &time_gpu, &stats_backend, &stats_frontend );
 
 	// get the GPU busy with new commands
+	frameTiming.startRenderTime = Sys_Microseconds();   // SRS - Added frame timing for out-of-sequence updates (e.g. used in timedemo "twice" mode)
 	renderSystem->RenderCommandBuffers( cmd );
+	frameTiming.finishRenderTime = Sys_Microseconds();  // SRS - Added frame timing for out-of-sequence updates (e.g. used in timedemo "twice" mode)
 
 	insideUpdateScreen = false;
 }
@@ -563,7 +567,8 @@ void idCommonLocal::Frame()
 			// RB end, DG end
 		{
 			// RB: don't release the mouse when opening a PDA or menu
-			if( console->Active() || ImGuiTools::ReleaseMouseForTools() )
+			// SRS - but always release at main menu after exiting game or demo
+			if( console->Active() || !mapSpawned || ImGuiTools::ReleaseMouseForTools() )
 			{
 				Sys_GrabMouseCursor( false );
 			}
@@ -679,7 +684,8 @@ void idCommonLocal::Frame()
 
 			// don't run any frames when paused
 			// jpcy: the game is paused when playing a demo, but playDemo should wait like the game does
-			if( pauseGame && !( readDemo && !timeDemo ) )
+			// SRS - don't wait if window not in focus and playDemo itself paused
+			if( pauseGame && ( !( readDemo && !timeDemo ) || session->IsSystemUIShowing() || com_pause.GetInteger() ) )
 			{
 				gameFrame++;
 				gameTimeResidual = 0;
@@ -766,6 +772,11 @@ void idCommonLocal::Frame()
 			ExecuteMapChange();
 			mapSpawnData.savegameFile = NULL;
 			mapSpawnData.persistentPlayerInfo.Clear();
+			// SRS - If in Doom 3 mode (com_smp = -1) on map change, must obey fence before returning to avoid command buffer sync issues
+			if( com_smp.GetInteger() < 0 )
+			{
+				renderSystem->SwapCommandBuffers_FinishRendering( &time_frontend, &time_backend, &time_shadows, &time_gpu, &stats_backend, &stats_frontend );
+			}
 			return;
 		}
 		else if( session->GetState() != idSession::INGAME && mapSpawned )
@@ -788,6 +799,18 @@ void idCommonLocal::Frame()
 
 		// send frame and mouse events to active guis
 		GuiFrameEvents();
+
+		// SRS - Advance demos inside Frame() vs. Draw() to support smp mode playback
+		// SRS - Pause playDemo (but not timeDemo) when window not in focus
+		if( readDemo && ( !( session->IsSystemUIShowing() || com_pause.GetInteger() ) || timeDemo ) )
+		{
+			AdvanceRenderDemo( true );
+			if( !readDemo )
+			{
+				// SRS - Important to return after demo playback is finished to avoid command buffer sync issues
+				return;
+			}
+		}
 
 		//--------------------------------------------
 		// Prepare usercmds and kick off the game processing
@@ -839,7 +862,8 @@ void idCommonLocal::Frame()
 		// RB begin
 #if defined(USE_DOOMCLASSIC)
 		// If we're in Doom or Doom 2, run tics and upload the new texture.
-		if( ( GetCurrentGame() == DOOM_CLASSIC || GetCurrentGame() == DOOM2_CLASSIC ) && !( Dialog().IsDialogPausing() || session->IsSystemUIShowing() ) )
+		// SRS - Add check for com_pause cvar to make sure window is in focus - if not classic game should be paused
+		if( ( GetCurrentGame() == DOOM_CLASSIC || GetCurrentGame() == DOOM2_CLASSIC ) && !( Dialog().IsDialogPausing() || session->IsSystemUIShowing() || com_pause.GetInteger() ) )
 		{
 			RunDoomClassicFrame();
 		}
@@ -850,12 +874,9 @@ void idCommonLocal::Frame()
 		gameReturn_t ret = gameThread.RunGameAndDraw( numGameFrames, userCmdMgr, IsClient(), gameFrame - numGameFrames );
 
 		// foresthale 2014-05-12: also check com_editors as many of them are not particularly thread-safe (editLights for example)
-		if( com_smp.GetInteger() < 0 )
-		{
-			// RB: this is the same as Doom 3 renderSystem->EndFrame()
-			renderSystem->SwapCommandBuffers_FinishRendering( &time_frontend, &time_backend, &time_shadows, &time_gpu, &stats_backend, &stats_frontend );
-		}
-		else if( com_smp.GetInteger() == 0 || com_editors != 0 )
+		// SRS - if com_editors is active make sure com_smp != -1, otherwise skip and call SwapCommandBuffers_FinishRendering later
+		frameTiming.startRenderTime = Sys_Microseconds();
+		if( com_smp.GetInteger() == 0 || ( com_smp.GetInteger() > 0 && com_editors != 0 ) )
 		{
 			// in non-smp mode, run the commands we just generated, instead of
 			// frame-delayed ones from a background thread
@@ -866,7 +887,6 @@ void idCommonLocal::Frame()
 		// Run the render back end, getting the GPU busy with new commands
 		// ASAP to minimize the pipeline bubble.
 		//----------------------------------------
-		frameTiming.startRenderTime = Sys_Microseconds();
 		renderSystem->RenderCommandBuffers( renderCommands );
 		if( com_sleepRender.GetInteger() > 0 )
 		{
@@ -874,6 +894,15 @@ void idCommonLocal::Frame()
 			Sys_Sleep( com_sleepRender.GetInteger() );
 		}
 		frameTiming.finishRenderTime = Sys_Microseconds();
+
+		// SRS - If in Doom 3 mode (com_smp = -1), must sync after RenderCommandBuffers() otherwise get artifacts due to improper command buffer swap timing
+		if( com_smp.GetInteger() < 0 )
+		{
+			// RB: this is the same as Doom 3 renderSystem->EndFrame()
+			renderSystem->SwapCommandBuffers_FinishRendering( &time_frontend, &time_backend, &time_shadows, &time_gpu, &stats_backend, &stats_frontend );
+		}
+		// SRS - Use finishSyncTime_EndFrame to record timing after sync for com_smp = -1, and just before gameThread.WaitForThread() for com_smp = 1
+		frameTiming.finishSyncTime_EndFrame = Sys_Microseconds();
 
 		// make sure the game / draw thread has completed
 		// This may block if the game is taking longer than the render back end
@@ -888,16 +917,25 @@ void idCommonLocal::Frame()
 		SendSnapshots();
 
 		// Render the sound system using the latest commands from the game thread
-		if( pauseGame )
+		// SRS - Enable sound during normal playDemo playback but not during timeDemo
+		if( pauseGame && !( readDemo && !timeDemo ) )
 		{
 			soundWorld->Pause();
 			soundSystem->SetPlayingSoundWorld( menuSoundWorld );
+			soundSystem->SetMute( false );
 		}
 		else
 		{
 			soundWorld->UnPause();
 			soundSystem->SetPlayingSoundWorld( soundWorld );
+			soundSystem->SetMute( false );
 		}
+		// SRS - Mute all sound output when dialog waiting or window not in focus (mutes Doom3, Classic, Cinematic Audio)
+		if( Dialog().IsDialogPausing() || session->IsSystemUIShowing() || com_pause.GetInteger() )
+		{
+			soundSystem->SetMute( true );
+		}
+
 		soundSystem->Render();
 
 		// process the game return for map changes, etc

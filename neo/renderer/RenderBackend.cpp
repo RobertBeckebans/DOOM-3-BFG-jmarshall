@@ -602,8 +602,8 @@ void idRenderBackend::BindVariableStageImage( const textureStage_t* texture, con
 			GL_SelectTexture( 0 );
 			cin.image->Bind();
 
-			/*
-			if( backEnd.viewDef->is2Dgui )
+			// SRS - Reenable shaders so ffmpeg and RoQ decoder cinematics are rendered with correct colour
+			if( viewDef->is2Dgui )
 			{
 				renderProgManager.BindShader_TextureVertexColor_sRGB();
 			}
@@ -611,7 +611,6 @@ void idRenderBackend::BindVariableStageImage( const textureStage_t* texture, con
 			{
 				renderProgManager.BindShader_TextureVertexColor();
 			}
-			*/
 		}
 		else
 		{
@@ -890,6 +889,7 @@ void idRenderBackend::FillDepthBufferGeneric( const drawSurf_t* const* drawSurfs
 				break;
 			}
 		}
+
 		if( stage == shader->GetNumStages() )
 		{
 			continue;
@@ -1200,9 +1200,13 @@ const int INTERACTION_TEXUNIT_JITTER		= 6;
 #if defined( USE_VULKAN )
 	const int INTERACTION_TEXUNIT_AMBIENT_CUBE1 = 5;
 	const int INTERACTION_TEXUNIT_SPECULAR_CUBE1 = 6;
+	const int INTERACTION_TEXUNIT_SPECULAR_CUBE2 = 7;
+	const int INTERACTION_TEXUNIT_SPECULAR_CUBE3 = 8;
 #else
 	const int INTERACTION_TEXUNIT_AMBIENT_CUBE1 = 7;
 	const int INTERACTION_TEXUNIT_SPECULAR_CUBE1 = 8;
+	const int INTERACTION_TEXUNIT_SPECULAR_CUBE2 = 9;
+	const int INTERACTION_TEXUNIT_SPECULAR_CUBE3 = 10;
 #endif
 
 /*
@@ -1323,8 +1327,129 @@ void idRenderBackend::DrawSingleInteraction( drawInteraction_t* din, bool useFas
 	const textureUsage_t specUsage = din->specularImage->GetUsage();
 
 	// RB begin
-	if( useIBL )
+	if( useIBL && currentSpace->useLightGrid && r_useLightGrid.GetBool() )
 	{
+		idVec4 probeMins, probeMaxs, probeCenter;
+
+		probeMins[0] = viewDef->globalProbeBounds[0][0];
+		probeMins[1] = viewDef->globalProbeBounds[0][1];
+		probeMins[2] = viewDef->globalProbeBounds[0][2];
+		probeMins[3] = viewDef->globalProbeBounds.IsCleared() ? 0.0f : 1.0f;
+
+		probeMaxs[0] = viewDef->globalProbeBounds[1][0];
+		probeMaxs[1] = viewDef->globalProbeBounds[1][1];
+		probeMaxs[2] = viewDef->globalProbeBounds[1][2];
+		probeMaxs[3] = 0.0f;
+
+		idVec3 center = viewDef->globalProbeBounds.GetCenter();
+		probeCenter.Set( center.x, center.y, center.z, 1.0f );
+
+		SetVertexParm( RENDERPARM_WOBBLESKY_X, probeMins.ToFloatPtr() );
+		SetVertexParm( RENDERPARM_WOBBLESKY_Y, probeMaxs.ToFloatPtr() );
+		SetVertexParm( RENDERPARM_WOBBLESKY_Z, probeCenter.ToFloatPtr() );
+
+		// use rpGlobalLightOrigin for lightGrid center
+		idVec4 lightGridOrigin( currentSpace->lightGridOrigin.x, currentSpace->lightGridOrigin.y, currentSpace->lightGridOrigin.z, 1.0f );
+		idVec4 lightGridSize( currentSpace->lightGridSize.x, currentSpace->lightGridSize.y, currentSpace->lightGridSize.z, 1.0f );
+		idVec4 lightGridBounds( currentSpace->lightGridBounds[0], currentSpace->lightGridBounds[1], currentSpace->lightGridBounds[2], 1.0f );
+
+		renderProgManager.SetUniformValue( RENDERPARM_GLOBALLIGHTORIGIN, lightGridOrigin.ToFloatPtr() );
+		renderProgManager.SetUniformValue( RENDERPARM_JITTERTEXSCALE, lightGridSize.ToFloatPtr() );
+		renderProgManager.SetUniformValue( RENDERPARM_JITTERTEXOFFSET, lightGridBounds.ToFloatPtr() );
+
+		// individual probe sizes on the atlas image
+		idVec4 probeSize;
+		probeSize[0] = currentSpace->lightGridAtlasSingleProbeSize - currentSpace->lightGridAtlasBorderSize;
+		probeSize[1] = currentSpace->lightGridAtlasSingleProbeSize;
+		probeSize[2] = currentSpace->lightGridAtlasBorderSize;
+		probeSize[3] = float( currentSpace->lightGridAtlasSingleProbeSize - currentSpace->lightGridAtlasBorderSize ) / currentSpace->lightGridAtlasSingleProbeSize;
+		renderProgManager.SetUniformValue( RENDERPARM_SCREENCORRECTIONFACTOR, probeSize.ToFloatPtr() ); // rpScreenCorrectionFactor
+
+		// specular cubemap blend weights
+		renderProgManager.SetUniformValue( RENDERPARM_LOCALLIGHTORIGIN, viewDef->radianceImageBlends.ToFloatPtr() );
+
+		if( specUsage == TD_SPECULAR_PBR_RMAO || specUsage == TD_SPECULAR_PBR_RMAOD )
+		{
+			// PBR path with roughness, metal and AO
+			if( din->surf->jointCache )
+			{
+				renderProgManager.BindShader_ImageBasedLightGridSkinned_PBR();
+			}
+			else
+			{
+				renderProgManager.BindShader_ImageBasedLightGrid_PBR();
+			}
+		}
+		else
+		{
+			if( din->surf->jointCache )
+			{
+				renderProgManager.BindShader_ImageBasedLightGridSkinned();
+			}
+			else
+			{
+				renderProgManager.BindShader_ImageBasedLightGrid();
+			}
+		}
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_FALLOFF );
+		globalImages->brdfLutImage->Bind();
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_PROJECTION );
+#if defined( USE_VULKAN )
+		globalImages->whiteImage->Bind();
+#else
+		if( !r_useSSAO.GetBool() || ( viewDef->renderView.rdflags & ( RDF_NOAMBIENT | RDF_IRRADIANCE ) ) )
+		{
+			globalImages->whiteImage->Bind();
+		}
+		else
+		{
+			globalImages->ambientOcclusionImage[0]->Bind();
+		}
+#endif
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_AMBIENT_CUBE1 );
+		currentSpace->lightGridAtlasImage->Bind();
+
+		idVec2i res = currentSpace->lightGridAtlasImage->GetUploadResolution();
+		idVec4 textureSize( res.x, res.y, 1.0f / res.x, 1.0f / res.y );
+
+		renderProgManager.SetUniformValue( RENDERPARM_CASCADEDISTANCES, textureSize.ToFloatPtr() );
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_SPECULAR_CUBE1 );
+		viewDef->radianceImages[0]->Bind();
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_SPECULAR_CUBE2 );
+		viewDef->radianceImages[1]->Bind();
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_SPECULAR_CUBE3 );
+		viewDef->radianceImages[2]->Bind();
+	}
+	else if( useIBL )
+	{
+		idVec4 probeMins, probeMaxs, probeCenter;
+
+		probeMins[0] = viewDef->globalProbeBounds[0][0];
+		probeMins[1] = viewDef->globalProbeBounds[0][1];
+		probeMins[2] = viewDef->globalProbeBounds[0][2];
+		probeMins[3] = viewDef->globalProbeBounds.IsCleared() ? 0.0f : 1.0f;
+
+		probeMaxs[0] = viewDef->globalProbeBounds[1][0];
+		probeMaxs[1] = viewDef->globalProbeBounds[1][1];
+		probeMaxs[2] = viewDef->globalProbeBounds[1][2];
+		probeMaxs[3] = 0.0f;
+
+		idVec3 center = viewDef->globalProbeBounds.GetCenter();
+		probeCenter.Set( center.x, center.y, center.z, 1.0f );
+
+		SetVertexParm( RENDERPARM_WOBBLESKY_X, probeMins.ToFloatPtr() );
+		SetVertexParm( RENDERPARM_WOBBLESKY_Y, probeMaxs.ToFloatPtr() );
+		SetVertexParm( RENDERPARM_WOBBLESKY_Z, probeCenter.ToFloatPtr() );
+
+		// specular cubemap blend weights
+		renderProgManager.SetUniformValue( RENDERPARM_LOCALLIGHTORIGIN, viewDef->radianceImageBlends.ToFloatPtr() );
+
 		if( specUsage == TD_SPECULAR_PBR_RMAO || specUsage == TD_SPECULAR_PBR_RMAOD )
 		{
 			// PBR path with roughness, metal and AO
@@ -1356,7 +1481,7 @@ void idRenderBackend::DrawSingleInteraction( drawInteraction_t* din, bool useFas
 #if defined( USE_VULKAN )
 		globalImages->whiteImage->Bind();
 #else
-		if( !r_useSSAO.GetBool() )
+		if( !r_useSSAO.GetBool() || ( viewDef->renderView.rdflags & ( RDF_NOAMBIENT | RDF_IRRADIANCE ) ) )
 		{
 			globalImages->whiteImage->Bind();
 		}
@@ -1366,26 +1491,17 @@ void idRenderBackend::DrawSingleInteraction( drawInteraction_t* din, bool useFas
 		}
 #endif
 
-		// TODO bind the 3 closest probes
 		GL_SelectTexture( INTERACTION_TEXUNIT_AMBIENT_CUBE1 );
-		if( viewDef->irradianceImage )
-		{
-			viewDef->irradianceImage->Bind();
-		}
-		else
-		{
-			globalImages->defaultUACIrradianceCube->Bind();
-		}
+		viewDef->irradianceImage->Bind();
 
 		GL_SelectTexture( INTERACTION_TEXUNIT_SPECULAR_CUBE1 );
-		if( viewDef->radianceImage )
-		{
-			viewDef->radianceImage->Bind();
-		}
-		else
-		{
-			globalImages->defaultUACRadianceCube->Bind();
-		}
+		viewDef->radianceImages[0]->Bind();
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_SPECULAR_CUBE2 );
+		viewDef->radianceImages[1]->Bind();
+
+		GL_SelectTexture( INTERACTION_TEXUNIT_SPECULAR_CUBE3 );
+		viewDef->radianceImages[2]->Bind();
 	}
 	else if( setInteractionShader )
 	{
@@ -1642,6 +1758,22 @@ void idRenderBackend::RenderInteractions( const drawSurf_t* surfList, const view
 	idStaticList< const drawSurf_t*, MAX_COMPLEX_INTERACTIONS_PER_LIGHT > complexSurfaces;
 	for( const drawSurf_t* walk = surfList; walk != NULL; walk = walk->nextOnLight )
 	{
+
+		// make sure the triangle culling is done
+		if( walk->shadowVolumeState != SHADOWVOLUME_DONE )
+		{
+			assert( walk->shadowVolumeState == SHADOWVOLUME_UNFINISHED || walk->shadowVolumeState == SHADOWVOLUME_DONE );
+
+			uint64 start = Sys_Microseconds();
+			while( walk->shadowVolumeState == SHADOWVOLUME_UNFINISHED )
+			{
+				Sys_Yield();
+			}
+			uint64 end = Sys_Microseconds();
+
+			pc.cpuShadowMicroSec += end - start;
+		}
+
 		const idMaterial* surfaceShader = walk->material;
 		if( surfaceShader->GetFastPathBumpImage() )
 		{
@@ -1712,7 +1844,6 @@ void idRenderBackend::RenderInteractions( const drawSurf_t* surfList, const view
 	}
 	// RB end
 
-	//const float lightScale = r_useHDR.GetBool() ? r_lightScale.GetFloat() * 0.666f : r_lightScale.GetFloat();
 	const float lightScale = r_lightScale.GetFloat();
 
 	for( int lightStageNum = 0; lightStageNum < lightShader->GetNumStages(); lightStageNum++ )
@@ -2015,7 +2146,7 @@ void idRenderBackend::RenderInteractions( const drawSurf_t* surfList, const view
 					case SL_SPECULAR:
 					{
 						// ignore stage that fails the condition
-						if( !surfaceRegs[ surfaceStage->conditionRegister ] )
+						if( !surfaceRegs[ surfaceStage->conditionRegister ] || vLight->lightDef->parms.noSpecular ) // SRS - From RB forums
 						{
 							break;
 						}
@@ -2139,8 +2270,8 @@ void idRenderBackend::AmbientPass( const drawSurf_t* const* drawSurfs, int numDr
 		return;
 	}
 
-	renderLog.OpenMainBlock( MRB_AMBIENT_PASS );
-	renderLog.OpenBlock( "Render_AmbientPass", colorBlue );
+	renderLog.OpenMainBlock( fillGbuffer ? MRB_FILL_GEOMETRY_BUFFER : MRB_AMBIENT_PASS );
+	renderLog.OpenBlock( fillGbuffer ? "Fill_GeometryBuffer" : "Render_AmbientPass", colorBlue );
 
 	if( fillGbuffer )
 	{
@@ -2168,31 +2299,55 @@ void idRenderBackend::AmbientPass( const drawSurf_t* const* drawSurfs, int numDr
 
 	GL_Color( colorWhite );
 
-	//const float lightScale = r_useHDR.GetBool() ? r_lightScale.GetFloat() * 0.666f : r_lightScale.GetFloat();
-	const float lightScale = r_lightScale.GetFloat();
-	const idVec4 lightColor = colorWhite * lightScale;
-
-	// apply the world-global overbright and the 2x factor for specular
-	const idVec4 diffuseColor = lightColor;
-	const idVec4 specularColor = lightColor * 2.0f;
-
+	idVec4 diffuseColor;
+	idVec4 specularColor;
 	idVec4 ambientColor;
-	float ambientBoost = 1.0f;
 
-	if( !r_usePBR.GetBool() )
+	if( viewDef->renderView.rdflags & RDF_IRRADIANCE )
 	{
-		ambientBoost += r_useSSAO.GetBool() ? 0.2f : 0.0f;
-		ambientBoost *= r_useHDR.GetBool() ? 1.1f : 1.0f;
+		// RB: don't let artist run into a trap when baking multibounce lightgrids
+
+		// use default value of r_lightScale 3
+		const float lightScale = 3;
+		const idVec4 lightColor = colorWhite * lightScale;
+
+		// apply the world-global overbright and the 2x factor for specular
+		diffuseColor = lightColor;
+		specularColor = lightColor;// * 2.0f;
+
+		// loose 5% with every bounce like in DDGI
+		const float energyConservation = 0.95f;
+
+		//ambientColor.Set( energyConservation, energyConservation, energyConservation, 1.0f );
+		float a = r_forceAmbient.GetFloat();
+
+		ambientColor.Set( a, a, a, 1 );
+	}
+	else
+	{
+		const float lightScale = r_lightScale.GetFloat();
+		const idVec4 lightColor = colorWhite * lightScale;
+
+		// apply the world-global overbright and tune down specular a bit so we have less fresnel overglow
+		diffuseColor = lightColor;
+		specularColor = lightColor;// * 0.5f;
+
+		float ambientBoost = 1.0f;
+		if( !r_usePBR.GetBool() )
+		{
+			ambientBoost += r_useSSAO.GetBool() ? 0.2f : 0.0f;
+			ambientBoost *= r_useHDR.GetBool() ? 1.1f : 1.0f;
+		}
+
+		ambientColor.x = r_forceAmbient.GetFloat() * ambientBoost;
+		ambientColor.y = r_forceAmbient.GetFloat() * ambientBoost;
+		ambientColor.z = r_forceAmbient.GetFloat() * ambientBoost;
+		ambientColor.w = 1;
 	}
 
-	bool useIBL = r_usePBR.GetBool() && !fillGbuffer;
-
-	ambientColor.x = r_forceAmbient.GetFloat() * ambientBoost;
-	ambientColor.y = r_forceAmbient.GetFloat() * ambientBoost;
-	ambientColor.z = r_forceAmbient.GetFloat() * ambientBoost;
-	ambientColor.w = 1;
-
 	renderProgManager.SetRenderParm( RENDERPARM_AMBIENT_COLOR, ambientColor.ToFloatPtr() );
+
+	bool useIBL = r_usePBR.GetBool() && !fillGbuffer;
 
 	// setup renderparms assuming we will be drawing trivial surfaces first
 	RB_SetupForFastPathInteractions( diffuseColor, specularColor );
@@ -2279,16 +2434,6 @@ void idRenderBackend::AmbientPass( const drawSurf_t* const* drawSurfs, int numDr
 			R_GlobalPointToLocal( drawSurf->space->modelMatrix, viewDef->renderView.vieworg, localViewOrigin.ToVec3() );
 			SetVertexParm( RENDERPARM_LOCALVIEWORIGIN, localViewOrigin.ToFloatPtr() );
 
-			//if( !isWorldModel )
-			//{
-			//	// tranform the light direction into model local space
-			//	idVec3 globalLightDirection( 0.0f, 0.0f, -1.0f ); // HACK
-			//	idVec4 localLightDirection( 0.0f );
-			//	R_GlobalVectorToLocal( drawSurf->space->modelMatrix, globalLightDirection, localLightDirection.ToVec3() );
-			//
-			//	SetVertexParm( RENDERPARM_LOCALLIGHTORIGIN, localLightDirection.ToFloatPtr() );
-			//}
-
 			// RB: if we want to store the normals in world space so we need the model -> world matrix
 			idRenderMatrix modelMatrix;
 			idRenderMatrix::Transpose( *( idRenderMatrix* )drawSurf->space->modelMatrix, modelMatrix );
@@ -2300,27 +2445,6 @@ void idRenderBackend::AmbientPass( const drawSurf_t* const* drawSurfs, int numDr
 			R_MatrixTranspose( drawSurf->space->modelViewMatrix, modelViewMatrixTranspose );
 			SetVertexParms( RENDERPARM_MODELVIEWMATRIX_X, modelViewMatrixTranspose, 4 );
 		}
-
-#if 0
-		if( !isWorldModel )
-		{
-			idVec4 directedColor;
-			directedColor.x = drawSurf->space->gridDirectedLight.x;
-			directedColor.y = drawSurf->space->gridDirectedLight.y;
-			directedColor.z = drawSurf->space->gridDirectedLight.z;
-			directedColor.w = 1;
-
-			idVec4 ambientColor;
-			ambientColor.x = drawSurf->space->gridAmbientLight.x;
-			ambientColor.y = drawSurf->space->gridAmbientLight.y;
-			ambientColor.z = drawSurf->space->gridAmbientLight.z;
-			ambientColor.w = 1;
-
-			renderProgManager.SetRenderParm( RENDERPARM_COLOR, directedColor.ToFloatPtr() );
-			renderProgManager.SetRenderParm( RENDERPARM_AMBIENT_COLOR, ambientColor.ToFloatPtr() );
-		}
-		float ambientBoost = r_useHDR.GetBool() ? 1.5 : 1.0;
-#endif
 
 		/*
 		uint64 surfGLState = 0;
@@ -2636,6 +2760,21 @@ void idRenderBackend::StencilShadowPass( const drawSurf_t* drawSurfs, const view
 		{
 			continue;	// !@# FIXME: find out why this is sometimes being hit!
 			// temporarily jump over the scissor and draw so the gl error callback doesn't get hit
+		}
+
+		// make sure the shadow volume is done
+		if( drawSurf->shadowVolumeState != SHADOWVOLUME_DONE )
+		{
+			assert( drawSurf->shadowVolumeState == SHADOWVOLUME_UNFINISHED || drawSurf->shadowVolumeState == SHADOWVOLUME_DONE );
+
+			uint64 start = Sys_Microseconds();
+			while( drawSurf->shadowVolumeState == SHADOWVOLUME_UNFINISHED )
+			{
+				Sys_Yield();
+			}
+			uint64 end = Sys_Microseconds();
+
+			pc.cpuShadowMicroSec += end - start;
 		}
 
 		if( drawSurf->numIndexes == 0 )
@@ -3276,6 +3415,24 @@ void idRenderBackend::ShadowMapPass( const drawSurf_t* drawSurfs, const viewLigh
 
 	for( const drawSurf_t* drawSurf = drawSurfs; drawSurf != NULL; drawSurf = drawSurf->nextOnLight )
 	{
+
+#if 1
+		// make sure the shadow occluder geometry is done
+		if( drawSurf->shadowVolumeState != SHADOWVOLUME_DONE )
+		{
+			assert( drawSurf->shadowVolumeState == SHADOWVOLUME_UNFINISHED || drawSurf->shadowVolumeState == SHADOWVOLUME_DONE );
+
+			uint64 start = Sys_Microseconds();
+			while( drawSurf->shadowVolumeState == SHADOWVOLUME_UNFINISHED )
+			{
+				Sys_Yield();
+			}
+			uint64 end = Sys_Microseconds();
+
+			pc.cpuShadowMicroSec += end - start;
+		}
+#endif
+
 		if( drawSurf->numIndexes == 0 )
 		{
 			continue;	// a job may have created an empty shadow geometry
@@ -4647,9 +4804,13 @@ void idRenderBackend::Bloom( const viewDef_t* _viewDef )
 		return;
 	}
 
+	renderLog.OpenMainBlock( MRB_BLOOM );
+	renderLog.OpenBlock( "Render_Bloom", colorBlue );
+
 	RENDERLOG_PRINTF( "---------- RB_Bloom( avg = %f, max = %f, key = %f ) ----------\n", hdrAverageLuminance, hdrMaxLuminance, hdrKey );
 
 	// BRIGHTPASS
+	renderLog.OpenBlock( "Brightpass" );
 
 	//GL_CheckErrors();
 
@@ -4730,6 +4891,9 @@ void idRenderBackend::Bloom( const viewDef_t* _viewDef )
 	// Draw
 	DrawElementsWithCounters( &unitSquareSurface );
 
+	renderLog.CloseBlock(); // Brightpass
+
+	renderLog.OpenBlock( "Bloom Ping Pong" );
 
 	// BLOOM PING PONG rendering
 	renderProgManager.BindShader_HDRGlareChromatic();
@@ -4762,9 +4926,14 @@ void idRenderBackend::Bloom( const viewDef_t* _viewDef )
 
 	DrawElementsWithCounters( &unitSquareSurface );
 
+	renderLog.CloseBlock(); // Bloom Ping Pong
+
 	renderProgManager.Unbind();
 
 	GL_State( GLS_DEFAULT );
+
+	renderLog.CloseBlock(); // Render_Bloom
+	renderLog.CloseMainBlock(); // MRB_BLOOM
 }
 
 
@@ -4788,7 +4957,7 @@ void idRenderBackend::DrawScreenSpaceAmbientOcclusion( const viewDef_t* _viewDef
 		return;
 	}
 
-	if( _viewDef->renderView.rdflags & RDF_NOAMBIENT )
+	if( _viewDef->renderView.rdflags & ( RDF_NOAMBIENT | RDF_IRRADIANCE ) )
 	{
 		return;
 	}
@@ -4870,8 +5039,6 @@ void idRenderBackend::DrawScreenSpaceAmbientOcclusion( const viewDef_t* _viewDef
 
 	GL_Viewport( 0, 0, aoScreenWidth, aoScreenHeight );
 	GL_Scissor( 0, 0, aoScreenWidth, aoScreenHeight );
-
-
 
 	if( downModulateScreen )
 	{
@@ -5104,7 +5271,7 @@ void idRenderBackend::DrawScreenSpaceGlobalIllumination( const viewDef_t* _viewD
 		return;
 	}
 
-	if( _viewDef->renderView.rdflags & RDF_NOAMBIENT )
+	if( _viewDef->renderView.rdflags & ( RDF_NOAMBIENT | RDF_IRRADIANCE ) )
 	{
 		return;
 	}
@@ -5138,7 +5305,6 @@ void idRenderBackend::DrawScreenSpaceGlobalIllumination( const viewDef_t* _viewD
 		glClearColor( 0, 0, 0, 1 );
 
 		GL_SelectTexture( 0 );
-		//globalImages->currentDepthImage->Bind();
 
 		for( int i = 0; i < MAX_HIERARCHICAL_ZBUFFERS; i++ )
 		{
@@ -5406,6 +5572,10 @@ void idRenderBackend::ExecuteBackEndCommands( const emptyCommand_t* cmds )
 	// needed for editor rendering
 	GL_SetDefaultState();
 
+	// SRS - Save glConfig.timerQueryAvailable state so it can be disabled for RC_DRAW_VIEW_GUI then restored after it is finished
+	const bool timerQueryAvailable = glConfig.timerQueryAvailable;
+	bool drawView3D_timestamps = false;
+
 	for( ; cmds != NULL; cmds = ( const emptyCommand_t* )cmds->next )
 	{
 		switch( cmds->commandId )
@@ -5413,17 +5583,33 @@ void idRenderBackend::ExecuteBackEndCommands( const emptyCommand_t* cmds )
 			case RC_NOP:
 				break;
 
-			case RC_DRAW_VIEW_3D:
 			case RC_DRAW_VIEW_GUI:
-				DrawView( cmds, 0 );
-				if( ( ( const drawSurfsCommand_t* )cmds )->viewDef->viewEntitys )
+				if( drawView3D_timestamps )
 				{
-					c_draw3d++;
+					// SRS - Capture separate timestamps for overlay GUI rendering when RC_DRAW_VIEW_3D timestamps are active
+					renderLog.OpenMainBlock( MRB_DRAW_GUI );
+					renderLog.OpenBlock( "Render_DrawViewGUI", colorBlue );
+					// SRS - Disable detailed timestamps during overlay GUI rendering so they do not overwrite timestamps from 3D rendering
+					glConfig.timerQueryAvailable = false;
+
+					DrawView( cmds, 0 );
+
+					// SRS - Restore timestamp capture state after overlay GUI rendering is finished
+					glConfig.timerQueryAvailable = timerQueryAvailable;
+					renderLog.CloseBlock();
+					renderLog.CloseMainBlock();
 				}
 				else
 				{
-					c_draw2d++;
+					DrawView( cmds, 0 );
 				}
+				c_draw2d++;
+				break;
+
+			case RC_DRAW_VIEW_3D:
+				drawView3D_timestamps = true;
+				DrawView( cmds, 0 );
+				c_draw3d++;
 				break;
 
 			case RC_SET_BUFFER:
@@ -5533,7 +5719,7 @@ void idRenderBackend::DrawViewInternal( const viewDef_t* _viewDef, const int ste
 
 	//GL_CheckErrors();
 
-#if !defined(USE_VULKAN)
+#if !defined( USE_VULKAN ) && !defined( USE_NVRHI )
 	// bind one global Vertex Array Object (VAO)
 	glBindVertexArray( glConfig.global_vao );
 #endif
@@ -5695,6 +5881,11 @@ void idRenderBackend::DrawViewInternal( const viewDef_t* _viewDef, const int ste
 
 #if !defined(USE_VULKAN)
 
+// SRS - For OSX OpenGL record the final portion of GPU time while no other elapsed time query is active (after final shader pass and before post processing)
+#if defined(__APPLE__)
+	renderLog.OpenMainBlock( MRB_GPU_TIME );
+#endif
+
 	// RB: convert back from HDR to LDR range
 	if( useHDR && !( _viewDef->renderView.rdflags & RDF_IRRADIANCE ) )
 	{
@@ -5753,7 +5944,15 @@ void idRenderBackend::DrawViewInternal( const viewDef_t* _viewDef, const int ste
 		Tonemap( _viewDef );
 	}
 
-	Bloom( _viewDef );
+	if( !r_skipBloom.GetBool() )
+	{
+		Bloom( _viewDef );
+	}
+
+#if defined(__APPLE__)
+	renderLog.CloseMainBlock();
+#endif
+
 #endif
 
 	renderLog.CloseBlock();

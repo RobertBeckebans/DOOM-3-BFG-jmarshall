@@ -9,6 +9,12 @@ if(CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 6)
 	set_property (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT RBDoom3BFG)
 endif()
 	
+option(STANDALONE
+		"Skip DOOM-3-BFG base/ folder and use assets/ instead" OFF)
+
+option(DOOM_CLASSIC
+		"Build with Doom 1 & 2" ON)
+
 option(FORCE_COLOR_OUTPUT
 		"Always produce ANSI-colored output (GNU/Clang only)." OFF)
 
@@ -31,7 +37,7 @@ option(FFMPEG
 		"Use FMPEG to render Bink videos" OFF)
 
 option(BINKDEC
-		"Use included libbinkdec to render Bink videos" OFF)
+		"Use included libbinkdec to render Bink videos" ON)
 		
 option(USE_VULKAN
 		"Use Vulkan instead of OpenGL" OFF)
@@ -45,11 +51,8 @@ option(USE_MoltenVK
 option(ONATIVE
 		"Optimize for the host CPU" OFF)
 		
-option(WINRT
-		"Build for Windows RT" OFF)
-		
 option(WINDOWS10
-		"Build for Windows 10" OFF)
+		"Build for Windows 10+" OFF)
 		
 option(USE_SYSTEM_ZLIB
                 "Use the system zlib instead of the bundled one" OFF)
@@ -285,7 +288,7 @@ elseif(MSVC)
 					-D_MBCS
 					-DUSE_EXCEPTIONS)
 
-	if( WINRT OR WINDOWS10 ) # Windows RT
+	if( WINDOWS10 ) # Windows RT
 		add_definitions(-DUSE_WINRT)
 	endif()
 					
@@ -308,9 +311,11 @@ if (USE_INTRINSICS_SSE)
 	add_definitions(-DUSE_INTRINSICS_SSE)
 endif()
 
-#if(STANDALONE)
-#	add_definitions(-DSTANDALONE)
-#endif()
+if(STANDALONE)
+	add_definitions(-DSTANDALONE)
+
+	set(DOOM_CLASSIC OFF)
+endif()
 
 if (USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
@@ -498,6 +503,14 @@ file(GLOB RENDERER_COLOR_INCLUDES renderer/Color/*.h)
 file(GLOB RENDERER_COLOR_SOURCES renderer/Color/*.cpp)
 file(GLOB RENDERER_DXT_INCLUDES renderer/DXT/*.h)
 file(GLOB RENDERER_DXT_SOURCES renderer/DXT/*.cpp)
+file(GLOB RENDERER_JOBS_INCLUDES renderer/jobs/*.h)
+file(GLOB RENDERER_JOBS_SOURCES renderer/jobs/*.cpp)
+file(GLOB RENDERER_JOBS_DYNAMICSHADOWVOLUME_INCLUDES renderer/jobs/dynamicshadowvolume/*.h)
+file(GLOB RENDERER_JOBS_DYNAMICSHADOWVOLUME_SOURCES renderer/jobs/dynamicshadowvolume/*.cpp)
+file(GLOB RENDERER_JOBS_PRELIGHTSHADOWVOLUME_INCLUDES renderer/jobs/prelightshadowvolume/*.h)
+file(GLOB RENDERER_JOBS_PRELIGHTSHADOWVOLUME_SOURCES renderer/jobs/prelightshadowvolume/*.cpp)
+file(GLOB RENDERER_JOBS_STATICSHADOWVOLUME_INCLUDES renderer/jobs/staticshadowvolume/*.h)
+file(GLOB RENDERER_JOBS_STATICSHADOWVOLUME_SOURCES renderer/jobs/staticshadowvolume/*.cpp)
 
 file(GLOB RENDERER_SMAA_INCLUDES renderer/SMAA/*.h)
 
@@ -670,7 +683,8 @@ set(SOUND_INCLUDES
 	sound/snd_local.h
 	sound/sound.h
 	sound/SoundVoice.h
-	sound/WaveFile.h)
+	sound/WaveFile.h
+	sound/CinematicAudio.h)
 	
 set(SOUND_SOURCES
 	sound/snd_emitter.cpp
@@ -678,28 +692,31 @@ set(SOUND_SOURCES
 	sound/snd_system.cpp
 	sound/snd_world.cpp
 	sound/SoundVoice.cpp
-	sound/WaveFile.cpp
-	)
+	sound/WaveFile.cpp)
 	
 set(XAUDIO2_INCLUDES
 	sound/XAudio2/XA2_SoundHardware.h
 	sound/XAudio2/XA2_SoundSample.h
-	sound/XAudio2/XA2_SoundVoice.h)
+	sound/XAudio2/XA2_SoundVoice.h
+	sound/Xaudio2/XA2_CinematicAudio.h)
 	
 set(XAUDIO2_SOURCES
 	sound/XAudio2/XA2_SoundHardware.cpp
 	sound/XAudio2/XA2_SoundSample.cpp
-	sound/XAudio2/XA2_SoundVoice.cpp)
+	sound/XAudio2/XA2_SoundVoice.cpp
+	sound/Xaudio2/XA2_CinematicAudio.cpp)
 	
 set(OPENAL_INCLUDES
 	sound/OpenAL/AL_SoundHardware.h
 	sound/OpenAL/AL_SoundSample.h
-	sound/OpenAL/AL_SoundVoice.h)
+	sound/OpenAL/AL_SoundVoice.h
+	sound/OpenAL/AL_CinematicAudio.h)
 	
 set(OPENAL_SOURCES
 	sound/OpenAL/AL_SoundHardware.cpp
 	sound/OpenAL/AL_SoundSample.cpp
-	sound/OpenAL/AL_SoundVoice.cpp)
+	sound/OpenAL/AL_SoundVoice.cpp
+	sound/OpenAL/AL_CinematicAudio.cpp)
 
 set(STUBAUDIO_INCLUDES
 	sound/stub/SoundStub.h)
@@ -1123,6 +1140,18 @@ source_group("renderer\\Color" FILES ${RENDERER_COLOR_SOURCES})
 source_group("renderer\\DXT" FILES ${RENDERER_DXT_INCLUDES})
 source_group("renderer\\DXT" FILES ${RENDERER_DXT_SOURCES})
 
+source_group("renderer\\jobs" FILES ${RENDERER_JOBS_INCLUDES})
+source_group("renderer\\jobs" FILES ${RENDERER_JOBS_SOURCES})
+
+source_group("renderer\\jobs\\dynamicshadowvolume" FILES ${RENDERER_JOBS_DYNAMICSHADOWVOLUME_INCLUDES})
+source_group("renderer\\jobs\\dynamicshadowvolume" FILES ${RENDERER_JOBS_DYNAMICSHADOWVOLUME_SOURCES})
+
+source_group("renderer\\jobs\\prelightshadowvolume" FILES ${RENDERER_JOBS_PRELIGHTSHADOWVOLUME_INCLUDES})
+source_group("renderer\\jobs\\prelightshadowvolume" FILES ${RENDERER_JOBS_PRELIGHTSHADOWVOLUME_SOURCES})
+
+source_group("renderer\\jobs\\staticshadowvolume" FILES ${RENDERER_JOBS_STATICSHADOWVOLUME_INCLUDES})
+source_group("renderer\\jobs\\staticshadowvolume" FILES ${RENDERER_JOBS_STATICSHADOWVOLUME_SOURCES})
+
 source_group("renderer\\OpenGL" FILES ${RENDERER_OPENGL_INCLUDES})
 source_group("renderer\\OpenGL" FILES ${RENDERER_OPENGL_SOURCES})
 
@@ -1335,6 +1364,10 @@ set(RBDOOM3_INCLUDES
 			${RENDERER_INCLUDES}
 			${RENDERER_COLOR_INCLUDES}
 			${RENDERER_DXT_INCLUDES}
+			${RENDERER_JOBS_INCLUDES}
+			${RENDERER_JOBS_DYNAMICSHADOWVOLUME_INCLUDES}
+			${RENDERER_JOBS_PRELIGHTSHADOWVOLUME_INCLUDES}
+			${RENDERER_JOBS_STATICSHADOWVOLUME_INCLUDES}
 			
 			${SHADERS}
 			${SHADERS_BUILTIN}
@@ -1369,8 +1402,6 @@ set(RBDOOM3_INCLUDES
 			${UI_INCLUDES}
 			${SWF_INCLUDES}
 			${COMMON_INCLUDES}
-			${DOOMCLASSIC_INCLUDES}
-			${TIMIDITY_INCLUDES}
 			
 			${COMPILER_INCLUDES}
 			${COMPILER_AAS_INCLUDES} ${COMPILER_AAS_SOURCES}
@@ -1402,6 +1433,10 @@ set(RBDOOM3_SOURCES
 			${RENDERER_SOURCES}
 			${RENDERER_COLOR_SOURCES}
 			${RENDERER_DXT_SOURCES}
+			${RENDERER_JOBS_SOURCES}
+			${RENDERER_JOBS_DYNAMICSHADOWVOLUME_SOURCES}
+			${RENDERER_JOBS_PRELIGHTSHADOWVOLUME_SOURCES}
+			${RENDERER_JOBS_STATICSHADOWVOLUME_SOURCES}
 			${IRRXML_SOURCES}
 			${FRAMEWORK_IMGUI_SOURCES}
 			${IMGUI_SOURCES}
@@ -1418,8 +1453,6 @@ set(RBDOOM3_SOURCES
 			${UI_SOURCES}
 			${SWF_SOURCES}
 			${COMMON_SOURCES}
-			${DOOMCLASSIC_SOURCES}
-			${TIMIDITY_SOURCES}
 			
 			${COMPILER_AAS_SOURCES}
 			${COMPILER_DMAP_SOURCES}
@@ -1441,7 +1474,15 @@ set(RBDOOM3_SOURCES
 			${GAMED3XP_SCRIPT_SOURCES}
 			)
 
-add_definitions(-DUSE_DOOMCLASSIC)
+if(DOOM_CLASSIC)
+	add_definitions(-DUSE_DOOMCLASSIC)
+
+	list(APPEND RBDOOM3_INCLUDES ${DOOMCLASSIC_INCLUDES})
+	list(APPEND RBDOOM3_INCLUDES ${TIMIDITY_INCLUDES})
+	
+	list(APPEND RBDOOM3_SOURCES ${DOOMCLASSIC_SOURCES})
+	list(APPEND RBDOOM3_SOURCES ${TIMIDITY_SOURCES})
+endif()
 
 add_definitions(-D__DOOM__
 				#-DBUILD_FREETYPE
@@ -1508,9 +1549,10 @@ if(MSVC)
 		endif()
 		
 		list(APPEND RBDOOM3_INCLUDES ${OPENAL_INCLUDES})
-		list(APPEND RBDOOM3_SOURCES
-			${OPENAL_SOURCES}
-			${DOOMCLASSIC_OPENAL_SOURCES})
+		list(APPEND RBDOOM3_SOURCES	${OPENAL_SOURCES})
+		if(DOOM_CLASSIC)
+			list(APPEND RBDOOM3_SOURCES	${DOOMCLASSIC_OPENAL_SOURCES})
+		endif()		
 		
 		set(OpenAL_LIBRARIES
 			OpenAL32)
@@ -1523,9 +1565,11 @@ if(MSVC)
 		endif()
 	else()
 		list(APPEND RBDOOM3_INCLUDES ${XAUDIO2_INCLUDES})
-		list(APPEND RBDOOM3_SOURCES
-			${XAUDIO2_SOURCES}
-			${DOOMCLASSIC_XAUDIO2_SOURCES})
+		list(APPEND RBDOOM3_SOURCES	${XAUDIO2_SOURCES})
+
+		if(DOOM_CLASSIC)
+			list(APPEND RBDOOM3_SOURCES	${DOOMCLASSIC_XAUDIO2_SOURCES})
+		endif()
 	endif()
 	
 	if(FFMPEG)
@@ -1537,6 +1581,7 @@ if(MSVC)
 			include_directories(libs/ffmpeg-win64/include/libavformat)
 			include_directories(libs/ffmpeg-win64/include/libavdevice)
 			include_directories(libs/ffmpeg-win64/include/libavcodec)
+			include_directories(libs/ffmpeg-win64/include/libswresample)
 			
 			link_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/ffmpeg-win64/lib)
 		else()
@@ -1545,6 +1590,7 @@ if(MSVC)
 			include_directories(libs/ffmpeg-win32/include/libavformat)
 			include_directories(libs/ffmpeg-win32/include/libavdevice)
 			include_directories(libs/ffmpeg-win32/include/libavcodec)
+			include_directories(libs/ffmpeg-win32/include/libswresample)
 			
 			link_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/ffmpeg-win32/lib)
 		endif()
@@ -1553,7 +1599,8 @@ if(MSVC)
 				avcodec
 				avformat
 				avutil
-				swscale)
+				swscale
+				swresample)
 		
 	endif()
 	
@@ -1602,14 +1649,18 @@ if(MSVC)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/DXT/DXTDecoder.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/DXT/DXTEncoder.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/DXT/DXTEncoder_SSE2.cpp)
-		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES d3xp/gamesys/Class.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/jobs/dynamicshadowvolume/DynamicShadowVolume.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/jobs/prelightshadowvolume/PreLightShadowVolume.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/jobs/staticshadowvolume/StaticShadowVolume.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/jobs/ShadowShared.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/RenderLog.cpp)
-		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/framework/precompiled.cpp)
 		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/renderer/Vulkan/vma.cpp)
+		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES d3xp/gamesys/Class.cpp)
+		list(REMOVE_ITEM RBDOOM3_PRECOMPILED_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/framework/precompiled.cpp)
+	
+		foreach( src_file ${RBDOOM3_PRECOMPILED_SOURCES} )
+			message(STATUS "-include precompiled.h for ${src_file}")
+		endforeach()
 	
 		set_source_files_properties(
 		${RBDOOM3_PRECOMPILED_SOURCES}
@@ -1730,22 +1781,26 @@ else()
 		if(OPENAL)
 			find_package(OpenAL REQUIRED)
 			add_definitions(-DUSE_OPENAL)
-   
-            # SRS - Added support for OpenAL Soft headers on OSX (vs default macOS SDK headers)
-            if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND NOT OPENAL_INCLUDE_DIR MATCHES "SDKs/MacOSX.*\.sdk")
-                include_directories(${OPENAL_INCLUDE_DIR})
-                add_definitions(-DUSE_OPENAL_SOFT_INCLUDES)
-            endif()
+
+			# SRS - Added support for OpenAL Soft headers on OSX (vs default macOS SDK headers)
+			if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND NOT OPENAL_INCLUDE_DIR MATCHES "SDKs/MacOSX.*\.sdk")
+				include_directories(${OPENAL_INCLUDE_DIR})
+				add_definitions(-DUSE_OPENAL_SOFT_INCLUDES)
+			endif()
 
 			list(APPEND RBDOOM3_INCLUDES ${OPENAL_INCLUDES})
-			list(APPEND RBDOOM3_SOURCES
-				${OPENAL_SOURCES}
-				${DOOMCLASSIC_OPENAL_SOURCES})
+			list(APPEND RBDOOM3_SOURCES ${OPENAL_SOURCES})
+				
+			if(DOOM_CLASSIC)
+				list(APPEND RBDOOM3_SOURCES	${DOOMCLASSIC_OPENAL_SOURCES})
+			endif()
 		else()
 			list(APPEND RBDOOM3_INCLUDES ${STUBAUDIO_INCLUDES})
-			list(APPEND RBDOOM3_SOURCES
-				${STUBAUDIO_SOURCES}
-				${DOOMCLASSIC_STUBAUDIO_SOURCES})
+			list(APPEND RBDOOM3_SOURCES ${STUBAUDIO_SOURCES})
+			
+			if(DOOM_CLASSIC)
+				list(APPEND RBDOOM3_SOURCES	${DOOMCLASSIC_STUBAUDIO_SOURCES})
+			endif()
 		endif()
 		
 		if(USE_VULKAN)

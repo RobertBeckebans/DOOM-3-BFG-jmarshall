@@ -310,6 +310,28 @@ public:
 		BindShader_Builtin( BUILTIN_AMBIENT_LIGHTING_IBL_PBR_SKINNED );
 	}
 
+
+	void	BindShader_ImageBasedLightGrid()
+	{
+		BindShader_Builtin( BUILTIN_AMBIENT_LIGHTGRID_IBL );
+	}
+
+	void	BindShader_ImageBasedLightGridSkinned()
+	{
+		BindShader_Builtin( BUILTIN_AMBIENT_LIGHTGRID_IBL_SKINNED );
+	}
+
+	void	BindShader_ImageBasedLightGrid_PBR()
+	{
+		BindShader_Builtin( BUILTIN_AMBIENT_LIGHTGRID_IBL_PBR );
+	}
+
+	void	BindShader_ImageBasedLightGridSkinned_PBR()
+	{
+		BindShader_Builtin( BUILTIN_AMBIENT_LIGHTGRID_IBL_PBR_SKINNED );
+	}
+
+
 	void	BindShader_SmallGeometryBuffer()
 	{
 		BindShader_Builtin( BUILTIN_SMALL_GEOMETRY_BUFFER );
@@ -450,14 +472,24 @@ public:
 		BindShader_Builtin( BUILTIN_PBR_INTERACTION_SHADOW_MAPPING_PARALLEL_SKINNED );
 	}
 
-	void	BindShader_Octahedron()
+	void	BindShader_DebugLightGrid()
 	{
-		BindShader_Builtin( BUILTIN_OCTAHEDRON );
+		BindShader_Builtin( BUILTIN_DEBUG_LIGHTGRID );
 	}
 
-	void	BindShader_OctahedronSkinned()
+	void	BindShader_DebugLightGridSkinned()
 	{
-		BindShader_Builtin( BUILTIN_OCTAHEDRON_SKINNED );
+		BindShader_Builtin( BUILTIN_DEBUG_LIGHTGRID_SKINNED );
+	}
+
+	void	BindShader_DebugOctahedron()
+	{
+		BindShader_Builtin( BUILTIN_DEBUG_OCTAHEDRON );
+	}
+
+	void	BindShader_DebugOctahedronSkinned()
+	{
+		BindShader_Builtin( BUILTIN_DEBUG_OCTAHEDRON_SKINNED );
 	}
 	// RB end
 
@@ -661,6 +693,12 @@ public:
 		BindShader_Builtin( BUILTIN_BINK );
 	}
 
+	// SRS - Added Bink shader without sRGB to linear conversion for testVideo cmd
+	void	BindShader_Bink_sRGB()
+	{
+		BindShader_Builtin( BUILTIN_BINK_SRGB );
+	}
+
 	void	BindShader_BinkGUI()
 	{
 		BindShader_Builtin( BUILTIN_BINK_GUI );
@@ -730,10 +768,17 @@ private:
 		BUILTIN_VERTEX_COLOR,
 		BUILTIN_AMBIENT_LIGHTING,
 		BUILTIN_AMBIENT_LIGHTING_SKINNED,
+
 		BUILTIN_AMBIENT_LIGHTING_IBL,
 		BUILTIN_AMBIENT_LIGHTING_IBL_SKINNED,
 		BUILTIN_AMBIENT_LIGHTING_IBL_PBR,
 		BUILTIN_AMBIENT_LIGHTING_IBL_PBR_SKINNED,
+
+		BUILTIN_AMBIENT_LIGHTGRID_IBL,
+		BUILTIN_AMBIENT_LIGHTGRID_IBL_SKINNED,
+		BUILTIN_AMBIENT_LIGHTGRID_IBL_PBR,
+		BUILTIN_AMBIENT_LIGHTGRID_IBL_PBR_SKINNED,
+
 		BUILTIN_SMALL_GEOMETRY_BUFFER,
 		BUILTIN_SMALL_GEOMETRY_BUFFER_SKINNED,
 		// RB end
@@ -766,8 +811,11 @@ private:
 		BUILTIN_PBR_INTERACTION_SHADOW_MAPPING_PARALLEL,
 		BUILTIN_PBR_INTERACTION_SHADOW_MAPPING_PARALLEL_SKINNED,
 
-		BUILTIN_OCTAHEDRON,
-		BUILTIN_OCTAHEDRON_SKINNED,
+		BUILTIN_DEBUG_LIGHTGRID,
+		BUILTIN_DEBUG_LIGHTGRID_SKINNED,
+
+		BUILTIN_DEBUG_OCTAHEDRON,
+		BUILTIN_DEBUG_OCTAHEDRON_SKINNED,
 		// RB end
 		BUILTIN_ENVIRONMENT,
 		BUILTIN_ENVIRONMENT_SKINNED,
@@ -812,6 +860,7 @@ private:
 		BUILTIN_STEREO_DEGHOST,
 		BUILTIN_STEREO_WARP,
 		BUILTIN_BINK,
+		BUILTIN_BINK_SRGB,	// SRS - Added Bink shader without sRGB to linear conversion for testVideo cmd
 		BUILTIN_BINK_GUI,
 		BUILTIN_STEREO_INTERLACE,
 		BUILTIN_MOTION_BLUR,

@@ -53,6 +53,7 @@ idImage::idImage( const char* name ) : imgName( name )
 	repeat = TR_REPEAT;
 	usage = TD_DEFAULT;
 	cubeFiles = CF_2D;
+	cubeMapSize = 0;
 
 	referencedOutsideLevelLoad = false;
 	levelLoadReferenced = false;
@@ -418,16 +419,6 @@ void idImage::SetSamplerState( textureFilter_t tf, textureRepeat_t tr )
 
 /*
 ========================
-idImage::SetPixel
-========================
-*/
-void idImage::SetPixel( int mipLevel, int x, int y, const void* data, int dataSize )
-{
-	SubImageUpload( mipLevel, x, y, 0, 1, 1, data );
-}
-
-/*
-========================
 idImage::SetTexParameters
 ========================
 */
@@ -550,7 +541,7 @@ void idImage::SetTexParameters()
 		}
 	}
 
-	// RB: disabled use of unreliable extension that can make the game look worse
+	// RB: disabled use of unreliable extension that can make the game look worse but doesn't save any VRAM
 	/*
 	if( glConfig.textureLODBiasAvailable && ( usage != TD_FONT ) )
 	{
@@ -615,74 +606,72 @@ void idImage::AllocImage()
 	GL_CheckErrors();
 	PurgeImage();
 
-	int sRGB = r_useSRGB.GetInteger();
-
 	switch( opts.format )
 	{
 		case FMT_RGBA8:
-			//internalFormat = GL_RGBA8;
-			//internalFormat = ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) ) ? GL_SRGB8_ALPHA8 : GL_RGBA8;
-			internalFormat = ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) ) ? GL_SRGB8_ALPHA8 : GL_RGBA8;
+			internalFormat = GL_RGBA8;
 			dataFormat = GL_RGBA;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_XRGB8:
-			internalFormat = ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) ) ? GL_SRGB : GL_RGB;
+			internalFormat = GL_RGB;
 			dataFormat = GL_RGBA;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_RGB565:
-			//internalFormat = ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) ) ? GL_SRGB : GL_RGB;
 			internalFormat = GL_RGB;
 			dataFormat = GL_RGB;
 			dataType = GL_UNSIGNED_SHORT_5_6_5;
 			break;
+
 		case FMT_ALPHA:
-#if 1
-			if( ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) ) )
-			{
-				internalFormat = GL_SRGB;
-				dataFormat = GL_RED;
-			}
-			else
-#endif
-			{
-				internalFormat = GL_R8;
-				dataFormat = GL_RED;
-			}
+			internalFormat = GL_R8;
+			dataFormat = GL_RED;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_L8A8:
 			internalFormat = GL_RG8;
 			dataFormat = GL_RG;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_LUM8:
 			internalFormat = GL_R8;
 			dataFormat = GL_RED;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_INT8:
 			internalFormat = GL_R8;
 			dataFormat = GL_RED;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_DXT1:
-			internalFormat = ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) ) ? GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT : GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-			//internalFormat =  GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
 			dataFormat = GL_RGBA;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_DXT5:
-			internalFormat = ( glConfig.sRGBFramebufferAvailable && ( sRGB == 1 || sRGB == 3 ) && opts.colorFormat != CFM_YCOCG_DXT5 && opts.colorFormat != CFM_NORMAL_DXT5 ) ? GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT : GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-			//internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			dataFormat = GL_RGBA;
 			dataType = GL_UNSIGNED_BYTE;
 			break;
+
 		case FMT_DEPTH:
 			internalFormat = GL_DEPTH_COMPONENT;
 			dataFormat = GL_DEPTH_COMPONENT;
 			dataType = GL_UNSIGNED_BYTE;
+			break;
+
+		case FMT_DEPTH_STENCIL:
+			internalFormat = GL_DEPTH24_STENCIL8;
+			dataFormat = GL_DEPTH_STENCIL;
+			dataType = GL_UNSIGNED_INT_24_8;
 			break;
 
 		case FMT_SHADOW_ARRAY:
@@ -731,7 +720,6 @@ void idImage::AllocImage()
 			internalFormat = GL_R11F_G11F_B10F;
 			dataFormat = GL_RGB;
 			dataType = GL_UNSIGNED_INT_10F_11F_11F_REV;
-			//dataType = GL_FLOAT;
 			break;
 
 		default:
@@ -884,12 +872,15 @@ void idImage::PurgeImage()
 	}
 
 	// clear all the current binding caches, so the next bind will do a real one
-	for( int i = 0 ; i < MAX_MULTITEXTURE_UNITS ; i++ )
+	for( int i = 0; i < MAX_MULTITEXTURE_UNITS; i++ )
 	{
 		glcontext.tmu[i].current2DMap = TEXTURE_NOT_LOADED;
 		glcontext.tmu[i].current2DArray = TEXTURE_NOT_LOADED;
 		glcontext.tmu[i].currentCubeMap = TEXTURE_NOT_LOADED;
 	}
+
+	// reset for reloading images
+	defaulted = false;
 }
 
 /*

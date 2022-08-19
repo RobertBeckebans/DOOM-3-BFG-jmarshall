@@ -34,8 +34,9 @@ static const int MAX_BLOOM_BUFFERS = 2;
 static const int MAX_SSAO_BUFFERS = 2;
 static const int MAX_HIERARCHICAL_ZBUFFERS = 6; // native resolution + 5 MIP LEVELS
 
-static const int RADIANCE_CUBEMAP_SIZE = 256;
-static const int IRRADIANCE_CUBEMAP_SIZE = 128;
+static const int ENVPROBE_CAPTURE_SIZE = 256;
+static const int RADIANCE_OCTAHEDRON_SIZE = 512;
+static const int IRRADIANCE_OCTAHEDRON_SIZE = 30 + 2;
 
 #if 1
 static	int shadowMapResolutions[MAX_SHADOWMAP_RESOLUTIONS] = { 2048, 1024, 512, 512, 256 };
@@ -53,8 +54,9 @@ public:
 
 	static void				Init();
 	static void				Shutdown();
-
 	static void				CheckFramebuffers();
+	static Framebuffer*		Find( const char* name );
+	static void				ResizeFramebuffers();
 
 	void					Bind();
 	bool					IsBound();
@@ -64,11 +66,11 @@ public:
 
 	void					AddColorBuffer( int format, int index, int multiSamples = 0 );
 	void					AddDepthBuffer( int format, int multiSamples = 0 );
+	void					AddStencilBuffer( int format, int multiSamples = 0 );
 
-	void					AttachImage2D( int target, const idImage* image, int index, int mipmapLod = 0 );
-	void					AttachImage3D( const idImage* image );
-	void					AttachImageDepth( int target, const idImage* image );
-	void					AttachImageDepthLayer( const idImage* image, int layer );
+	void					AttachImage2D( int target, idImage* image, int index, int mipmapLod = 0 );
+	void					AttachImageDepth( int target, idImage* image );
+	void					AttachImageDepthLayer( idImage* image, int layer );
 
 	// check for OpenGL errors
 	void					Check();
@@ -138,6 +140,7 @@ struct globalFramebuffers_t
 	Framebuffer*				smaaEdgesFBO;
 	Framebuffer*				smaaBlendFBO;
 };
+
 extern globalFramebuffers_t globalFramebuffers;
 
 #endif // __FRAMEBUFFER_H__

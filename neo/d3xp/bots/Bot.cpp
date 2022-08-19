@@ -408,7 +408,7 @@ void rvmBot::Think( void )
 			common->RW()->DebugBounds( color, bounds, GetOrigin() );
 
 			idMat3 axis = viewAngles.ToMat3();
-			common->RW()->DrawTextA( stateThread.GetState()->state.c_str(), GetOrigin(), 1.0f, color, axis );
+			common->RW()->DrawText( stateThread.GetState()->state.c_str(), GetOrigin(), 1.0f, color, axis );
 		}
 	}
 

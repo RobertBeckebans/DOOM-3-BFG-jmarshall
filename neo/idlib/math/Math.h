@@ -29,6 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __MATH_MATH_H__
 #define __MATH_MATH_H__
 
+class idVec2;
 class idVec3;
 class idVec4;
 

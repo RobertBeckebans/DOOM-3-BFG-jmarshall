@@ -33,7 +33,6 @@ If you have questions concerning this license or the applicable additional terms
 #endif
 // RB end
 
-#include "precompiled.h"
 #include "ParallelJobList_JobHeaders.h"
 
 #ifdef _WIN32

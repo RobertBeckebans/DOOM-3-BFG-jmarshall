@@ -7,7 +7,7 @@
 
 	This file has been generated with the Type Info Generator v1.1 (c) 2004 id Software
 
-	954 constants
+	955 constants
 	92 enums
 	474 classes/structs/unions
 	3 templates
@@ -55,6 +55,7 @@ static constantInfo_t constantInfo[] = {
 	{ "const int", "ENTITYNUM_WORLD", "4096-2" },
 	{ "const int", "ENTITYNUM_MAX_NORMAL", "4096-2" },
 	{ "const int", "ENTITYNUM_FIRST_NON_REPLICATED", "4094-256" },
+	{ "constexpr const char *", "BRUSH_ORIGIN_KEY", "__brushOrigin" },
 	{ "int", "SRESULT_OK", "0" },
 	{ "int", "SRESULT_ERROR", "1" },
 	{ "int", "SRESULT_DONE", "2" },

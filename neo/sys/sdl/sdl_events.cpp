@@ -852,7 +852,8 @@ void Sys_GrabMouseCursor( bool grabIt )
 	{
 		flags = GRAB_SETSTATE;
 	}
-#if defined(__linux__) && defined(USE_VULKAN)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	VKimp_GrabInput( flags );
 #else
 	GLimp_GrabInput( flags );
@@ -1707,8 +1708,12 @@ sysEvent_t Sys_GetEvent()
 						common->Warning( "unknown user event %u", ev.user.code );
 				}
 				continue; // just handle next event
+
+			case SDL_KEYMAPCHANGED:
+				continue; // just handle next event
+
 			default:
-				common->Warning( "unknown event %u", ev.type );
+				common->Warning( "unknown event %u = %#x", ev.type, ev.type );
 				continue; // just handle next event
 		}
 	}

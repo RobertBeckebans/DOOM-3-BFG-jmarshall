@@ -768,8 +768,27 @@ remove them if not needed.
 #include <mutex> // for std::mutex
 #include <string.h>
 
-#if !defined(_WIN32)
-	#include <malloc.h> // for aligned_alloc()
+//SRS - Modified from vkQuake2, to compile with C++11 on OSX versions with no aligned_alloc
+#if defined(__APPLE__)
+//SRS - aligned_alloc available on macOS starting with C++17 on 10.15 SDK, C++14 on 11.0 SDK
+//SRS - Instead, use custom _aligned_alloc for portability across macOS SDK and runtime versions
+void* _aligned_alloc( size_t alignment, size_t size )
+{
+	// alignment must be >= sizeof(void*)
+	if( alignment < sizeof( void* ) )
+	{
+		alignment = sizeof( void* );
+	}
+
+	void* pointer;
+	if( posix_memalign( &pointer, alignment, size ) == 0 )
+	{
+		return pointer;
+	}
+	return NULL;
+}
+#elif !defined(_WIN32)
+#include <malloc.h> // for aligned_alloc()
 #endif
 
 // Normal assert to check for programmer's errors, especially in Debug configuration.
@@ -803,6 +822,8 @@ remove them if not needed.
 #ifndef VMA_SYSTEM_ALIGNED_MALLOC
 	#if defined(_WIN32)
 		#define VMA_SYSTEM_ALIGNED_MALLOC(size, alignment)   (_aligned_malloc((size), (alignment)))
+	#elif defined(__APPLE__)
+		#define VMA_SYSTEM_ALIGNED_MALLOC(size, alignment)   (_aligned_alloc((alignment), (size) ))
 	#else
 		#define VMA_SYSTEM_ALIGNED_MALLOC(size, alignment)   (aligned_alloc((alignment), (size) ))
 	#endif
@@ -3468,7 +3489,8 @@ void VmaBlock::PrintDetailedMap( class VmaStringBuilder& sb ) const
 	sb.Add( ",\n\t\t\t\"FreeBytes\": " );
 	sb.AddNumber( m_SumFreeSize );
 	sb.Add( ",\n\t\t\t\"Suballocations\": " );
-	sb.AddNumber( m_Suballocations.size() );
+	//SRS - cast to uint32_t to avoid type ambiguity
+	sb.AddNumber( ( uint32_t )m_Suballocations.size() );
 	sb.Add( ",\n\t\t\t\"FreeSuballocations\": " );
 	sb.AddNumber( m_FreeCount );
 	sb.Add( ",\n\t\t\t\"SuballocationList\": [" );
@@ -4933,7 +4955,8 @@ void VmaAllocator_T::PrintDetailedMap( VmaStringBuilder& sb )
 					sb.Add( ",\n\"OwnAllocations\": {\n\t\"Type " );
 					ownAllocationsStarted = true;
 				}
-				sb.AddNumber( memTypeIndex );
+				//SRS - cast to uint32_t to avoid type ambiguity, memTypeIndex is an unsigned int
+				sb.AddNumber( ( uint32_t )memTypeIndex );
 				if( blockVectorType == VMA_BLOCK_VECTOR_TYPE_MAPPED )
 				{
 					sb.Add( " Mapped" );
@@ -4984,7 +5007,8 @@ void VmaAllocator_T::PrintDetailedMap( VmaStringBuilder& sb )
 						sb.Add( ",\n\"Allocations\": {\n\t\"Type " );
 						allocationsStarted = true;
 					}
-					sb.AddNumber( memTypeIndex );
+					//SRS - cast to uint32_t to avoid type ambiguity, memTypeIndex is an unsigned int
+					sb.AddNumber( ( uint32_t )memTypeIndex );
 					if( blockVectorType == VMA_BLOCK_VECTOR_TYPE_MAPPED )
 					{
 						sb.Add( " Mapped" );
@@ -5207,6 +5231,7 @@ VkResult vmaFindMemoryTypeIndex(
 
 	uint32_t requiredFlags = pMemoryRequirements->requiredFlags;
 	uint32_t preferredFlags = pMemoryRequirements->preferredFlags;
+	uint32_t avoidFlags = 0;
 	if( preferredFlags == 0 )
 	{
 		preferredFlags = requiredFlags;
@@ -5240,6 +5265,8 @@ VkResult vmaFindMemoryTypeIndex(
 	if( ( pMemoryRequirements->flags & VMA_MEMORY_REQUIREMENT_PERSISTENT_MAP_BIT ) != 0 )
 	{
 		requiredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+		// SRS - Make sure memory type does not have VK_MEMORY_HEAP_MULTI_INSTANCE_BIT set, otherwise get validation errors when mapping memory
+		avoidFlags |= VK_MEMORY_HEAP_MULTI_INSTANCE_BIT;
 	}
 
 	*pMemoryTypeIndex = UINT32_MAX;
@@ -5253,8 +5280,11 @@ VkResult vmaFindMemoryTypeIndex(
 		{
 			const VkMemoryPropertyFlags currFlags =
 				allocator->m_MemProps.memoryTypes[memTypeIndex].propertyFlags;
+			const VkMemoryHeapFlags heapFlags =
+				allocator->m_MemProps.memoryHeaps[allocator->m_MemProps.memoryTypes[memTypeIndex].heapIndex].flags;
 			// This memory type contains requiredFlags.
-			if( ( requiredFlags & ~currFlags ) == 0 )
+			// SRS - and does not contain any heap avoidFlags
+			if( ( requiredFlags & ~currFlags ) == 0 && ( avoidFlags & heapFlags ) == 0 )
 			{
 				// Calculate cost as number of bits from preferredFlags not present in this memory type.
 				uint32_t currCost = CountBitsSet( preferredFlags & ~currFlags );

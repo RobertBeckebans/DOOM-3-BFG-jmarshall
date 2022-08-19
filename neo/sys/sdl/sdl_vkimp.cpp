@@ -41,6 +41,10 @@ If you have questions concerning this license or the applicable additional terms
 #include <SDL.h>
 #include <SDL_vulkan.h>
 #include <vulkan/vulkan.h>
+// SRS - optinally needed for VK_MVK_MOLTENVK_EXTENSION_NAME visibility
+#if defined(__APPLE__) && defined(USE_MoltenVK)
+	#include <MoltenVK/vk_mvk_moltenvk.h>
+#endif
 #include <vector>
 
 #include "renderer/RenderCommon.h"
@@ -71,15 +75,17 @@ static SDL_Window* window = nullptr;
 
 // Eric: Integrate this into RBDoom3BFG's source code ecosystem.
 // Helper function for using SDL2 and Vulkan on Linux.
-std::vector<const char*> get_required_extensions( const std::vector<const char*>& instanceExtensions, bool enableValidationLayers )
+std::vector<const char*> get_required_extensions()
 {
 	uint32_t                 sdlCount = 0;
-	std::vector<const char*> sdlInstanceExtensions;
+	std::vector<const char*> sdlInstanceExtensions = {};
 
 	SDL_Vulkan_GetInstanceExtensions( nullptr, &sdlCount, nullptr );
 	sdlInstanceExtensions.resize( sdlCount );
 	SDL_Vulkan_GetInstanceExtensions( nullptr, &sdlCount, sdlInstanceExtensions.data() );
 
+	// SRS - Report enabled instance extensions in CreateVulkanInstance() vs. doing it here
+	/*
 	if( enableValidationLayers )
 	{
 		idLib::Printf( "\nNumber of availiable instance extensions\t%i\n", sdlCount );
@@ -89,7 +95,18 @@ std::vector<const char*> get_required_extensions( const std::vector<const char*>
 			idLib::Printf( "\t%s\n", ext );
 		}
 	}
+	*/
 
+	// SRS - needed for MoltenVK portability implementation and optionally for MoltenVK configuration on OSX
+#if defined(__APPLE__)
+	sdlInstanceExtensions.push_back( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+#if defined(USE_MoltenVK)
+	sdlInstanceExtensions.push_back( VK_MVK_MOLTENVK_EXTENSION_NAME );
+#endif
+#endif
+
+	// SRS - Add debug instance extensions in CreateVulkanInstance() vs. hardcoding them here
+	/*
 	if( enableValidationLayers )
 	{
 		sdlInstanceExtensions.push_back( "VK_EXT_debug_report" );
@@ -102,6 +119,7 @@ std::vector<const char*> get_required_extensions( const std::vector<const char*>
 			idLib::Printf( "\t%s\n", ext );
 		}
 	}
+	*/
 
 	return sdlInstanceExtensions;
 }
@@ -306,8 +324,9 @@ bool VKimp_Init( glimpParms_t parms )
 		return false;
 	}
 
-#ifdef __APPLE__
-	glewExperimental = GL_TRUE;
+#if defined(__APPLE__) && SDL_VERSION_ATLEAST(2, 0, 2)
+	// SRS - On OSX enable SDL2 relative mouse mode warping to capture mouse properly if outside of window
+	SDL_SetHintWithPriority( SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE );
 #endif
 
 	// DG: disable cursor, we have two cursors in menu (because mouse isn't grabbed in menu)

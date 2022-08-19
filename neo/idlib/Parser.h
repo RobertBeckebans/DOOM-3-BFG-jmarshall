@@ -95,6 +95,7 @@ public:
 	// free the current source
 	void			FreeSource( bool keepDefines = false );
 
+	// jmarshall
 	int				Parse1DMatrixLegacy( int x, float* m );
 
 	// returns true if a source is loaded

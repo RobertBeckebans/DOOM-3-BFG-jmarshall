@@ -130,6 +130,7 @@ struct frameTiming_t
 	uint64	finishDrawTime;
 	uint64	startRenderTime;
 	uint64	finishRenderTime;
+	uint64  finishSyncTime_EndFrame;
 };
 
 #define	MAX_PRINT_MSG_SIZE	4096
@@ -368,6 +369,18 @@ public:
 	}
 	// RB end
 
+	// SRS start
+	uint64      GetRendererStartFrameSyncMicroseconds() const
+	{
+		return mainFrameTiming.finishSyncTime - mainFrameTiming.startSyncTime;
+	}
+
+	uint64      GetRendererEndFrameSyncMicroseconds() const
+	{
+		return mainFrameTiming.finishSyncTime_EndFrame - mainFrameTiming.startRenderTime;
+	}
+	// SRS end
+
 	// foresthale 2014-05-30: a special binarize pacifier has to be shown in
 	// some cases, which includes filename and ETA information, note that
 	// the progress function takes 0-1 float, not 0-100, and can be called
@@ -547,6 +560,7 @@ private:
 	timeDemo_t			timeDemo;
 	int					timeDemoStartTime;
 	int					numDemoFrames;		// for timeDemo and demoShot
+	int                 numShotFrames;      // SRS - for demoShot playback timeout
 	int					demoTimeOffset;
 	renderView_t		currentDemoRenderView;
 

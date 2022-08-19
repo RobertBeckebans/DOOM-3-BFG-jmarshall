@@ -31,9 +31,24 @@ If you have questions concerning this license or the applicable additional terms
 #include "precompiled.h"
 #pragma hdrstop
 
+// SRS - Include SDL headers to enable vsync changes without restart for UNIX-like OSs
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__)
+	// SRS - Don't seem to need these #undefs (at least on macOS), are they needed for Linux, etc?
+	// DG: SDL.h somehow needs the following functions, so #undef those silly
+	//     "don't use" #defines from Str.h
+	//#undef strncmp
+	//#undef strcasecmp
+	//#undef vsnprintf
+	// DG end
+	#include <SDL.h>
+#endif
+// SRS end
+
 #include "../RenderCommon.h"
 #include "../RenderBackend.h"
 #include "../../framework/Common_local.h"
+
+#include "../../imgui/BFGimgui.h"
 
 idCVar r_drawFlickerBox( "r_drawFlickerBox", "0", CVAR_RENDERER | CVAR_BOOL, "visual test for dropping frames" );
 idCVar stereoRender_warp( "stereoRender_warp", "0", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_BOOL, "use the optical warping renderprog instead of stereoDeGhost" );
@@ -181,17 +196,22 @@ static void R_CheckPortableExtensions()
 		idLib::FatalError( "%s", badVideoCard );
 	}
 
-	if( idStr::Icmpn( glConfig.renderer_string, "ATI ", 4 ) == 0 || idStr::Icmpn( glConfig.renderer_string, "AMD ", 4 ) == 0 )
+	if( idStr::Icmpn( glConfig.vendor_string, "ATI ", 4 ) == 0 || idStr::Icmpn( glConfig.renderer_string, "ATI ", 4 ) == 0 || idStr::Icmpn( glConfig.renderer_string, "AMD ", 4 ) == 0 )
 	{
 		glConfig.vendor = VENDOR_AMD;
 	}
-	else if( idStr::Icmpn( glConfig.renderer_string, "NVIDIA", 6 ) == 0 )
+	else if( idStr::Icmpn( glConfig.vendor_string, "NVIDIA", 6 ) == 0 || idStr::Icmpn( glConfig.renderer_string, "NVIDIA", 6 ) == 0 )
 	{
 		glConfig.vendor = VENDOR_NVIDIA;
 	}
-	else if( idStr::Icmpn( glConfig.renderer_string, "Intel", 5 ) == 0 )
+	else if( idStr::Icmpn( glConfig.vendor_string, "Intel", 5 ) == 0 || idStr::Icmpn( glConfig.renderer_string, "Intel", 5 ) == 0 )
 	{
 		glConfig.vendor = VENDOR_INTEL;
+	}
+	// SRS - Added support for Apple GPUs
+	else if( idStr::Icmpn( glConfig.vendor_string, "Apple", 5 ) == 0 || idStr::Icmpn( glConfig.renderer_string, "Apple", 5 ) == 0 )
+	{
+		glConfig.vendor = VENDOR_APPLE;
 	}
 
 	// RB: Mesa support
@@ -262,10 +282,6 @@ static void R_CheckPortableExtensions()
 	// GL_ARB_seamless_cube_map
 	glConfig.seamlessCubeMapAvailable = GLEW_ARB_seamless_cube_map != 0;
 	r_useSeamlessCubeMap.SetModified();		// the CheckCvars() next frame will enable / disable it
-
-	// GL_ARB_framebuffer_sRGB
-	glConfig.sRGBFramebufferAvailable = GLEW_ARB_framebuffer_sRGB != 0;
-	r_useSRGB.SetModified();		// the CheckCvars() next frame will enable / disable it
 
 	// GL_ARB_vertex_buffer_object
 	if( glConfig.driverType == GLDRV_OPENGL_MESA_CORE_PROFILE )
@@ -339,10 +355,13 @@ static void R_CheckPortableExtensions()
 	// GL_ARB_occlusion_query
 	glConfig.occlusionQueryAvailable = GLEW_ARB_occlusion_query != 0;
 
+#if defined(__APPLE__)
+	// SRS - DSA not available in Apple OpenGL 4.1, but enable for OSX anyways since elapsed time query will be used to get timing info instead
+	glConfig.timerQueryAvailable = ( GLEW_ARB_timer_query != 0 || GLEW_EXT_timer_query != 0 );
+#else
 	// GL_ARB_timer_query using the DSA interface
-	//glConfig.timerQueryAvailable = ( GLEW_ARB_timer_query != 0 || GLEW_EXT_timer_query != 0 ) && ( glConfig.vendor != VENDOR_INTEL || r_skipIntelWorkarounds.GetBool() ) && glConfig.driverType != GLDRV_OPENGL_MESA;
-
 	glConfig.timerQueryAvailable = ( GLEW_ARB_direct_state_access != 0 && GLEW_ARB_timer_query != 0 );
+#endif
 
 	// GREMEDY_string_marker
 	glConfig.gremedyStringMarkerAvailable = GLEW_GREMEDY_string_marker != 0;
@@ -1407,21 +1426,6 @@ void idRenderBackend::GL_Clear( bool color, bool depth, bool stencil, byte stenc
 	glClear( clearFlags );
 
 	// RB begin
-	/*
-	if( r_useHDR.GetBool() && clearHDR && globalFramebuffers.hdrFBO != NULL )
-	{
-		bool isDefaultFramebufferActive = Framebuffer::IsDefaultFramebufferActive();
-
-		globalFramebuffers.hdrFBO->Bind();
-		glClear( clearFlags );
-
-		if( isDefaultFramebufferActive )
-		{
-			Framebuffer::Unbind();
-		}
-	}
-	*/
-
 	if( r_useHDR.GetBool() && clearHDR )
 	{
 		bool isDefaultFramebufferActive = Framebuffer::IsDefaultFramebufferActive();
@@ -1518,22 +1522,27 @@ void idRenderBackend::CheckCVars()
 		}
 	}
 
-	if( r_useSRGB.IsModified() )
-	{
-		r_useSRGB.ClearModified();
-		if( glConfig.sRGBFramebufferAvailable )
-		{
-			if( r_useSRGB.GetBool() && r_useSRGB.GetInteger() != 3 )
-			{
-				glEnable( GL_FRAMEBUFFER_SRGB );
-			}
-			else
-			{
-				glDisable( GL_FRAMEBUFFER_SRGB );
-			}
-		}
-	}
 
+	// SRS - Enable SDL-driven vync changes without restart for UNIX-like OSs
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__)
+	extern idCVar r_swapInterval;
+	if( r_swapInterval.IsModified() )
+	{
+		r_swapInterval.ClearModified();
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+		if( SDL_GL_SetSwapInterval( r_swapInterval.GetInteger() ) < 0 )
+		{
+			common->Warning( "Vsync changes not supported without restart" );
+		}
+#else
+		if( SDL_GL_SetAttribute( SDL_GL_SWAP_CONTROL, r_swapInterval.GetInteger() ) < 0 )
+		{
+			common->Warning( "Vsync changes not supported without restart" );
+		}
+#endif
+	}
+#endif
+	// SRS end
 	if( r_antiAliasing.IsModified() )
 	{
 		switch( r_antiAliasing.GetInteger() )
@@ -1958,6 +1967,10 @@ void idRenderBackend::StereoRenderExecuteBackEndCommands( const emptyCommand_t* 
 	// off to a texture.
 	bool foundEye[2] = { false, false };
 
+	// SRS - Save glConfig.timerQueryAvailable state so it can be disabled for RC_DRAW_VIEW_GUI then restored after it is finished
+	const bool timerQueryAvailable = glConfig.timerQueryAvailable;
+	bool drawView3D_timestamps = false;
+
 	for( int stereoEye = 1; stereoEye >= -1; stereoEye -= 2 )
 	{
 		// set up the target texture we will draw to
@@ -1989,10 +2002,27 @@ void idRenderBackend::StereoRenderExecuteBackEndCommands( const emptyCommand_t* 
 					}
 
 					foundEye[ targetEye ] = true;
-					DrawView( dsc, stereoEye );
-					if( cmds->commandId == RC_DRAW_VIEW_GUI )
+					if( cmds->commandId == RC_DRAW_VIEW_GUI && drawView3D_timestamps )
 					{
+						// SRS - Capture separate timestamps for overlay GUI rendering when RC_DRAW_VIEW_3D timestamps are active
+						renderLog.OpenMainBlock( MRB_DRAW_GUI );
+						renderLog.OpenBlock( "Render_DrawViewGUI", colorBlue );
+						// SRS - Disable detailed timestamps during overlay GUI rendering so they do not overwrite timestamps from 3D rendering
+						glConfig.timerQueryAvailable = false;
+
+						DrawView( dsc, stereoEye );
+
+						// SRS - Restore timestamp capture state after overlay GUI rendering is finished
+						glConfig.timerQueryAvailable = timerQueryAvailable;
+						renderLog.CloseBlock();
+						renderLog.CloseMainBlock();
+						break;
 					}
+					else if( cmds->commandId == RC_DRAW_VIEW_3D )
+					{
+						drawView3D_timestamps = true;
+					}
+					DrawView( dsc, stereoEye );
 				}
 				break;
 
@@ -2014,6 +2044,7 @@ void idRenderBackend::StereoRenderExecuteBackEndCommands( const emptyCommand_t* 
 					PostProcess( cmds );
 				}
 				break;
+
 				default:
 					common->Error( "RB_ExecuteBackEndCommands: bad commandId" );
 					break;
@@ -2345,6 +2376,12 @@ void idRenderBackend::ImGui_Shutdown()
 
 void idRenderBackend::ImGui_RenderDrawLists( ImDrawData* draw_data )
 {
+	if( draw_data->CmdListsCount == 0 )
+	{
+		// Nothing to do.
+		return;
+	}
+
 #if IMGUI_BFGUI
 
 	tr.guiModel->EmitImGui( draw_data );

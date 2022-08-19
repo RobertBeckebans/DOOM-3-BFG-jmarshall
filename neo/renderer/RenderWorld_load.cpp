@@ -352,11 +352,14 @@ idRenderModel* idRenderWorldLocal::ParseShadowModel( idLexer* src, idFile* fileO
 	srfTriangles_t* tri = R_AllocStaticTriSurf();
 
 	tri->numVerts = src->ParseInt();
+	tri->numShadowIndexesNoCaps = src->ParseInt();
+	tri->numShadowIndexesNoFrontCaps = src->ParseInt();
 	tri->numIndexes = src->ParseInt();
 	tri->shadowCapPlaneBits = src->ParseInt();
 
 	assert( ( tri->numVerts & 1 ) == 0 );
 
+	R_AllocStaticTriSurfPreLightShadowVerts( tri, ALIGN( tri->numVerts, 2 ) );
 	tri->bounds.Clear();
 	for( int j = 0; j < tri->numVerts; j++ )
 	{
@@ -855,6 +858,7 @@ bool idRenderWorldLocal::InitFromMap( const char* name )
 			TouchWorldModels();
 			AddWorldModelEntities();
 			ClearPortalStates();
+			SetupLightGrid();
 			return true;
 		}
 		common->Printf( "idRenderWorldLocal::InitFromMap: timestamp has changed, reloading.\n" );
@@ -1044,6 +1048,7 @@ bool idRenderWorldLocal::InitFromMap( const char* name )
 
 	AddWorldModelEntities();
 	ClearPortalStates();
+	SetupLightGrid();
 
 	// done!
 	return true;

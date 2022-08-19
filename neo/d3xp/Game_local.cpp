@@ -3,8 +3,9 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
-Copyright (C) 2014-2016 Robert Beckebans
+Copyright (C) 2014-2021 Robert Beckebans
 Copyright (C) 2014-2016 Kot in Action Creative Artel
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -991,7 +992,7 @@ void idGameLocal::LoadMap( const char* mapName, int randseed )
 	mapFileName = mapFile->GetName();
 
 	// load the collision map
-	collisionModelManager->LoadMap( mapFile );
+	collisionModelManager->LoadMap( mapFile, false );
 	collisionModelManager->Preload( mapName );
 
 	numClients = 0;
@@ -1288,12 +1289,10 @@ void idGameLocal::PopulateEnvironmentProbes()
 
 	for( ent = spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next() )
 	{
-		if( !ent->IsType( EnvironmentProbe::Type ) )
+		if( ent->IsType( EnvironmentProbe::Type ) )
 		{
-			continue;
+			numEnvprobes++;
 		}
-
-		numEnvprobes++;
 	}
 
 	if( numEnvprobes > 0 )
@@ -1312,11 +1311,12 @@ void idGameLocal::PopulateEnvironmentProbes()
 
 	int	numAreas = gameRenderWorld->NumAreas();
 
-	for( int i = 0 ; i < numAreas ; i++ )
+	for( int i = 0; i < numAreas; i++ )
 	{
 		idBounds areaBounds = gameRenderWorld->AreaBounds( i );
 
 		idVec3 point = areaBounds.GetCenter();
+		point.SnapInt();
 
 		int areaNum = gameRenderWorld->PointInArea( point );
 		if( areaNum < 0 )
@@ -1329,13 +1329,17 @@ void idGameLocal::PopulateEnvironmentProbes()
 		args.Set( "classname", "env_probe" );
 		args.Set( "origin", point.ToString() );
 
+		idStr name;
+		name.Format( "env_probe_area_%i", i );
+		name = gameEdit->GetUniqueEntityName( name );
+
+		args.Set( "name", name );
+
 		gameLocal.SpawnEntityDef( args, &ent );
 		if( !ent )
 		{
 			gameLocal.Error( "Couldn't spawn 'env_probe'" );
 		}
-
-		//environmentProbes.Append( probe );
 	}
 }
 // RB end
@@ -1914,7 +1918,7 @@ void idGameLocal::CacheDictionaryMedia( const idDict* dict )
 				renderModelManager->FindModel( kv->GetValue() );
 
 				// precache .cm files only
-				collisionModelManager->LoadModel( kv->GetValue() );
+				collisionModelManager->LoadModel( kv->GetValue(), true );
 			}
 		}
 		kv = dict->MatchPrefix( "model", kv );
@@ -3516,7 +3520,10 @@ void idGameLocal::RunDebugInfo()
 			}
 			if( viewTextBounds.IntersectsBounds( entBounds ) )
 			{
-				gameRenderWorld->DrawText( ent->name.c_str(), entBounds.GetCenter(), 0.1f, colorWhite, axis, 1 );
+				//if( ent->IsType( EnvironmentProbe::Type ) )
+				{
+					gameRenderWorld->DrawText( ent->name.c_str(), entBounds.GetCenter(), 0.1f, colorWhite, axis, 1 );
+				}
 				gameRenderWorld->DrawText( va( "#%d", ent->entityNumber ), entBounds.GetCenter() + up, 0.1f, colorWhite, axis, 1 );
 			}
 		}
@@ -4099,6 +4106,17 @@ bool idGameLocal::InhibitEntitySpawn( idDict& spawnArgs )
 		}
 	}
 
+	// RB: TrenchBroom interop skip func_group entities
+	{
+		const char* name = spawnArgs.GetString( "classname" );
+		const char* groupType = spawnArgs.GetString( "_tb_type" );
+
+		if( idStr::Icmp( name, "func_group" ) == 0 && ( idStr::Icmp( groupType, "_tb_group" ) == 0 || idStr::Icmp( groupType, "_tb_layer" ) == 0 ) )
+		{
+			result = true;
+		}
+	}
+
 	return result;
 }
 
@@ -4168,6 +4186,9 @@ void idGameLocal::SpawnMapEntities()
 		{
 			// precache any media specified in the map entity
 			CacheDictionaryMedia( &args );
+
+			// Admer: brush origin offsets:
+			args.SetVector( BRUSH_ORIGIN_KEY, mapEnt->originOffset );
 
 			SpawnEntityDef( args );
 			num++;
@@ -5115,6 +5136,9 @@ bool idGameLocal::SkipCinematic( void )
 	{
 		skipCinematic = true;
 		cinematicMaxSkipTime = gameLocal.time + SEC2MS( g_cinematicMaxSkipTime.GetFloat() );
+		
+		// SRS - Skip the remainder of the currently playing cinematic sound
+		soundSystem->GetPlayingSoundWorld()->Skip( cinematicMaxSkipTime );
 	}
 
 	return true;

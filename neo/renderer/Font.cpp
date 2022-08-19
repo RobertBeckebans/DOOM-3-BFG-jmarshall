@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 #include "Font.h"
 
-const char* DEFAULT_FONT = "Arial";
+const char* DEFAULT_FONT = "Arial_Narrow";
 
 static const float old_scale2 = 0.6f;
 static const float old_scale1 = 0.3f;
@@ -187,7 +187,7 @@ idFont::LoadFont
 */
 bool idFont::LoadFont()
 {
-	idStr fontName = va( "fonts/%s/48.dat", GetName() );
+	idStr fontName = va( "newfonts/%s/48.dat", GetName() );
 	idFile* fd = fileSystem->OpenFileRead( fontName );
 	if( fd == NULL )
 	{

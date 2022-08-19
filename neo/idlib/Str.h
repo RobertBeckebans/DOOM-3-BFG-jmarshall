@@ -286,7 +286,7 @@ public:
 	void				ExtractFileExtension( idStr& dest ) const;		// copy the file extension to another string
 	bool				CheckExtension( const char* ext );
 
-	void				StripDoubleQuotes( void );
+	void				StripDoubleQuotes();
 
 // RAVEN BEGIN
 // abahr

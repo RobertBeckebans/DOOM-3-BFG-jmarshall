@@ -128,8 +128,14 @@ void idRenderProgManager::LoadShader( shader_t& shader )
 
 		default:
 		{
+			//SRS - OSX supports only up to GLSL 4.1
+#if defined(__APPLE__)
+			outFileGLSL.Format( "renderprogs/glsl-4_10/%s%s", shader.name.c_str(), shader.nameOutSuffix.c_str() );
+			outFileUniforms.Format( "renderprogs/glsl-4_10/%s%s", shader.name.c_str(), shader.nameOutSuffix.c_str() );
+#else
 			outFileGLSL.Format( "renderprogs/glsl-4_50/%s%s", shader.name.c_str(), shader.nameOutSuffix.c_str() );
 			outFileUniforms.Format( "renderprogs/glsl-4_50/%s%s", shader.name.c_str(), shader.nameOutSuffix.c_str() );
+#endif
 		}
 	}
 
@@ -214,7 +220,6 @@ void idRenderProgManager::LoadShader( shader_t& shader )
 		idStr hlslCode( hlslFileBuffer );
 		idStr programHLSL = StripDeadCode( hlslCode, inFile, compileMacros, shader.builtin );
 		programGLSL = ConvertCG2GLSL( programHLSL, inFile.c_str(), shader.stage, programUniforms, false, hasGPUSkinning, shader.vertexLayout );
-
 		fileSystem->WriteFile( outFileHLSL, programHLSL.c_str(), programHLSL.Length(), "fs_savepath" );
 		fileSystem->WriteFile( outFileGLSL, programGLSL.c_str(), programGLSL.Length(), "fs_savepath" );
 		fileSystem->WriteFile( outFileUniforms, programUniforms.c_str(), programUniforms.Length(), "fs_savepath" );

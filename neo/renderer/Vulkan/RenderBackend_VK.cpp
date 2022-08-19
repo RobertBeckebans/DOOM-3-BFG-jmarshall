@@ -28,8 +28,8 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-#include "precompiled.h"
 #pragma hdrstop
+#include "precompiled.h"
 
 // VK_EXT_debug_marker
 PFN_vkDebugMarkerSetObjectTagEXT	qvkDebugMarkerSetObjectTagEXT = VK_NULL_HANDLE;
@@ -65,13 +65,18 @@ idCVar r_vkEnableValidationLayers( "r_vkEnableValidationLayers", "0", CVAR_BOOL 
 
 vulkanContext_t vkcontext;
 
-#if defined(_WIN32)
+#if defined(VK_USE_PLATFORM_WIN32_KHR)  //_WIN32
 static const int g_numInstanceExtensions = 2;
 static const char* g_instanceExtensions[ g_numInstanceExtensions ] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
 	VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 };
+#endif
+
+// SRS - optionally needed for runtime access to fullImageViewSwizzle (instead of env var MVK_CONFIG_FULL_IMAGE_VIEW_SWIZZLE = 1)
+#if defined(__APPLE__) && defined(USE_MoltenVK)
+	#include <MoltenVK/vk_mvk_moltenvk.h>
 #endif
 
 static const int g_numDebugInstanceExtensions = 1;
@@ -83,7 +88,12 @@ static const char* g_debugInstanceExtensions[ g_numDebugInstanceExtensions ] =
 static const int g_numValidationLayers = 1;
 static const char* g_validationLayers[ g_numValidationLayers ] =
 {
+// SRS - use MoltenVK validation layer on macOS when using libMoltenVK in place of libvulkan
+#if defined(__APPLE__) && defined(USE_MoltenVK)
+	"MoltenVK"
+#else
 	"VK_LAYER_KHRONOS_validation"
+#endif
 };
 
 #define ID_VK_ERROR_STRING( x ) case static_cast< int >( x ): return #x
@@ -267,18 +277,67 @@ static void CreateVulkanInstance()
 	vkcontext.instanceExtensions.Clear();
 	vkcontext.deviceExtensions.Clear();
 	vkcontext.validationLayers.Clear();
-#if defined(_WIN32)
+#if defined(VK_USE_PLATFORM_WIN32_KHR)  //_WIN32
 	for( int i = 0; i < g_numInstanceExtensions; ++i )
 	{
 		vkcontext.instanceExtensions.Append( g_instanceExtensions[ i ] );
 	}
+#elif defined(VULKAN_USE_PLATFORM_SDL)  // SDL2
+	auto sdl_instanceExtensions = get_required_extensions();
+	// SRS - Populate vkcontext with required SDL instance extensions
+	for( auto instanceExtension : sdl_instanceExtensions )
+	{
+		vkcontext.instanceExtensions.Append( instanceExtension );
+	}
 #endif
 
+	// SRS - Enumerate available Vulkan instance extensions and test for presence of VK_KHR_get_physical_device_properties2 and VK_EXT_debug_utils
+	idLib::Printf( "Getting available vulkan instance extensions...\n" );
+	uint32 numInstanceExtensions;
+	ID_VK_CHECK( vkEnumerateInstanceExtensionProperties( NULL, &numInstanceExtensions, NULL ) );
+	ID_VK_VALIDATE( numInstanceExtensions > 0, "vkEnumerateInstanceExtensionProperties returned zero extensions." );
+
+	idList< VkExtensionProperties > instanceExtensionProps;
+	instanceExtensionProps.SetNum( numInstanceExtensions );
+	ID_VK_CHECK( vkEnumerateInstanceExtensionProperties( NULL, &numInstanceExtensions, instanceExtensionProps.Ptr() ) );
+	ID_VK_VALIDATE( numInstanceExtensions > 0, "vkEnumerateInstanceExtensionProperties returned zero extensions." );
+
+	vkcontext.deviceProperties2Available = false;
+	for( int i = 0; i < numInstanceExtensions; i++ )
+	{
+		if( idStr::Icmp( instanceExtensionProps[ i ].extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) == 0 )
+		{
+			vkcontext.instanceExtensions.AddUnique( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+			vkcontext.deviceProperties2Available = true;
+			break;
+		}
+	}
+
+	vkcontext.debugUtilsSupportAvailable = false;
 	if( enableLayers )
 	{
 		for( int i = 0; i < g_numDebugInstanceExtensions; ++i )
 		{
 			vkcontext.instanceExtensions.Append( g_debugInstanceExtensions[ i ] );
+		}
+
+		idLib::Printf( "Number of available instance extensions\t%i\n", numInstanceExtensions );
+		idLib::Printf( "Available Extension List: \n" );
+		for( int i = 0; i < numInstanceExtensions; i++ )
+		{
+			idLib::Printf( "\t%s\n", instanceExtensionProps[ i ].extensionName );
+			if( idStr::Icmp( instanceExtensionProps[ i ].extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) == 0 )
+			{
+				vkcontext.instanceExtensions.AddUnique( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+				vkcontext.debugUtilsSupportAvailable = true;
+			}
+		}
+
+		idLib::Printf( "Number of enabled instance extensions\t%i\n", vkcontext.instanceExtensions.Num() );
+		idLib::Printf( "Enabled Extension List: \n" );
+		for( int i = 0; i < vkcontext.instanceExtensions.Num(); ++i )
+		{
+			idLib::Printf( "\t%s\n", vkcontext.instanceExtensions[ i ] );
 		}
 
 		for( int i = 0; i < g_numValidationLayers; ++i )
@@ -288,14 +347,8 @@ static void CreateVulkanInstance()
 
 		ValidateValidationLayers();
 	}
-#if defined(__linux__)
-	auto extensions = get_required_extensions( sdlInstanceExtensions, enableLayers );
-	createInfo.enabledExtensionCount = static_cast<uint32_t>( extensions.size() );
-	createInfo.ppEnabledExtensionNames = extensions.data();
-#else
 	createInfo.enabledExtensionCount = vkcontext.instanceExtensions.Num();
 	createInfo.ppEnabledExtensionNames = vkcontext.instanceExtensions.Ptr();
-#endif
 
 	createInfo.enabledLayerCount = vkcontext.validationLayers.Num();
 	createInfo.ppEnabledLayerNames = vkcontext.validationLayers.Ptr();
@@ -349,9 +402,9 @@ static void EnumeratePhysicalDevices()
 			ID_VK_VALIDATE( numQueues > 0, "vkGetPhysicalDeviceQueueFamilyProperties returned zero queues." );
 		}
 
-		// grab available Vulkan extensions
+		// grab available Vulkan device extensions
 		{
-			idLib::Printf( "Getting available vulkan extensions...\n" );
+			idLib::Printf( "Getting available vulkan device extensions...\n" );
 			uint32 numExtension;
 			ID_VK_CHECK( vkEnumerateDeviceExtensionProperties( gpu.device, NULL, &numExtension, NULL ) );
 			ID_VK_VALIDATE( numExtension > 0, "vkEnumerateDeviceExtensionProperties returned zero extensions." );
@@ -362,7 +415,7 @@ static void EnumeratePhysicalDevices()
 #if 0
 			for( uint32 j = 0; j < numExtension; j++ )
 			{
-				idLib::Printf( "Found Vulkan Extension '%s' on device %d\n", gpu.extensionProps[j].extensionName, i );
+				idLib::Printf( "Found Vulkan Device Extension '%s' on device %d\n", gpu.extensionProps[ j ].extensionName, i );
 			}
 #endif // 0
 		}
@@ -407,6 +460,11 @@ static void EnumeratePhysicalDevices()
 				idLib::Printf( "Found device[%i] Vendor: AMD\n", i );
 				break;
 
+			// SRS - Added support for Apple GPUs
+			case 0x106B:
+				idLib::Printf( "Found device[%i] Vendor: Apple\n", i );
+				break;
+
 			default:
 				idLib::Printf( "Found device[%i] Vendor: Unknown (0x%x)\n", i, gpu.props.vendorID );
 		}
@@ -418,13 +476,14 @@ static void EnumeratePhysicalDevices()
 CreateSurface
 =============
 */
+// SRS - Is this #include still needed?
 #ifdef _WIN32
 	#include "../../sys/win32/win_local.h"
 #endif
 
 static void CreateSurface()
 {
-#ifdef _WIN32
+#if defined(VK_USE_PLATFORM_WIN32_KHR)  //_WIN32
 	VkWin32SurfaceCreateInfoKHR createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 	createInfo.hinstance = win32.hInstance;
@@ -432,33 +491,13 @@ static void CreateSurface()
 
 	ID_VK_CHECK( vkCreateWin32SurfaceKHR( vkcontext.instance, &createInfo, NULL, &vkcontext.surface ) );
 
-#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-	VkWaylandSurfaceCreateInfoKHR createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR;
-	createInfo.pNext = NULL;
-	createInfo.display = info.display;
-	createInfo.surface = info.window;
-
-	ID_VK_CHECK( vkCreateWaylandSurfaceKHR( info.inst, &createInfo, NULL, &info.surface ) );
-
-#else
-#if defined(__linux__)
+// SRS - Generalized Vulkan SDL platform
+#elif defined(VULKAN_USE_PLATFORM_SDL)
 	if( !SDL_Vulkan_CreateSurface( vkcontext.sdlWindow, vkcontext.instance, &vkcontext.surface ) )
 	{
 		idLib::FatalError( "Error while creating Vulkan surface: %s", SDL_GetError() );
 	}
-#else
-	VkXcbSurfaceCreateInfoKHR createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
-	createInfo.pNext = NULL;
-	createInfo.flags = 0;
-	createInfo.connection = info.connection;
-	createInfo.window = info.window;
-
-	ID_VK_CHECK( vkCreateXcbSurfaceKHR( vkcontext.instance, &createInfo, NULL, &vkcontext.surface ) );
-#endif // __linux__
-
-#endif  // _WIN32
+#endif
 
 }
 
@@ -506,17 +545,27 @@ static void PopulateDeviceExtensions( const idList< VkExtensionProperties >& ext
 	{
 		//idLib::Printf( "Checking Vulkan device extension [%s]\n", extensionProps[ i ].extensionName );
 
+		// SRS - needed for MoltenVK portability implementation on OSX
+#if defined(__APPLE__)
+		if( idStr::Icmp( extensionProps[ i ].extensionName, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME ) == 0 )
+		{
+			extensions.AddUnique( VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME );
+			continue;
+		}
+#endif
+
 		if( idStr::Icmp( extensionProps[ i ].extensionName, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) == 0 && enableLayers )
 		{
 			extensions.AddUnique( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 			continue;
 		}
 
-		if( idStr::Icmp( extensionProps[ i ].extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) == 0 && enableLayers )
-		{
-			extensions.AddUnique( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-			continue;
-		}
+		// SRS - Move this to CreateVulkanInstance(), since VK_EXT_debug_utils is an instance extension not a device extension
+		//if( idStr::Icmp( extensionProps[ i ].extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) == 0 && enableLayers )
+		//{
+		//	extensions.AddUnique( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+		//	continue;
+		//}
 	}
 }
 
@@ -553,7 +602,7 @@ EnableDeviceExtensionFeatures
 static void EnableDeviceExtensionFeatures( const idList< const char* >& extensions )
 {
 	vkcontext.debugMarkerSupportAvailable = false;
-	vkcontext.debugUtilsSupportAvailable = false;
+	//vkcontext.debugUtilsSupportAvailable = false;
 
 	for( int i = 0; i < extensions.Num(); ++i )
 	{
@@ -561,13 +610,15 @@ static void EnableDeviceExtensionFeatures( const idList< const char* >& extensio
 		{
 			idLib::Printf( "Using Vulkan device extension [%s]\n", VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 			vkcontext.debugMarkerSupportAvailable = true;
+			break;
 		}
 
-		if( idStr::Icmp( extensions[ i ], VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) == 0 )
-		{
-			idLib::Printf( "Using Vulkan device extension [%s]\n", VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-			vkcontext.debugUtilsSupportAvailable = true;
-		}
+		// SRS - Move this to CreateVulkanInstance(), since VK_EXT_debug_utils is an instance extension not a device extension
+		//if( idStr::Icmp( extensions[ i ], VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) == 0 )
+		//{
+		//	idLib::Printf( "Using Vulkan device extension [%s]\n", VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+		//	vkcontext.debugUtilsSupportAvailable = true;
+		//}
 	}
 }
 
@@ -660,23 +711,65 @@ static void SelectPhysicalDevice()
 			switch( gpu.props.vendorID )
 			{
 				case 0x8086:
-					idLib::Printf( "Device[%i] : Vendor: Intel \n", i );
+					idLib::Printf( "Device[%i] : Vendor: Intel\n", i );
 					glConfig.vendor = VENDOR_INTEL;
+					glConfig.vendor_string = "Intel Inc.";
 					break;
 
 				case 0x10DE:
 					idLib::Printf( "Device[%i] : Vendor: NVIDIA\n", i );
 					glConfig.vendor = VENDOR_NVIDIA;
+					glConfig.vendor_string = "NVIDIA Corporation";
 					break;
 
 				case 0x1002:
 					idLib::Printf( "Device[%i] : Vendor: AMD\n", i );
 					glConfig.vendor = VENDOR_AMD;
+					glConfig.vendor_string = "ATI Technologies Inc.";
+					break;
+
+				// SRS - Added support for Apple GPUs
+				case 0x106B:
+					idLib::Printf( "Found device[%i] Vendor: Apple\n", i );
+					glConfig.vendor = VENDOR_APPLE;
+					glConfig.vendor_string = "Apple";
 					break;
 
 				default:
 					idLib::Printf( "Device[%i] : Vendor: Unknown (0x%x)\n", i, gpu.props.vendorID );
 			}
+
+			glConfig.renderer_string = gpu.props.deviceName;
+
+			static idStr version_string;
+			version_string.Clear();
+			version_string.Append( va( "Vulkan API %i.%i.%i", VK_API_VERSION_MAJOR( gpu.props.apiVersion ), VK_API_VERSION_MINOR( gpu.props.apiVersion ), VK_API_VERSION_PATCH( gpu.props.apiVersion ) ) );
+
+			static idStr extensions_string;
+			extensions_string.Clear();
+			bool driverPropertiesAvailable = false;
+			for( int i = 0; i < gpu.extensionProps.Num(); i++ )
+			{
+				extensions_string.Append( va( "%s ", gpu.extensionProps[ i ].extensionName ) );
+
+				if( idStr::Icmp( gpu.extensionProps[ i ].extensionName, VK_KHR_DRIVER_PROPERTIES_EXTENSION_NAME ) == 0 )
+				{
+					driverPropertiesAvailable = true;
+				}
+			}
+			glConfig.extensions_string = extensions_string.c_str();
+
+			if( vkcontext.deviceProperties2Available && driverPropertiesAvailable )
+			{
+				VkPhysicalDeviceProperties2 pProperties = {};
+				VkPhysicalDeviceDriverProperties pDriverProperties = {};
+				pProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+				pProperties.pNext = &pDriverProperties;
+				pDriverProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES;
+				vkGetPhysicalDeviceProperties2( vkcontext.physicalDevice, &pProperties );
+				version_string.Append( va( " (%s %s)", pDriverProperties.driverName, pDriverProperties.driverInfo ) );
+			}
+			glConfig.version_string = version_string.c_str();
 
 			return;
 		}
@@ -711,6 +804,39 @@ static void CreateLogicalDeviceAndQueues()
 		devqInfo.Append( qinfo );
 	}
 
+	// SRS - needed for MoltenVK portability implementation on OSX
+#if defined(__APPLE__)
+	VkPhysicalDeviceFeatures2 deviceFeatures2 = {};
+	VkPhysicalDevicePortabilitySubsetFeaturesKHR portabilityFeatures = {};
+
+	deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+	deviceFeatures2.pNext = &portabilityFeatures;
+	portabilityFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR;
+
+	vkGetPhysicalDeviceFeatures2( vkcontext.physicalDevice, &deviceFeatures2 );
+#if defined(USE_MoltenVK)
+	MVKConfiguration    pConfig;
+	size_t              pConfigSize = sizeof( pConfig );
+
+	ID_VK_CHECK( vkGetMoltenVKConfigurationMVK( vkcontext.instance, &pConfig, &pConfigSize ) );
+
+	// SRS - If we don't have native image view swizzle, enable MoltenVK's image view swizzle feature
+	if( portabilityFeatures.imageViewFormatSwizzle == VK_FALSE )
+	{
+		idLib::Printf( "Enabling MoltenVK's image view swizzle...\n" );
+		pConfig.fullImageViewSwizzle = VK_TRUE;
+		ID_VK_CHECK( vkSetMoltenVKConfigurationMVK( vkcontext.instance, &pConfig, &pConfigSize ) );
+	}
+
+	// SRS - If MoltenVK's Metal argument buffer feature is on, disable it for sampler scalability
+	if( pConfig.useMetalArgumentBuffers == VK_TRUE )
+	{
+		idLib::Printf( "Disabling MoltenVK's Metal argument buffers...\n" );
+		pConfig.useMetalArgumentBuffers = VK_FALSE;
+		ID_VK_CHECK( vkSetMoltenVKConfigurationMVK( vkcontext.instance, &pConfig, &pConfigSize ) );
+	}
+#endif
+#else
 	VkPhysicalDeviceFeatures deviceFeatures = {};
 	deviceFeatures.textureCompressionBC = VK_TRUE;
 	deviceFeatures.imageCubeArray = VK_TRUE;
@@ -719,12 +845,18 @@ static void CreateLogicalDeviceAndQueues()
 	deviceFeatures.depthBounds = vkcontext.physicalDeviceFeatures.depthBounds;
 	deviceFeatures.fillModeNonSolid = VK_TRUE;
 	deviceFeatures.samplerAnisotropy = vkcontext.physicalDeviceFeatures.samplerAnisotropy; // RB
+#endif
 
 	VkDeviceCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	// SRS - needed for MoltenVK portability implementation on OSX
+#if defined(__APPLE__)
+	info.pNext = &deviceFeatures2;
+#else
+	info.pEnabledFeatures = &deviceFeatures;
+#endif
 	info.queueCreateInfoCount = devqInfo.Num();
 	info.pQueueCreateInfos = devqInfo.Ptr();
-	info.pEnabledFeatures = &deviceFeatures;
 	info.enabledExtensionCount = vkcontext.deviceExtensions.Num();
 	info.ppEnabledExtensionNames = vkcontext.deviceExtensions.Ptr();
 
@@ -760,11 +892,12 @@ static void CreateLogicalDeviceAndQueues()
 
 	if( vkcontext.debugUtilsSupportAvailable )
 	{
-		qvkQueueBeginDebugUtilsLabelEXT = ( PFN_vkQueueBeginDebugUtilsLabelEXT )vkGetDeviceProcAddr( vkcontext.device, "vkQueueBeginDebugUtilsLabelEXT" );
-		qvkQueueEndDebugUtilsLabelEXT = ( PFN_vkQueueEndDebugUtilsLabelEXT )vkGetDeviceProcAddr( vkcontext.device, "vkQueueEndDebugUtilsLabelEXT" );
-		qvkCmdBeginDebugUtilsLabelEXT = ( PFN_vkCmdBeginDebugUtilsLabelEXT )vkGetDeviceProcAddr( vkcontext.device, "vkCmdBeginDebugUtilsLabelEXT" );
-		qvkCmdEndDebugUtilsLabelEXT = ( PFN_vkCmdEndDebugUtilsLabelEXT )vkGetDeviceProcAddr( vkcontext.device, "vkCmdEndDebugUtilsLabelEXT" );
-		qvkCmdInsertDebugUtilsLabelEXT = ( PFN_vkCmdInsertDebugUtilsLabelEXT )vkGetDeviceProcAddr( vkcontext.device, "vkCmdInsertDebugUtilsLabelEXT" );
+		// SRS - Since VK_EXT_debug_utils is an instance extension, must use vkGetInstanceProcAddr() vs vkGetDeviceProcAddr()
+		qvkQueueBeginDebugUtilsLabelEXT = ( PFN_vkQueueBeginDebugUtilsLabelEXT )vkGetInstanceProcAddr( vkcontext.instance, "vkQueueBeginDebugUtilsLabelEXT" );
+		qvkQueueEndDebugUtilsLabelEXT = ( PFN_vkQueueEndDebugUtilsLabelEXT )vkGetInstanceProcAddr( vkcontext.instance, "vkQueueEndDebugUtilsLabelEXT" );
+		qvkCmdBeginDebugUtilsLabelEXT = ( PFN_vkCmdBeginDebugUtilsLabelEXT )vkGetInstanceProcAddr( vkcontext.instance, "vkCmdBeginDebugUtilsLabelEXT" );
+		qvkCmdEndDebugUtilsLabelEXT = ( PFN_vkCmdEndDebugUtilsLabelEXT )vkGetInstanceProcAddr( vkcontext.instance, "vkCmdEndDebugUtilsLabelEXT" );
+		qvkCmdInsertDebugUtilsLabelEXT = ( PFN_vkCmdInsertDebugUtilsLabelEXT )vkGetInstanceProcAddr( vkcontext.instance, "vkCmdInsertDebugUtilsLabelEXT" );
 	}
 }
 
@@ -843,7 +976,8 @@ static VkExtent2D ChooseSurfaceExtent( VkSurfaceCapabilitiesKHR& caps )
 	int width = glConfig.nativeScreenWidth;
 	int height = glConfig.nativeScreenHeight;
 
-#if defined(__linux__)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	SDL_Vulkan_GetDrawableSize( vkcontext.sdlWindow, &width, &height );
 
 	width = idMath::ClampInt( caps.minImageExtent.width, caps.maxImageExtent.width, width );
@@ -1111,6 +1245,14 @@ static void CreateRenderTargets()
 		vkcontext.sampleCount = VK_SAMPLE_COUNT_2_BIT;
 	}
 
+#if defined(__APPLE__)
+	// SRS - Disable MSAA for OSX since shaderStorageImageMultisample is disabled on MoltenVK for now
+	if( samples >= 2 )
+	{
+		vkcontext.sampleCount = VK_SAMPLE_COUNT_1_BIT;
+	}
+#endif
+
 	// Select Depth Format
 	{
 		VkFormat formats[] =
@@ -1127,7 +1269,8 @@ static void CreateRenderTargets()
 	depthOptions.format = FMT_DEPTH;
 
 	// Eric: See if this fixes resizing
-#if defined(__linux__)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	gpuInfo_t& gpu = *vkcontext.gpu;
 	VkExtent2D extent = ChooseSurfaceExtent( gpu.surfaceCaps );
 
@@ -1247,7 +1390,8 @@ static void CreateRenderPass()
 	depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
 	// RB
-	//depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	// SRS - reenable, otherwise get Vulkan validation layer warnings
+	depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 
 	depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -1368,11 +1512,15 @@ ClearContext
 */
 static void ClearContext()
 {
+#if defined(VULKAN_USE_PLATFORM_SDL)
+	vkcontext.sdlWindow = nullptr;
+#endif
 	vkcontext.frameCounter = 0;
 	vkcontext.frameParity = 0;
 	vkcontext.jointCacheHandle = 0;
 	vkcontext.instance = VK_NULL_HANDLE;
 	vkcontext.physicalDevice = VK_NULL_HANDLE;
+	vkcontext.physicalDeviceFeatures = {};
 	vkcontext.device = VK_NULL_HANDLE;
 	vkcontext.graphicsQueue = VK_NULL_HANDLE;
 	vkcontext.presentQueue = VK_NULL_HANDLE;
@@ -1382,6 +1530,9 @@ static void ClearContext()
 	vkcontext.instanceExtensions.Clear();
 	vkcontext.deviceExtensions.Clear();
 	vkcontext.validationLayers.Clear();
+	vkcontext.debugMarkerSupportAvailable = false;
+	vkcontext.debugUtilsSupportAvailable = false;
+	vkcontext.deviceProperties2Available = false;
 	vkcontext.gpu = NULL;
 	vkcontext.gpus.Clear();
 	vkcontext.commandPool = VK_NULL_HANDLE;
@@ -1401,6 +1552,12 @@ static void ClearContext()
 	vkcontext.currentSwapIndex = 0;
 	vkcontext.msaaImage = VK_NULL_HANDLE;
 	vkcontext.msaaImageView = VK_NULL_HANDLE;
+#if defined( USE_AMD_ALLOCATOR )
+	vkcontext.msaaVmaAllocation = NULL;
+	vkcontext.msaaAllocation = VmaAllocationInfo();
+#else
+	vkcontext.msaaAllocation = vulkanAllocation_t();
+#endif
 	vkcontext.swapchainImages.Zero();
 	vkcontext.swapchainViews.Zero();
 	vkcontext.frameBuffers.Zero();
@@ -1453,7 +1610,8 @@ void idRenderBackend::Init()
 
 
 	// DG: make sure SDL has setup video so getting supported modes in R_SetNewMode() works
-#if defined(__linux__) && defined(USE_VULKAN)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	VKimp_PreInit();
 #else
 	GLimp_PreInit();
@@ -1468,6 +1626,7 @@ void idRenderBackend::Init()
 	idLib::Printf( "----- Initializing Vulkan driver -----\n" );
 
 	glConfig.driverType = GLDRV_VULKAN;
+	glConfig.timerQueryAvailable = true;    // SRS - Use glConfig.timerQueryAvailable flag to control Vulkan timestamp capture
 	glConfig.gpuSkinningAvailable = true;
 
 	// create the Vulkan instance and enable validation layers
@@ -1638,7 +1797,8 @@ void idRenderBackend::Shutdown()
 	ClearContext();
 
 	// destroy main window
-#if defined(__linux__) && defined(USE_VULKAN)
+// SRS - Generalized Vulkan SDL platform
+#if defined(VULKAN_USE_PLATFORM_SDL)
 	VKimp_Shutdown();
 #else
 	GLimp_Shutdown();
@@ -1948,7 +2108,14 @@ void idRenderBackend::GL_StartFrame()
 		{
 			vkGetQueryPoolResults( vkcontext.device, queryPool, MRB_GPU_TIME, numQueries,
 								   results.ByteSize(), results.Ptr(), sizeof( uint64 ), VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT );
-
+#if defined(__APPLE__)
+			// SRS - When using Metal-derived timestamps on OSX, update timestampPeriod every frame based on ongoing calibration within MoltenVK
+			// Only need to do this for non-Apple GPUs, for Apple GPUs timestampPeriod = 1 and ongoing calibration within MoltenVK is skipped
+			if( vkcontext.gpu->props.vendorID != 0x106B )
+			{
+				vkGetPhysicalDeviceProperties( vkcontext.gpu->device, &vkcontext.gpu->props );
+			}
+#endif
 			const uint64 gpuStart = results[ assignedIndex[ MRB_GPU_TIME * 2 + 0 ] ];
 			const uint64 gpuEnd = results[ assignedIndex[ MRB_GPU_TIME * 2 + 1 ]  ];
 			const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
@@ -1958,7 +2125,6 @@ void idRenderBackend::GL_StartFrame()
 			{
 				const uint64 gpuStart = results[ assignedIndex[ MRB_FILL_DEPTH_BUFFER * 2 + 0 ] ];
 				const uint64 gpuEnd = results[ assignedIndex[ MRB_FILL_DEPTH_BUFFER * 2 + 1 ]  ];
-				const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
 				pc.gpuDepthMicroSec = ( ( gpuEnd - gpuStart ) * 1000 * 1000 ) / tick;
 			}
 
@@ -1966,7 +2132,6 @@ void idRenderBackend::GL_StartFrame()
 			{
 				const uint64 gpuStart = results[ assignedIndex[ MRB_SSAO_PASS * 2 + 0 ] ];
 				const uint64 gpuEnd = results[ assignedIndex[ MRB_SSAO_PASS * 2 + 1 ]  ];
-				const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
 				pc.gpuScreenSpaceAmbientOcclusionMicroSec = ( ( gpuEnd - gpuStart ) * 1000 * 1000 ) / tick;
 			}
 
@@ -1974,7 +2139,6 @@ void idRenderBackend::GL_StartFrame()
 			{
 				const uint64 gpuStart = results[ assignedIndex[ MRB_AMBIENT_PASS * 2 + 0 ] ];
 				const uint64 gpuEnd = results[ assignedIndex[ MRB_AMBIENT_PASS * 2 + 1 ]  ];
-				const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
 				pc.gpuAmbientPassMicroSec = ( ( gpuEnd - gpuStart ) * 1000 * 1000 ) / tick;
 			}
 
@@ -1982,7 +2146,6 @@ void idRenderBackend::GL_StartFrame()
 			{
 				const uint64 gpuStart = results[ assignedIndex[ MRB_DRAW_INTERACTIONS * 2 + 0 ] ];
 				const uint64 gpuEnd = results[ assignedIndex[ MRB_DRAW_INTERACTIONS * 2 + 1 ]  ];
-				const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
 				pc.gpuInteractionsMicroSec = ( ( gpuEnd - gpuStart ) * 1000 * 1000 ) / tick;
 			}
 
@@ -1990,7 +2153,6 @@ void idRenderBackend::GL_StartFrame()
 			{
 				const uint64 gpuStart = results[ assignedIndex[ MRB_DRAW_SHADER_PASSES * 2 + 0 ] ];
 				const uint64 gpuEnd = results[ assignedIndex[ MRB_DRAW_SHADER_PASSES * 2 + 1 ]  ];
-				const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
 				pc.gpuShaderPassMicroSec = ( ( gpuEnd - gpuStart ) * 1000 * 1000 ) / tick;
 			}
 
@@ -1998,7 +2160,6 @@ void idRenderBackend::GL_StartFrame()
 			{
 				const uint64 gpuStart = results[ assignedIndex[ MRB_POSTPROCESS * 2 + 0 ] ];
 				const uint64 gpuEnd = results[ assignedIndex[ MRB_POSTPROCESS * 2 + 1 ]  ];
-				const uint64 tick = ( 1000 * 1000 * 1000 ) / vkcontext.gpu->props.limits.timestampPeriod;
 				pc.gpuPostProcessingMicroSec = ( ( gpuEnd - gpuStart ) * 1000 * 1000 ) / tick;
 			}
 		}

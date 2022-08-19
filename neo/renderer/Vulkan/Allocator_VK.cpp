@@ -26,8 +26,8 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-#include "precompiled.h"
 #pragma hdrstop
+#include "precompiled.h"
 
 #include "../RenderCommon.h"
 #include "../RenderBackend.h"
@@ -65,6 +65,7 @@ uint32 FindMemoryTypeIndex( const uint32 memoryTypeBits, const vulkanMemoryUsage
 
 	VkMemoryPropertyFlags required = 0;
 	VkMemoryPropertyFlags preferred = 0;
+	VkMemoryHeapFlags avoid = 0;
 
 	switch( usage )
 	{
@@ -73,14 +74,20 @@ uint32 FindMemoryTypeIndex( const uint32 memoryTypeBits, const vulkanMemoryUsage
 			break;
 		case VULKAN_MEMORY_USAGE_CPU_ONLY:
 			required |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+			// SRS - Make sure memory type does not have VK_MEMORY_HEAP_MULTI_INSTANCE_BIT set, otherwise get validation errors when mapping memory
+			avoid |= VK_MEMORY_HEAP_MULTI_INSTANCE_BIT;
 			break;
 		case VULKAN_MEMORY_USAGE_CPU_TO_GPU:
 			required |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
 			preferred |= VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+			// SRS - Make sure memory type does not have VK_MEMORY_HEAP_MULTI_INSTANCE_BIT set, otherwise get validation errors when mapping memory
+			avoid |= VK_MEMORY_HEAP_MULTI_INSTANCE_BIT;
 			break;
 		case VULKAN_MEMORY_USAGE_GPU_TO_CPU:
 			required |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
 			preferred |= VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+			// SRS - Make sure memory type does not have VK_MEMORY_HEAP_MULTI_INSTANCE_BIT set, otherwise get validation errors when mapping memory
+			avoid |= VK_MEMORY_HEAP_MULTI_INSTANCE_BIT;
 			break;
 		default:
 			idLib::FatalError( "idVulkanAllocator::AllocateFromPools: Unknown memory usage." );
@@ -89,6 +96,12 @@ uint32 FindMemoryTypeIndex( const uint32 memoryTypeBits, const vulkanMemoryUsage
 	for( uint32 i = 0; i < physicalMemoryProperties.memoryTypeCount; ++i )
 	{
 		if( ( ( memoryTypeBits >> i ) & 1 ) == 0 )
+		{
+			continue;
+		}
+
+		// SRS - Make sure memory type does not have any avoid heap flags set
+		if( ( physicalMemoryProperties.memoryHeaps[ physicalMemoryProperties.memoryTypes[ i ].heapIndex ].flags & avoid ) != 0 )
 		{
 			continue;
 		}
@@ -110,6 +123,12 @@ uint32 FindMemoryTypeIndex( const uint32 memoryTypeBits, const vulkanMemoryUsage
 	for( uint32 i = 0; i < physicalMemoryProperties.memoryTypeCount; ++i )
 	{
 		if( ( ( memoryTypeBits >> i ) & 1 ) == 0 )
+		{
+			continue;
+		}
+
+		// SRS - Make sure memory type does not have any avoid heap flags set
+		if( ( physicalMemoryProperties.memoryHeaps[ physicalMemoryProperties.memoryTypes[ i ].heapIndex ].flags & avoid ) != 0 )
 		{
 			continue;
 		}
@@ -167,7 +186,8 @@ idVulkanBlock::Init
 */
 bool idVulkanBlock::Init()
 {
-	if( memoryTypeIndex == UINT64_MAX )
+	//SRS - Changed UINT64_MAX to UINT32_MAX for type consistency, otherwise test is always false
+	if( memoryTypeIndex == UINT32_MAX )
 	{
 		return false;
 	}
@@ -495,8 +515,10 @@ void idVulkanBlock::Print()
 	idLib::Printf( "Type Index: %u\n", memoryTypeIndex );
 	idLib::Printf( "Usage:      %s\n", memoryUsageStrings[ usage ] );
 	idLib::Printf( "Count:      %d\n", count );
-	idLib::Printf( "Size:       %lu\n", size );
-	idLib::Printf( "Allocated:  %lu\n", allocated );
+
+	// SRS - Changed %lu to %PRIu64 pre-defined macro to handle platform differences
+	idLib::Printf( "Size:       %" PRIu64"\n", size );
+	idLib::Printf( "Allocated:  %" PRIu64"\n", allocated );
 	idLib::Printf( "Next Block: %u\n", nextBlockId );
 	idLib::Printf( "------------------------\n" );
 
@@ -505,8 +527,9 @@ void idVulkanBlock::Print()
 		idLib::Printf( "{\n" );
 
 		idLib::Printf( "\tId:     %u\n", current->id );
-		idLib::Printf( "\tSize:   %lu\n", current->size );
-		idLib::Printf( "\tOffset: %lu\n", current->offset );
+		// SRS - Changed %lu to %PRIu64 pre-defined macro to handle platform differences
+		idLib::Printf( "\tSize:   %" PRIu64"\n", current->size );
+		idLib::Printf( "\tOffset: %" PRIu64"\n", current->offset );
 		idLib::Printf( "\tType:   %s\n", allocationTypeStrings[ current->type ] );
 
 		idLib::Printf( "}\n" );
@@ -638,7 +661,11 @@ idVulkanAllocator::Free
 */
 void idVulkanAllocator::Free( const vulkanAllocation_t allocation )
 {
-	garbage[ garbageIndex ].Append( allocation );
+	// SRS - Make sure we are trying to free an actual allocated block, otherwise skip
+	if( allocation.block != NULL )
+	{
+		garbage[ garbageIndex ].Append( allocation );
+	}
 }
 
 /*
@@ -679,7 +706,8 @@ void idVulkanAllocator::Print()
 {
 	idLib::Printf( "Device Local MB: %d\n", int( deviceLocalMemoryBytes / 1024 * 1024 ) );
 	idLib::Printf( "Host Visible MB: %d\n", int( hostVisibleMemoryBytes / 1024 * 1024 ) );
-	idLib::Printf( "Buffer Granularity: %lu\n", bufferImageGranularity );
+	// SRS - Changed %lu to %PRIu64 pre-defined macro to handle platform differences
+	idLib::Printf( "Buffer Granularity: %" PRIu64"\n", bufferImageGranularity );
 	idLib::Printf( "\n" );
 
 	for( int i = 0; i < VK_MAX_MEMORY_TYPES; ++i )
@@ -702,7 +730,9 @@ CONSOLE_COMMAND( Vulkan_PrintHeapInfo, "Print out the heap information for this 
 	for( uint32 i = 0; i < props.memoryHeapCount; ++i )
 	{
 		VkMemoryHeap heap = props.memoryHeaps[ i ];
-		idLib::Printf( "id=%d, size=%lu, flags=", i, heap.size );
+
+		// SRS - Changed %lu to %PRIu64 pre-defined macro to handle platform differences
+		idLib::Printf( "id=%d, size=%" PRIu64", flags=", i, heap.size );
 		if( heap.flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT )
 		{
 			idLib::Printf( "DEVICE_LOCAL" );
@@ -710,6 +740,10 @@ CONSOLE_COMMAND( Vulkan_PrintHeapInfo, "Print out the heap information for this 
 		else
 		{
 			idLib::Printf( "HOST_VISIBLE" );
+		}
+		if( heap.flags & VK_MEMORY_HEAP_MULTI_INSTANCE_BIT )
+		{
+			idLib::Printf( ", MULTI_INSTANCE" );
 		}
 		idLib::Printf( "\n" );
 

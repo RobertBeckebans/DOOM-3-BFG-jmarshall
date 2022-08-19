@@ -76,7 +76,7 @@ idCVar com_forceGenericSIMD( "com_forceGenericSIMD", "0", CVAR_BOOL | CVAR_SYSTE
 idCVar com_developer( "developer", "0", CVAR_BOOL | CVAR_SYSTEM | CVAR_NOCHEAT, "developer mode" );
 idCVar com_speeds( "com_speeds", "0", CVAR_BOOL | CVAR_SYSTEM | CVAR_NOCHEAT, "show engine timings" );
 // DG: support "com_showFPS 1" for fps-only view like in classic doom3 => make it CVAR_INTEGER
-idCVar com_showFPS( "com_showFPS", "0", CVAR_INTEGER | CVAR_SYSTEM | CVAR_ARCHIVE | CVAR_NOCHEAT, "show frames rendered per second. 0: off 1: default bfg values, 2: only show FPS (classic view)" );
+idCVar com_showFPS( "com_showFPS", "0", CVAR_INTEGER | CVAR_SYSTEM | CVAR_ARCHIVE | CVAR_NOCHEAT, "show frames rendered per second. 0: off, 1: only show FPS (classic view), 2: default bfg values" );
 // DG end
 idCVar com_showMemoryUsage( "com_showMemoryUsage", "0", CVAR_BOOL | CVAR_SYSTEM | CVAR_NOCHEAT, "show total and per frame memory usage" );
 idCVar com_updateLoadSize( "com_updateLoadSize", "0", CVAR_BOOL | CVAR_SYSTEM | CVAR_NOCHEAT, "update the load size after loading a map" );
@@ -931,8 +931,8 @@ void idCommonLocal::RenderBink( const char* path )
 	material->Parse( materialText.c_str(), materialText.Length(), false );
 	material->ResetCinematicTime( Sys_Milliseconds() );
 
-	// RB: FFmpeg might return the wrong play length so I changed the intro video to play max 30 seconds until finished
-	int cinematicLength = 30000; //material->CinematicLength();
+	// SRS - Restored original calculation after implementing idCinematicLocal::GetStartTime() and fixing animationLength in idCinematicLocal::InitFromBinkDecFile()
+	int cinematicLength = material->CinematicLength();
 	int	mouseEvents[MAX_MOUSE_EVENTS][2];
 
 	bool escapeEvent = false;
@@ -1338,7 +1338,8 @@ void idCommonLocal::Init( int argc, const char* const* argv, const char* cmdline
 			// display the legal splash screen
 			// No clue why we have to render this twice to show up...
 			RenderSplash();
-			//RenderSplash();
+			// SRS - OSX needs this for some OpenGL drivers, otherwise renders leftover image before splash
+			RenderSplash();
 		}
 
 
@@ -1420,7 +1421,8 @@ void idCommonLocal::Init( int argc, const char* const* argv, const char* cmdline
 		AddStartupCommands();
 
 		StartMenu( true );
-#ifndef ID_RETAIL
+// SRS - changed ifndef to ifdef since legalMinTime should apply to retail builds, not dev builds
+#ifdef ID_RETAIL
 		while( Sys_Milliseconds() - legalStartTime < legalMinTime )
 		{
 			RenderSplash();
@@ -1538,15 +1540,18 @@ void idCommonLocal::Shutdown()
 	ImGuiHook::Destroy();
 
 	printf( "delete renderWorld;\n" );
-	delete renderWorld;
+	// SRS - Call FreeRenderWorld() vs. delete, otherwise worlds list not updated on shutdown
+	renderSystem->FreeRenderWorld( renderWorld );
 	renderWorld = NULL;
 
 	printf( "delete soundWorld;\n" );
-	delete soundWorld;
+	// SRS - Call FreeSoundWorld() vs. delete, otherwise soundWorlds list not updated and can segfault in soundSystem->Shutdown()
+	soundSystem->FreeSoundWorld( soundWorld );
 	soundWorld = NULL;
 
 	printf( "delete menuSoundWorld;\n" );
-	delete menuSoundWorld;
+	// SRS - Call FreeSoundWorld() vs. delete, otherwise soundWorlds list not updated and can segfault in soundSystem->Shutdown()
+	soundSystem->FreeSoundWorld( menuSoundWorld );
 	menuSoundWorld = NULL;
 
 	// shut down the session
@@ -1566,10 +1571,6 @@ void idCommonLocal::Shutdown()
 	printf( "uiManager->Shutdown();\n" );
 	uiManager->Shutdown();
 
-	// shut down the sound system
-	printf( "soundSystem->Shutdown();\n" );
-	soundSystem->Shutdown();
-
 	// shut down the user command input code
 	printf( "usercmdGen->Shutdown();\n" );
 	usercmdGen->Shutdown();
@@ -1579,8 +1580,15 @@ void idCommonLocal::Shutdown()
 	eventLoop->Shutdown();
 
 	// shutdown the decl manager
+	// SRS - Note this also shuts down all cinematic resources, including cinematic audio voices
 	printf( "declManager->Shutdown();\n" );
 	declManager->Shutdown();
+
+	// shut down the sound system
+	// SRS - Shut down sound system after decl manager so cinematic audio voices are destroyed first
+	// Important for XAudio2 where the mastering voice cannot be destroyed if any other voices exist
+	printf( "soundSystem->Shutdown();\n" );
+	soundSystem->Shutdown();
 
 	// shut down the renderSystem
 	printf( "renderSystem->Shutdown();\n" );
@@ -1792,7 +1800,8 @@ idCommonLocal::ProcessEvent
 bool idCommonLocal::ProcessEvent( const sysEvent_t* event )
 {
 	// hitting escape anywhere brings up the menu
-	if( game && game->IsInGame() )
+	// SRS - allow escape during demo playback to cancel
+	if( game && ( game->IsInGame() || readDemo ) )
 	{
 		if( event->evType == SE_KEY && event->evValue2 == 1 && ( event->evValue == K_ESCAPE || event->evValue == K_JOY9 ) )
 		{
@@ -1813,7 +1822,15 @@ bool idCommonLocal::ProcessEvent( const sysEvent_t* event )
 
 					console->Close();
 
-					StartMenu();
+					// SRS - cancel demo playback and return to the main menu
+					if( readDemo )
+					{
+						LeaveGame();
+					}
+					else
+					{
+						StartMenu();
+					}
 					return true;
 				}
 				else

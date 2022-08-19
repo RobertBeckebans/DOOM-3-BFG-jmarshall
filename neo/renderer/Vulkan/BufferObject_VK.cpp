@@ -26,8 +26,8 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-#include "precompiled.h"
 #pragma hdrstop
+#include "precompiled.h"
 
 #include "../RenderCommon.h"
 #include "../RenderBackend.h"
@@ -105,7 +105,12 @@ bool idVertexBuffer::AllocBufferObject( const void* data, int allocSize, bufferU
 	}
 	else if( usage == BU_DYNAMIC )
 	{
+#if defined(__APPLE__)
+		// SRS - VMA_MEMORY_USAGE_CPU_ONLY required for BU_DYNAMIC host coherency on OSX, otherwise black screen
+		vmaReq.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+#else
 		vmaReq.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+#endif
 		vmaReq.flags = VMA_MEMORY_REQUIREMENT_PERSISTENT_MAP_BIT;
 	}
 
@@ -115,10 +120,15 @@ bool idVertexBuffer::AllocBufferObject( const void* data, int allocSize, bufferU
 	VkResult ret = vkCreateBuffer( vkcontext.device, &bufferCreateInfo, NULL, &apiObject );
 	assert( ret == VK_SUCCESS );
 
-	VkMemoryRequirements memoryRequirements;
+	VkMemoryRequirements memoryRequirements = {};
 	vkGetBufferMemoryRequirements( vkcontext.device, apiObject, &memoryRequirements );
 
+#if defined(__APPLE__)
+	// SRS - VULKAN_MEMORY_USAGE_CPU_ONLY required for BU_DYNAMIC host coherency on OSX, otherwise black screen
+	vulkanMemoryUsage_t memUsage = ( usage == BU_STATIC ) ? VULKAN_MEMORY_USAGE_GPU_ONLY : VULKAN_MEMORY_USAGE_CPU_ONLY;
+#else
 	vulkanMemoryUsage_t memUsage = ( usage == BU_STATIC ) ? VULKAN_MEMORY_USAGE_GPU_ONLY : VULKAN_MEMORY_USAGE_CPU_TO_GPU;
+#endif
 
 	allocation = vulkanAllocator.Allocate(
 					 memoryRequirements.size,
@@ -357,7 +367,12 @@ bool idIndexBuffer::AllocBufferObject( const void* data, int allocSize, bufferUs
 	}
 	else if( usage == BU_DYNAMIC )
 	{
+#if defined(__APPLE__)
+		// SRS - VMA_MEMORY_USAGE_CPU_ONLY required for BU_DYNAMIC host coherency on OSX, otherwise black screen
+		vmaReq.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+#else
 		vmaReq.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+#endif
 		vmaReq.flags = VMA_MEMORY_REQUIREMENT_PERSISTENT_MAP_BIT;
 	}
 
@@ -367,10 +382,15 @@ bool idIndexBuffer::AllocBufferObject( const void* data, int allocSize, bufferUs
 	VkResult ret = vkCreateBuffer( vkcontext.device, &bufferCreateInfo, NULL, &apiObject );
 	assert( ret == VK_SUCCESS );
 
-	VkMemoryRequirements memoryRequirements;
+	VkMemoryRequirements memoryRequirements = {};
 	vkGetBufferMemoryRequirements( vkcontext.device, apiObject, &memoryRequirements );
 
+#if defined(__APPLE__)
+	// SRS - VULKAN_MEMORY_USAGE_CPU_ONLY required for BU_DYNAMIC host coherency on OSX, otherwise black screen
+	vulkanMemoryUsage_t memUsage = ( usage == BU_STATIC ) ? VULKAN_MEMORY_USAGE_GPU_ONLY : VULKAN_MEMORY_USAGE_CPU_ONLY;
+#else
 	vulkanMemoryUsage_t memUsage = ( usage == BU_STATIC ) ? VULKAN_MEMORY_USAGE_GPU_ONLY : VULKAN_MEMORY_USAGE_CPU_TO_GPU;
+#endif
 
 	allocation = vulkanAllocator.Allocate(
 					 memoryRequirements.size,
@@ -610,7 +630,12 @@ bool idUniformBuffer::AllocBufferObject( const void* data, int allocSize, buffer
 	}
 	else if( usage == BU_DYNAMIC )
 	{
+#if defined(__APPLE__)
+		// SRS - VMA_MEMORY_USAGE_CPU_ONLY required for BU_DYNAMIC host coherency on OSX, otherwise black screen
+		vmaReq.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+#else
 		vmaReq.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+#endif
 		vmaReq.flags = VMA_MEMORY_REQUIREMENT_PERSISTENT_MAP_BIT;
 	}
 
@@ -623,7 +648,12 @@ bool idUniformBuffer::AllocBufferObject( const void* data, int allocSize, buffer
 	VkMemoryRequirements memoryRequirements = {};
 	vkGetBufferMemoryRequirements( vkcontext.device, apiObject, &memoryRequirements );
 
+#if defined(__APPLE__)
+	// SRS - VULKAN_MEMORY_USAGE_CPU_ONLY required for BU_DYNAMIC host coherency on OSX, otherwise black screen
+	vulkanMemoryUsage_t memUsage = ( usage == BU_STATIC ) ? VULKAN_MEMORY_USAGE_GPU_ONLY : VULKAN_MEMORY_USAGE_CPU_ONLY;
+#else
 	vulkanMemoryUsage_t memUsage = ( usage == BU_STATIC ) ? VULKAN_MEMORY_USAGE_GPU_ONLY : VULKAN_MEMORY_USAGE_CPU_TO_GPU;
+#endif
 
 	allocation = vulkanAllocator.Allocate(
 					 memoryRequirements.size,
