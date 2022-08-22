@@ -47,7 +47,7 @@ void rvmWeaponHandgrenade::Init( idWeapon* weapon )
 rvmWeaponHandgrenade::GrenadeNade
 ===============
 */
-void rvmWeaponHandgrenade::GrenadeNade( void )
+void rvmWeaponHandgrenade::GrenadeNade()
 {
 	show_grenade = true;
 	UpdateSkin();
@@ -58,7 +58,7 @@ void rvmWeaponHandgrenade::GrenadeNade( void )
 rvmWeaponHandgrenade::GrenadeNoNade
 ===============
 */
-void rvmWeaponHandgrenade::GrenadeNoNade( void )
+void rvmWeaponHandgrenade::GrenadeNoNade()
 {
 	show_grenade = false;
 	UpdateSkin();
@@ -193,7 +193,7 @@ stateResult_t rvmWeaponHandgrenade::Idle( stateParms_t* parms )
 rvmWeaponHandgrenade::OwnerDied
 ===============
 */
-void rvmWeaponHandgrenade::OwnerDied( void )
+void rvmWeaponHandgrenade::OwnerDied()
 {
 	float time_held;
 

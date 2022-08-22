@@ -58,6 +58,8 @@ entityDef light {
 	"count"						"1"
 	"break"						"0"
 	
+	// jmarshall: Quake 1 light styles
+	/*
 	"style"						"-1"
 	
 	"ls_frametime"				"100"
@@ -76,6 +78,8 @@ entityDef light {
 	"light_style9"				"aaaaaaaazzzzzzzz"
 	"light_style10"				"mmamammmmammamamaaamammma"
 	"light_style11"				"abcdefghijklmnopqrrqponmlkjihgfedcba"
+	*/
+	// jmarshall end
 }
 
 entityDef speaker {

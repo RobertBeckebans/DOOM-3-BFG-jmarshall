@@ -83,7 +83,7 @@ END_CLASS
 rvmMonsterDemonHellknight::Init
 =================
 */
-void rvmMonsterBossVagary::Init( void )
+void rvmMonsterBossVagary::Init()
 {
 }
 
@@ -92,7 +92,7 @@ void rvmMonsterBossVagary::Init( void )
 rvmMonsterDemonHellknight::AI_Begin
 =================
 */
-void rvmMonsterBossVagary::AI_Begin( void )
+void rvmMonsterBossVagary::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }

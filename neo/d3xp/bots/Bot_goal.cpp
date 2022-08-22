@@ -202,7 +202,7 @@ itemconfig_t* idBotGoalManager::LoadItemConfig( char* filename )
 	idParser source;
 
 	path = filename;
-	rvmScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
+	iceScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
 
 	if( !source.LoadFile( path ) )
 	{
@@ -284,7 +284,7 @@ int* idBotGoalManager::ItemWeightIndex( weightconfig_t* iwc, itemconfig_t* ic )
 idBotGoalManager::InitLevelItemHeap
 ========================
 */
-void idBotGoalManager::InitLevelItemHeap( void )
+void idBotGoalManager::InitLevelItemHeap()
 {
 	for( int i = 0; i < MAX_BOT_LEVEL_ITEMS - 1; i++ )
 	{
@@ -301,7 +301,7 @@ void idBotGoalManager::InitLevelItemHeap( void )
 idBotGoalManager::AllocLevelItem
 ========================
 */
-levelitem_t* idBotGoalManager::AllocLevelItem( void )
+levelitem_t* idBotGoalManager::AllocLevelItem()
 {
 	levelitem_t* li;
 
@@ -372,7 +372,7 @@ void idBotGoalManager::RemoveLevelItemFromList( levelitem_t* li )
 idBotGoalManager::BotFreeInfoEntities
 ========================
 */
-void idBotGoalManager::BotFreeInfoEntities( void )
+void idBotGoalManager::BotFreeInfoEntities()
 {
 	maplocation_t* ml, * nextml;
 	campspot_t* cs, * nextcs;
@@ -400,7 +400,7 @@ void idBotGoalManager::BotFreeInfoEntities( void )
 idBotGoalManager::BotInitInfoEntities
 ========================
 */
-void idBotGoalManager::BotInitInfoEntities( void )
+void idBotGoalManager::BotInitInfoEntities()
 {
 	//char classname[MAX_EPAIRKEY];
 	idStr classname;
@@ -454,7 +454,7 @@ void idBotGoalManager::BotInitInfoEntities( void )
 idBotGoalManager::InitLevelItems
 =======================
 */
-void idBotGoalManager::InitLevelItems( void )
+void idBotGoalManager::InitLevelItems()
 {
 	int i, spawnflags, value;
 	idStr classname;
@@ -1000,7 +1000,7 @@ UpdateEntityItems
 //NOTE: enum entityType_t in bg_public.h
 #define ET_ITEM			2
 
-void idBotGoalManager::UpdateEntityItems( void )
+void idBotGoalManager::UpdateEntityItems()
 {
 	int i, modelindex;
 	idVec3 dir;
@@ -1985,7 +1985,7 @@ void idBotGoalManager::BotFreeGoalState( int handle )
 idBotGoalManager::BotSetupGoalAI
 ========================
 */
-int idBotGoalManager::BotSetupGoalAI( void )
+int idBotGoalManager::BotSetupGoalAI()
 {
 	//load the item configuration
 	itemconfig = LoadItemConfig( ( char* )bot_itemsfile.GetString() );
@@ -2004,7 +2004,7 @@ int idBotGoalManager::BotSetupGoalAI( void )
 idBotGoalManager::BotSetupGoalAI
 ========================
 */
-void idBotGoalManager::BotShutdownGoalAI( void )
+void idBotGoalManager::BotShutdownGoalAI()
 {
 	int i;
 	// jmarshall

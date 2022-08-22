@@ -1189,7 +1189,7 @@ int rvmBot::BotMoveInRandomDirection( bot_state_t* bs )
 rvmBot::ShowHideArea
 ============
 */
-void rvmBot::MoveToCoverPoint( void )
+void rvmBot::MoveToCoverPoint()
 {
 	int areaNum, numObstacles;
 	idVec3 target;

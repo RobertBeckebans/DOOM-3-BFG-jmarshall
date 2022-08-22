@@ -35,13 +35,13 @@ public:
 
 
 public:
-	idObstacleAvoidance( void ) { }
-	~idObstacleAvoidance( void )
+	idObstacleAvoidance() { }
+	~idObstacleAvoidance()
 	{
 		pathNodeAllocator.Shutdown();
 	}
 
-	void		ClearObstacles( void );
+	void		ClearObstacles();
 	void		AddObstacle( const idBox& box, int id );
 	void		RemoveObstacle( int id );
 

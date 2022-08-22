@@ -108,7 +108,7 @@ public:
 
 	virtual void				ShowArea( const idVec3& origin ) const = 0;
 
-	virtual void				DrawAreas( void ) const = 0;
+	virtual void				DrawAreas() const = 0;
 // jmarshall end
 	// Returns the area flags.
 	virtual int					AreaFlags( int areaNum ) const = 0;
@@ -154,7 +154,7 @@ public:
 	virtual bool				FindNearestGoal( aasGoal_t& goal, int areaNum, const idVec3 origin, const idVec3& target, int travelFlags, aasObstacle_t* obstacles, int numObstacles, idAASCallback& callback ) const = 0;
 
 // jmarshall
-	virtual idAASFile*			GetAASFile( void ) = 0;
+	virtual idAASFile*			GetAASFile() = 0;
 	virtual void				DrawArea( int areaNum ) const = 0;
 // jmarshall end
 };

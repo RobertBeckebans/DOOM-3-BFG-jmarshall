@@ -13,7 +13,7 @@ idBotFuzzyWeightManager botFuzzyWeightManager;
 idBotFuzzyWeightManager::Init
 ========================
 */
-void idBotFuzzyWeightManager::Init( void )
+void idBotFuzzyWeightManager::Init()
 {
 	memset( &fuzzyseperators[0], 0, sizeof( fuzzyseperators ) );
 }
@@ -23,7 +23,7 @@ void idBotFuzzyWeightManager::Init( void )
 idBotFuzzyWeightManager::AllocFuzzyWeight
 ========================
 */
-fuzzyseperator_t* idBotFuzzyWeightManager::AllocFuzzyWeight( void )
+fuzzyseperator_t* idBotFuzzyWeightManager::AllocFuzzyWeight()
 {
 	for( int i = 0; i < MAX_FUZZY_OPERATORS; i++ )
 	{
@@ -400,7 +400,7 @@ weightconfig_t* idBotFuzzyWeightManager::ReadWeightConfig( char* filename )
 		return NULL;
 	}
 
-	rvmScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
+	iceScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
 
 	if( !source.LoadFile( filename ) )
 	{
@@ -899,7 +899,7 @@ void idBotFuzzyWeightManager::InterbreedWeightConfigs( weightconfig_t* config1, 
 idBotFuzzyWeightManager::BotShutdownWeights
 =======================
 */
-void idBotFuzzyWeightManager::BotShutdownWeights( void )
+void idBotFuzzyWeightManager::BotShutdownWeights()
 {
 	int i;
 

@@ -264,7 +264,7 @@ public:
 	void					TalkTo( idActor* actor );
 	talkState_t				GetTalkState() const;
 
-	float					EnemyRange( void );
+	float					EnemyRange();
 
 	bool					GetAimDir( const idVec3& firePos, idEntity* aimAtEnt, const idEntity* ignore, idVec3& aimDir ) const;
 
@@ -468,23 +468,23 @@ public:
 
 	virtual idThread*		ConstructScriptObject();
 protected:
-	virtual void			AI_Begin( void ) { };
+	virtual void			AI_Begin() { };
 	virtual int				check_attacks()
 	{
 		return 0;
 	}
 	virtual void			do_attack( int attack_flags ) { }
 
-	void					enemy_dead( void );
+	void					enemy_dead();
 
 	void					PlayCustomAnim( idStr animname, float blendIn, float blendOut );
 	void					PlayCustomCycle( idStr animname, float blendTime );
 
-	void					trigger_wakeup_targets( void );
+	void					trigger_wakeup_targets();
 
-	void					sight_enemy( void );
+	void					sight_enemy();
 
-	void					CallConstructor( void );
+	void					CallConstructor();
 
 	void					EnemyDead();
 	virtual bool			CanPlayChatterSounds() const;
@@ -562,7 +562,7 @@ protected:
 	void					SetEnemy( idActor* newEnemy );
 
 	bool					CanReachEntity( idEntity* ent );
-	bool					CanReachEnemy( void );
+	bool					CanReachEnemy();
 
 	// attacks
 	void					CreateProjectileClipModel() const;
@@ -588,7 +588,7 @@ protected:
 
 	void					combat_lost();
 
-	idEntity*				GetCombatNode( void );
+	idEntity*				GetCombatNode();
 
 	bool					TestAnimMove( const char* animname );
 
@@ -597,7 +597,7 @@ protected:
 	idEntity*				GetEmitter( const char* name );
 	void					StopEmitter( const char* name );
 
-	idEntity*				FindEnemyInCombatNodes( void );
+	idEntity*				FindEnemyInCombatNodes();
 
 	// State utilities that are nested states.
 	stateResult_t			check_blocked( stateParms_t* parms, bool& result );
@@ -712,7 +712,7 @@ protected:
 	void					Event_SetTalkState( int state );
 	void					Event_EnemyRange();
 	void					Event_EnemyRange2D();
-	void					Event_IsAwake( void );
+	void					Event_IsAwake();
 	void					Event_GetEnemy();
 	void					Event_GetEnemyPos();
 	void					Event_GetEnemyEyePos();

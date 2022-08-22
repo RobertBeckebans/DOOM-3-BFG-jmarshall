@@ -21,7 +21,7 @@ idBotCharacterStatsManager::idBotCharacterStatsManager()
 idBotCharacterStatsManager::Init
 ====================
 */
-void idBotCharacterStatsManager::Init( void )
+void idBotCharacterStatsManager::Init()
 {
 	default_char_profile = BotLoadCharacterFromFile( "bots/default_c.c", 1 );
 	if( default_char_profile == NULL )
@@ -35,7 +35,7 @@ void idBotCharacterStatsManager::Init( void )
 idBotCharacterStatsManager::AllocBotCharacter
 ============================
 */
-bot_character_t* idBotCharacterStatsManager::AllocBotCharacter( void )
+bot_character_t* idBotCharacterStatsManager::AllocBotCharacter()
 {
 	bot_character_t* ch = NULL;
 
@@ -107,7 +107,7 @@ bot_character_t* idBotCharacterStatsManager::BotLoadCharacterFromFile( const cha
 		}
 	}
 
-	rvmScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
+	iceScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
 
 	//a bot character is parsed in two phases
 	if( !parser.LoadFile( charfile ) )

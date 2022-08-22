@@ -11,12 +11,12 @@ class idBotFuzzyWeightManager
 {
 public:
 	// Init the fuzzy weight manager.
-	void Init( void );
+	void Init();
 
 	// Parses a weight config file.
 	weightconfig_t* ReadWeightConfig( char* filename );
 
-	void BotShutdownWeights( void );
+	void BotShutdownWeights();
 
 	// Fuzzy Weight simulation functions.
 	int FindFuzzyWeight( weightconfig_t* wc, char* name );
@@ -29,7 +29,7 @@ public:
 	void InterbreedWeightConfigs( weightconfig_t* config1, weightconfig_t* config2, weightconfig_t* configout );
 	void FreeWeightConfig( weightconfig_t* config );
 private:
-	fuzzyseperator_t* AllocFuzzyWeight( void );
+	fuzzyseperator_t* AllocFuzzyWeight();
 	bool ReadValue( idParser& source, float* value );
 	int ReadFuzzyWeight( idParser& source, fuzzyseperator_t* fs );
 

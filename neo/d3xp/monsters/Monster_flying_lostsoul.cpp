@@ -24,7 +24,7 @@ END_CLASS
 rvmMonsterLostSoul::Init
 ====================
 */
-void rvmMonsterLostSoul::Init( void )
+void rvmMonsterLostSoul::Init()
 {
 
 }
@@ -34,7 +34,7 @@ void rvmMonsterLostSoul::Init( void )
 rvmMonsterLostSoul::AI_Begin
 =================
 */
-void rvmMonsterLostSoul::AI_Begin( void )
+void rvmMonsterLostSoul::AI_Begin()
 {
 	fly_offset = GetFloatKey( "fly_offset" );
 	Event_SetState( "state_Begin" );

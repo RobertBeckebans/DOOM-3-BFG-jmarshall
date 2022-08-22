@@ -88,11 +88,11 @@ public:
 	{
 		stateThread.PostState( state );
 	}
-	void					Execute( void )
+	void					Execute()
 	{
 		stateThread.Execute();
 	}
-	bool					IsRunning( void )
+	bool					IsRunning()
 	{
 		return stateThread.IsExecuting();
 	}
@@ -101,7 +101,7 @@ public:
 		return stateThread.CurrentStateIs( name );
 	}
 
-	virtual void			OwnerDied( void ) { }
+	virtual void			OwnerDied() { }
 
 	bool					IsFiring();
 	bool					IsReloading();
@@ -111,7 +111,7 @@ public:
 		return SRESULT_WAIT;
 	}
 
-	virtual bool			IsHolstered( void )
+	virtual bool			IsHolstered()
 	{
 		return IsStateRunning( "Holstered" );
 	}

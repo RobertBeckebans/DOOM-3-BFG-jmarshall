@@ -684,7 +684,7 @@ void Characteristic_String( bot_character_t* ch, int index, char* buf, int size 
 
 bot_character_t* BotLoadCharacterFromFile( char* charfile, int skill );
 
-void BotInitLevelItems( void );
+void BotInitLevelItems();
 
 void BotChooseWeapon( bot_state_t* bs );
 
@@ -841,12 +841,12 @@ public:
 	rvmBot();
 	~rvmBot();
 
-	void			Spawn( void );
-	virtual void	Think( void ) override;
+	void			Spawn();
+	virtual void	Think() override;
 	virtual void	SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_angles ) override;
 	virtual	void	Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location ) override;
 	virtual void	InflictedDamageEvent( idEntity* target ) override;
-	virtual void	StateThreadChanged( void ) override;
+	virtual void	StateThreadChanged() override;
 
 	void			SetEnemy( idPlayer* player, idVec3 origin );
 
@@ -861,8 +861,8 @@ private:
 
 	void			BotMoveToGoalOrigin( idVec3 goalOrigin );
 
-	void			ServerThink( void );
-	void			BotUpdateInventory( void );
+	void			ServerThink();
+	void			BotUpdateInventory();
 
 	bool			HasWeapon( int index )
 	{
@@ -898,7 +898,7 @@ protected:
 	int				BotMoveInRandomDirection( bot_state_t* bs );
 	void			BotMoveToGoal( bot_state_t* bs, bot_goal_t* goal );
 
-	void			MoveToCoverPoint( void );
+	void			MoveToCoverPoint();
 
 	static int	WP_MACHINEGUN;
 	static int	WP_SHOTGUN;

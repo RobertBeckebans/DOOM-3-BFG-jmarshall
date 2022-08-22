@@ -391,9 +391,9 @@ typedef enum
 	CONTENTS_FLASHLIGHT_TRIGGER	= BIT( 15 ),	// used for triggers that are activated by the flashlight
 
 	// jmarshall: used by Quake 3 bots
-	CONTENTS_SLIME				= BIT(16),	// used for slime
-	CONTENTS_FOG				= BIT(17),	// used for fog
-	CONTENTS_LAVA				= BIT(18),
+	CONTENTS_SLIME				= BIT( 16 ),	// used for slime
+	CONTENTS_FOG				= BIT( 17 ),	// used for fog
+	CONTENTS_LAVA				= BIT( 18 ),
 	// jmarshall end
 
 	// contents used by utils

@@ -453,8 +453,8 @@ public:
 	virtual void			Hide();
 	virtual void			Show();
 
-	bool					IsShooting( void );
-	float					GetViewHeight( void );
+	bool					IsShooting();
+	float					GetViewHeight();
 
 	void					Init();
 	void					PrepareForRestart();
@@ -478,7 +478,7 @@ public:
 	void					UpdateConditions();
 	void					SetViewAngles( const idAngles& angles );
 
-	virtual bool			IsBot( void )
+	virtual bool			IsBot()
 	{
 		return false;
 	}
@@ -798,7 +798,7 @@ public:
 		numProjectileKills = 0;
 	}
 
-	int						GetPrevWeapon( void )
+	int						GetPrevWeapon()
 	{
 		return previousWeapon;
 	}

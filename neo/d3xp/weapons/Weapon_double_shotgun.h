@@ -16,7 +16,7 @@ public:
 	stateResult_t			Fire( stateParms_t* parms );
 	stateResult_t			Reload( stateParms_t* parms );
 
-	void	EjectBrass( void );
+	void	EjectBrass();
 private:
 
 };

@@ -16,8 +16,8 @@ public:
 	stateResult_t			Fire( stateParms_t* parms );
 	stateResult_t			Reload( stateParms_t* parms );
 private:
-	void					UpdateSkin( void );
-	void					UpdateLightIntensity( void );
+	void					UpdateSkin();
+	void					UpdateLightIntensity();
 
 	bool					on;
 	float					intensity;

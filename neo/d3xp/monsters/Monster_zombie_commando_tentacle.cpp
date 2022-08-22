@@ -22,7 +22,7 @@ END_CLASS
 rvmMonsterZombieCommandoTentacle::Init
 =================
 */
-void rvmMonsterZombieCommandoTentacle::Init( void )
+void rvmMonsterZombieCommandoTentacle::Init()
 {
 
 }
@@ -32,7 +32,7 @@ void rvmMonsterZombieCommandoTentacle::Init( void )
 rvmMonsterZombieCommandoTentacle::AI_Begin
 =================
 */
-void rvmMonsterZombieCommandoTentacle::AI_Begin( void )
+void rvmMonsterZombieCommandoTentacle::AI_Begin()
 {
 	run_distance = ZCT_RUNDISTANCE;
 	walk_turn = ZCT_WALKTURN;

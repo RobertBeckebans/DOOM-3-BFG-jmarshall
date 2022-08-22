@@ -629,14 +629,14 @@ private:
 class idModelExport
 {
 private:
-	void					Reset( void );
+	void					Reset();
 	bool					ParseOptions( idLexer& lex );
 	int						ParseExportSection( idParser& parser );
 
-	static bool				CheckMayaInstall( void );
-	static void				LoadMayaDll( void );
+	static bool				CheckMayaInstall();
+	static void				LoadMayaDll();
 
-	bool					ConvertMayaToMD5( void );
+	bool					ConvertMayaToMD5();
 	static bool				initialized;
 
 public:
@@ -647,7 +647,7 @@ public:
 
 	idModelExport();
 
-	static void				Shutdown( void );
+	static void				Shutdown();
 
 	int						ExportDefFile( const char* filename );
 	bool					ExportModel( const char* model );

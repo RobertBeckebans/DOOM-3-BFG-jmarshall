@@ -20,7 +20,7 @@ END_CLASS
 rvmMonsterDemonHellknight::Init
 =================
 */
-void rvmMonsterDemonHellknight::Init( void )
+void rvmMonsterDemonHellknight::Init()
 {
 	range_attack_anim.LinkTo( scriptObject, "range_attack_anim" );
 }
@@ -30,7 +30,7 @@ void rvmMonsterDemonHellknight::Init( void )
 rvmMonsterDemonHellknight::AI_Begin
 =================
 */
-void rvmMonsterDemonHellknight::AI_Begin( void )
+void rvmMonsterDemonHellknight::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }

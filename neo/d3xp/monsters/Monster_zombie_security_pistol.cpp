@@ -32,7 +32,7 @@ END_CLASS
 rvmMonsterZombieSecurityPistol::Init
 =====================
 */
-void rvmMonsterZombieSecurityPistol::Init( void )
+void rvmMonsterZombieSecurityPistol::Init()
 {
 	combat_node = NULL;
 
@@ -53,7 +53,7 @@ void rvmMonsterZombieSecurityPistol::Init( void )
 rvmMonsterZombieSecurityPistol::AI_Begin
 =====================
 */
-void rvmMonsterZombieSecurityPistol::AI_Begin( void )
+void rvmMonsterZombieSecurityPistol::AI_Begin()
 {
 	run_distance = ZSECP_RUNDISTANCE;
 	walk_turn = ZSECP_WALKTURN;

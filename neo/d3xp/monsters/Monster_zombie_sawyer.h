@@ -7,7 +7,7 @@ class rvmMonsterZombieSawyer : public rvmMonsterZombie
 {
 	CLASS_PROTOTYPE( rvmMonsterZombieSawyer );
 public:
-	virtual void				AI_Begin( void ) override;
+	virtual void				AI_Begin() override;
 
 	virtual int					check_attacks() override;
 	virtual void				do_attack( int attack_flags ) override;

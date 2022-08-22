@@ -104,26 +104,26 @@ class rvStateThread
 {
 public:
 
-	rvStateThread( void );
-	~rvStateThread( void );
+	rvStateThread();
+	~rvStateThread();
 
 	void			SetName( const char* name );
 	void			SetOwner( idClass* owner );
 
-	bool			Interrupt( void );
+	bool			Interrupt();
 
 	stateResult_t	InterruptState( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );
 	stateResult_t	PostState( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );
 	stateResult_t	SetState( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );
-	stateCall_t*	GetState( void ) const;
+	stateCall_t*	GetState() const;
 	bool			CurrentStateIs( const char* name ) const;
 
-	stateResult_t	Execute( void );
+	stateResult_t	Execute();
 
 	void			Clear( bool ignoreStateCalls = false );
 
-	bool			IsIdle( void ) const;
-	bool			IsExecuting( void ) const;
+	bool			IsIdle() const;
+	bool			IsExecuting() const;
 
 	void			Save( idSaveGame* saveFile ) const;
 	void			Restore( idRestoreGame* saveFile, idClass* owner );
@@ -150,17 +150,17 @@ ID_INLINE void rvStateThread::SetName( const char* _name )
 	name = _name;
 }
 
-ID_INLINE stateCall_t* rvStateThread::GetState( void ) const
+ID_INLINE stateCall_t* rvStateThread::GetState() const
 {
 	return states.Next();
 }
 
-ID_INLINE bool rvStateThread::IsIdle( void ) const
+ID_INLINE bool rvStateThread::IsIdle() const
 {
 	return !states.Next() && !interrupted.Next();
 }
 
-ID_INLINE bool rvStateThread::IsExecuting( void ) const
+ID_INLINE bool rvStateThread::IsExecuting() const
 {
 	return fl.executing;
 }

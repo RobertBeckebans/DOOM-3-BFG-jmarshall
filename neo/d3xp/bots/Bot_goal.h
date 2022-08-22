@@ -182,7 +182,7 @@ struct itemconfig_t
 		Reset();
 	}
 
-	void Reset( void )
+	void Reset()
 	{
 		numiteminfo = 0;
 		for( int i = 0; i < MAX_BOT_ITEM_INFO; i++ )
@@ -257,10 +257,10 @@ class idBotGoalManager
 public:
 	idBotGoalManager();
 
-	int BotSetupGoalAI( void );
+	int BotSetupGoalAI();
 
-	void InitLevelItems( void );
-	void UpdateEntityItems( void );
+	void InitLevelItems();
+	void UpdateEntityItems();
 
 	void BotPushGoal( int goalstate, bot_goal_t* goal );
 	void BotPopGoal( int goalstate );
@@ -281,7 +281,7 @@ public:
 	void BotGoalName( int number, char* name, int size );
 
 	void BotFreeGoalState( int handle );
-	void BotShutdownGoalAI( void );
+	void BotShutdownGoalAI();
 	void BotFreeItemWeights( int goalstate );
 public:
 	bool BotNearGoal( idVec3 p1, idVec3 p2 );
@@ -302,17 +302,17 @@ public:
 	void BotFindEntityForLevelItem( levelitem_t* li );
 private:
 
-	levelitem_t* AllocLevelItem( void );
+	levelitem_t* AllocLevelItem();
 	void FreeLevelItem( levelitem_t* li );
 
 	void AddLevelItemToList( levelitem_t* li );
 	void RemoveLevelItemFromList( levelitem_t* li );
 
-	void BotFreeInfoEntities( void );
+	void BotFreeInfoEntities();
 
-	void BotInitInfoEntities( void );
+	void BotInitInfoEntities();
 
-	void InitLevelItemHeap( void );
+	void InitLevelItemHeap();
 	int* ItemWeightIndex( weightconfig_t* iwc, itemconfig_t* ic );
 	itemconfig_t* LoadItemConfig( char* filename );
 	void BotSaveGoalFuzzyLogic( int goalstate, char* filename );

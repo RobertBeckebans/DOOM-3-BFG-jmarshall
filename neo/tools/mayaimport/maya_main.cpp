@@ -1113,7 +1113,7 @@ dll setup
 Maya_Shutdown
 ===============
 */
-void Maya_Shutdown( void )
+void Maya_Shutdown()
 {
 
 }

@@ -4519,7 +4519,7 @@ void idWeapon::Event_EjectBrass()
 idWeapon::Event_IsInvisible
 ===============
 */
-bool idWeapon::Event_IsInvisible( void )
+bool idWeapon::Event_IsInvisible()
 {
 	if( !owner )
 	{

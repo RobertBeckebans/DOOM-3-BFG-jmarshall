@@ -1166,7 +1166,7 @@ bool idAI::CanReachEntity( idEntity* ent )
 idAI::CanReachEnemy
 ================
 */
-bool idAI::CanReachEnemy( void )
+bool idAI::CanReachEnemy()
 {
 	aasPath_t	path;
 	int			toAreaNum;

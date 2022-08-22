@@ -15,7 +15,7 @@ END_CLASS
 rvmMonsterZombieBernie::Init
 =================
 */
-void rvmMonsterZombieBernie::Init( void )
+void rvmMonsterZombieBernie::Init()
 {
 
 }
@@ -25,7 +25,7 @@ void rvmMonsterZombieBernie::Init( void )
 rvmMonsterZombieBernie::AI_Begin
 =================
 */
-void rvmMonsterZombieBernie::AI_Begin( void )
+void rvmMonsterZombieBernie::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }

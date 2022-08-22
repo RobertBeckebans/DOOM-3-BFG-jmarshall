@@ -265,7 +265,7 @@ int rvRandom::irand( int min, int max )
 
 // Try to get a seed independent of the random number system
 
-int rvRandom::Init( void )
+int rvRandom::Init()
 {
 	mSeed *= ( unsigned long )Sys_Milliseconds();
 

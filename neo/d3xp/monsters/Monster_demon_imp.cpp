@@ -26,7 +26,7 @@ END_CLASS
 rvmMonsterDemonImp::Init
 =================
 */
-void rvmMonsterDemonImp::Init( void )
+void rvmMonsterDemonImp::Init()
 {
 	jumpVelocity.LinkTo( scriptObject, "jumpVelocity" );
 	range_attack_anim.LinkTo( scriptObject, "range_attack_anim" );
@@ -37,7 +37,7 @@ void rvmMonsterDemonImp::Init( void )
 rvmMonsterDemonImp::AI_Begin
 =================
 */
-void rvmMonsterDemonImp::AI_Begin( void )
+void rvmMonsterDemonImp::AI_Begin()
 {
 	run_distance = IMP_RUNDISTANCE;
 	walk_turn = IMP_WALKTURN;

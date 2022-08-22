@@ -14,7 +14,7 @@ END_CLASS
 rvmMonsterZombieMorgue::Init
 =================
 */
-void rvmMonsterZombieMorgue::Init( void )
+void rvmMonsterZombieMorgue::Init()
 {
 
 }
@@ -24,7 +24,7 @@ void rvmMonsterZombieMorgue::Init( void )
 rvmMonsterZombieMorgue::AI_Begin
 =================
 */
-void rvmMonsterZombieMorgue::AI_Begin( void )
+void rvmMonsterZombieMorgue::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }

@@ -17,7 +17,7 @@ END_CLASS
 rvmMonsterFlyingCacodemon::Init
 =================
 */
-void rvmMonsterFlyingCacodemon::Init( void )
+void rvmMonsterFlyingCacodemon::Init()
 {
 }
 
@@ -26,7 +26,7 @@ void rvmMonsterFlyingCacodemon::Init( void )
 rvmMonsterFlyingCacodemon::AI_Begin
 =================
 */
-void rvmMonsterFlyingCacodemon::AI_Begin( void )
+void rvmMonsterFlyingCacodemon::AI_Begin()
 {
 	Event_SetState( "state_Idle" );
 }

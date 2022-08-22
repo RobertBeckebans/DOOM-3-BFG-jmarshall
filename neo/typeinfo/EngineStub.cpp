@@ -112,7 +112,7 @@ int Sys_ListFiles( const char* directory, const char* extension, idStrList& list
 
 
 
-int idEventLoop::JournalLevel( void ) const
+int idEventLoop::JournalLevel() const
 {
 	return 0;
 }
@@ -209,7 +209,7 @@ const char* Sys_DefaultBasePath()
 	return Sys_Cwd();
 }
 
-int Sys_NumLangs( void )
+int Sys_NumLangs()
 {
 	return 0;
 }
@@ -453,11 +453,11 @@ public:
 	virtual void				QueueShowShell() { };		// Will activate the shell on the next frame.
 	virtual void idCommon::UpdateScreen( bool, bool ) { }
 	void idCommon::InitTool( const toolFlag_t, const idDict*, idEntity* ) { }
-	idDemoFile* idCommon::ReadDemo( void )
+	idDemoFile* idCommon::ReadDemo()
 	{
 		return NULL;
 	}
-	idDemoFile* idCommon::WriteDemo( void )
+	idDemoFile* idCommon::WriteDemo()
 	{
 		return NULL;
 	}

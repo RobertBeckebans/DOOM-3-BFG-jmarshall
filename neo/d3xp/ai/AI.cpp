@@ -323,7 +323,7 @@ void idAI::combat_lost()
 idAI::GetCombatNode
 =====================
 */
-idEntity* idAI::GetCombatNode( void )
+idEntity* idAI::GetCombatNode()
 {
 	int				i;
 	float			dist;
@@ -654,7 +654,7 @@ void idAI::Restore( idRestoreGame* savefile )
 idAI::FindEnemyInCombatNodes
 =====================
 */
-idEntity* idAI::FindEnemyInCombatNodes( void )
+idEntity* idAI::FindEnemyInCombatNodes()
 {
 	int				i, j;
 	idCombatNode* node;
@@ -2224,7 +2224,7 @@ void idAI::PlayCustomCycle( idStr animname, float blendTime )
 idAI::trigger_wakeup_targets
 ======================
 */
-void idAI::trigger_wakeup_targets( void )
+void idAI::trigger_wakeup_targets()
 {
 	idStr key;
 	idStr name;
@@ -2254,7 +2254,7 @@ void idAI::trigger_wakeup_targets( void )
 idAI::checkForEnemy
 ======================
 */
-void idAI::sight_enemy( void )
+void idAI::sight_enemy()
 {
 	idStr animname;
 
@@ -3034,7 +3034,7 @@ void idAI::DirectDamage( const char* meleeDefName, idEntity* ent )
 idAI::enemy_dead
 =====================
 */
-void idAI::enemy_dead( void )
+void idAI::enemy_dead()
 {
 	AI_ENEMY_DEAD = false;
 	checkForEnemy( false );
@@ -3601,7 +3601,7 @@ idThread* idAI::ConstructScriptObject()
 CallConstructor
 ================
 */
-void idAI::CallConstructor( void )
+void idAI::CallConstructor()
 {
 	const function_t* constructor;
 

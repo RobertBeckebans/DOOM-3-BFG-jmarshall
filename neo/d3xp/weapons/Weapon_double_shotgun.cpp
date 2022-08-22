@@ -246,7 +246,7 @@ stateResult_t rvmWeaponDoubleShotgun::Reload( stateParms_t* parms )
 rvmWeaponDoubleShotgun::EjectBrass
 ===============
 */
-void rvmWeaponDoubleShotgun::EjectBrass( void )
+void rvmWeaponDoubleShotgun::EjectBrass()
 {
 
 }

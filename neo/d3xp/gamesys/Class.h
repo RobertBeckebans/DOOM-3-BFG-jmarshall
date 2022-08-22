@@ -253,18 +253,18 @@ public:
 
 // jmarshall
 	template< typename T >
-	T* Cast( void )
+	T* Cast()
 	{
 		return this ? ( IsType( T::Type ) ? static_cast<T*>( this ) : NULL ) : NULL;
 	}
 
 	template< typename T >
-	const T* Cast( void ) const
+	const T* Cast() const
 	{
 		return this ? ( IsType( T::Type ) ? static_cast<const T*>( this ) : NULL ) : NULL;
 	}
 
-	virtual void			StateThreadChanged( void ) { };
+	virtual void			StateThreadChanged() { };
 // jmarshall end
 
 	virtual idClass* InvokeChild()

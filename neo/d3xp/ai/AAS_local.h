@@ -126,11 +126,11 @@ public:
 	virtual const idBounds&		DefaultSearchBounds() const;
 	virtual int					AdjustPositionAndGetArea( idVec3& origin );
 	virtual void				ShowArea( const idVec3& origin ) const;
-	virtual void				DrawAreas( void ) const;
+	virtual void				DrawAreas() const;
 // jmarshall end
 
 // jmarshall
-	virtual idAASFile*			GetAASFile( void )
+	virtual idAASFile*			GetAASFile()
 	{
 		return file;
 	}

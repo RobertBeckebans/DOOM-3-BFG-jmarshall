@@ -17,7 +17,7 @@ END_CLASS
 rvmMonsterZombie::Init
 =================
 */
-void rvmMonsterZombie::Init( void )
+void rvmMonsterZombie::Init()
 {
 	can_run.LinkTo( scriptObject, "can_run" );
 }
@@ -27,7 +27,7 @@ void rvmMonsterZombie::Init( void )
 rvmMonsterZombie::AI_Begin
 =================
 */
-void rvmMonsterZombie::AI_Begin( void )
+void rvmMonsterZombie::AI_Begin()
 {
 	run_distance = ZOMBIE_RUNDISTANCE;
 	walk_turn = ZOMBIE_WALKTURN;

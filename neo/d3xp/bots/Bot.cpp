@@ -58,7 +58,7 @@ void rvmBot::SetEnemy( idPlayer* player, idVec3 origin )
 rvmBot::BotUpdateInventory
 ==================
 */
-void rvmBot::BotUpdateInventory( void )
+void rvmBot::BotUpdateInventory()
 {
 	bs.inventory[INVENTORY_ARMOR]			= inventory.armor;
 	bs.inventory[INVENTORY_GAUNTLET]		= 1;
@@ -98,7 +98,7 @@ void rvmBot::BotUpdateInventory( void )
 rvmBot::Spawn
 ===================
 */
-void rvmBot::Spawn( void )
+void rvmBot::Spawn()
 {
 	idStr botName;
 	char filename[256];
@@ -220,7 +220,7 @@ void rvmBot::SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_ang
 rvmBot::StateThreadChanged
 ===================
 */
-void rvmBot::StateThreadChanged( void )
+void rvmBot::StateThreadChanged()
 {
 	// Ensure if we are switching states, pop the last goal.
 	bs.ltg_time = 0;
@@ -231,7 +231,7 @@ void rvmBot::StateThreadChanged( void )
 rvmBot::ServerThink
 ===================
 */
-void rvmBot::ServerThink( void )
+void rvmBot::ServerThink()
 {
 	bs.origin = GetPhysics()->GetOrigin();
 	bs.eye = GetEyePosition();
@@ -384,7 +384,7 @@ void rvmBot::PresenceTypeBoundingBox( int presencetype, idVec3& mins, idVec3& ma
 rvmBot::Think
 ===================
 */
-void rvmBot::Think( void )
+void rvmBot::Think()
 {
 	if( !hasSpawned )
 	{

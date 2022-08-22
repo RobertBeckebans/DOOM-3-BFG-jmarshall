@@ -480,7 +480,7 @@ public:
      *  The function does nothing if no scene has previously been
      *  read via ReadFile(). FreeScene() is called automatically by the
      *  destructor and ReadFile() itself.  */
-    void FreeScene( );
+    void FreeScene();
 
     // -------------------------------------------------------------------
     /** Returns an error description of an error that occurred in ReadFile().

@@ -2641,7 +2641,7 @@ void idStr::Split( idList<idStr>& list, const char delimiter, const char groupDe
 idStr::StripDoubleQuotes
 ===================
 */
-void idStr::StripDoubleQuotes( void )
+void idStr::StripDoubleQuotes()
 {
 	idStr temp = *this;
 	char* string = ( char* )temp.c_str();

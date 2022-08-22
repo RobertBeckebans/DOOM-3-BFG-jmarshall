@@ -300,9 +300,9 @@ void idBotWeaponInfoManager::LoadWeaponConfig( char* filename )
 idBotWeaponInfoManager::Init
 ========================
 */
-void idBotWeaponInfoManager::Init( void )
+void idBotWeaponInfoManager::Init()
 {
-	rvmScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
+	iceScopedLexerBaseFolder scopedBaseFolder( BOTFILESBASEFOLDER );
 
 	LoadWeaponConfig( ( char* )bot_weaponsfile.GetString() );
 }
@@ -464,7 +464,7 @@ void idBotWeaponInfoManager::BotResetWeaponState( int weaponstate )
 idBotWeaponInfoManager::BotAllocWeaponState
 =====================
 */
-int idBotWeaponInfoManager::BotAllocWeaponState( void )
+int idBotWeaponInfoManager::BotAllocWeaponState()
 {
 	int i;
 

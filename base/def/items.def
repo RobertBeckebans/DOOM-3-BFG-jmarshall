@@ -4,7 +4,7 @@
 
 ***********************************************************************/
 
-// Everything in here must match dkbase/botfiles/inv.h!
+// jmarshall: Everything in here must match dkbase/botfiles/inv.h!
 entityDef bot_itemtable {
 
 	"INVENTORY_NONE"				"0"

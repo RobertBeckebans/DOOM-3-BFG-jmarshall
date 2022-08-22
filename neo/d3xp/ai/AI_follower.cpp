@@ -18,7 +18,7 @@ END_CLASS
 rvmAI_Follower::Init
 ================
 */
-void rvmAI_Follower::Init( void )
+void rvmAI_Follower::Init()
 {
 	inCustomAnim = false;
 	AI_RUN = false;

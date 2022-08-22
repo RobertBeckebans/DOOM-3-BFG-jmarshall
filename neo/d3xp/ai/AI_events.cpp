@@ -1617,7 +1617,7 @@ void idAI::Event_EnemyRange()
 idAI::EnemyRange
 =====================
 */
-float idAI::EnemyRange( void )
+float idAI::EnemyRange()
 {
 	float dist;
 	idActor* enemyEnt = enemy.GetEntity();
@@ -2893,7 +2893,7 @@ void idAI::Event_PushPointIntoAAS( const idVec3& pos )
 idAI::Event_IsAwake
 ================
 */
-void idAI::Event_IsAwake( void )
+void idAI::Event_IsAwake()
 {
 	idThread::ReturnFloat( isAwake );
 }

@@ -133,13 +133,13 @@ struct bot_weaponstate_t
 class idBotWeaponInfoManager
 {
 public:
-	void	Init( void );
+	void	Init();
 
 	int		BotLoadWeaponWeights( int weaponstate, char* filename );
 	void	BotGetWeaponInfo( int weaponstate, int weapon, weaponinfo_t* weaponinfo );
 	int		BotChooseBestFightWeapon( int weaponstate, int* inventory );
 	void	BotResetWeaponState( int weaponstate );
-	int		BotAllocWeaponState( void );
+	int		BotAllocWeaponState();
 	void	BotFreeWeaponState( int ws );
 private:
 	int		BotValidWeaponNumber( int weaponnum );

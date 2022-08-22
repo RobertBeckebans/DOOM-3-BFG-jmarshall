@@ -713,7 +713,7 @@ Sys_GogBasePath
 */
 static char gogPathBuffer[MAX_OSPATH] = { 0 };
 
-static const char* Sys_GogBasePath( void )
+static const char* Sys_GogBasePath()
 {
 #ifdef GOGPATH_ID
 	HKEY gogRegKey;

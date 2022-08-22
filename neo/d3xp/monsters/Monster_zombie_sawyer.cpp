@@ -16,7 +16,7 @@ END_CLASS
 rvmMonsterZombieSawyer::AI_Begin
 ====================
 */
-void rvmMonsterZombieSawyer::AI_Begin( void )
+void rvmMonsterZombieSawyer::AI_Begin()
 {
 	Event_SetSmokeVisibility( ALL_PARTICLES, 0 );
 	Event_SetSmokeVisibility( SAWYER_SMOKE_PARTICLES, 1 ); // This was called as a seperate event before; possibly a optimization?

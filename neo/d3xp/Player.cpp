@@ -12557,7 +12557,7 @@ gameExpansionType_t idPlayer::GetExpansionType() const
 idPlayer::IsShooting
 ==============
 */
-bool idPlayer::IsShooting( void )
+bool idPlayer::IsShooting()
 {
 	return AI_ATTACK_HELD;
 }
@@ -12567,7 +12567,7 @@ bool idPlayer::IsShooting( void )
 idPlayer::GetViewHeight
 ==============
 */
-float idPlayer::GetViewHeight( void )
+float idPlayer::GetViewHeight()
 {
 	float newEyeOffset = 0;
 

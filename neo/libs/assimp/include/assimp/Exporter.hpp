@@ -262,7 +262,7 @@ public:
      *  automatically by the destructor. The only reason to call
      *  it manually would be to reclaim as much storage as possible
      *  without giving up the #Exporter instance yet. */
-    void FreeBlob( );
+    void FreeBlob();
 
     // -------------------------------------------------------------------
     /** Returns the number of export file formats available in the current

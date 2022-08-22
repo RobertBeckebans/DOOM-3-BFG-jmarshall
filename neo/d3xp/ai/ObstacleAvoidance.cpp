@@ -36,7 +36,7 @@ const float idObstacleAvoidance::CLIP_BOUNDS_EPSILON		= 10.0f;
 idObstacleAvoidance::pathNode_t::Init
 ============
 */
-void idObstacleAvoidance::pathNode_t::Init( void )
+void idObstacleAvoidance::pathNode_t::Init()
 {
 	dir = 0;
 	pos.Zero();
@@ -1144,7 +1144,7 @@ void idObstacleAvoidance::FindOptimalPath( const pathNode_t* root, const float h
 idObstacleAvoidance::ClearObstacles
 ============
 */
-void idObstacleAvoidance::ClearObstacles( void )
+void idObstacleAvoidance::ClearObstacles()
 {
 	obstacles.SetNum( 0 );
 }

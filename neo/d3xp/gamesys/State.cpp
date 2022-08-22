@@ -70,14 +70,14 @@ void stateCall_t::Restore( idRestoreGame* saveFile, const idClass* owner )
 rvStateThread::rvStateThread
 =====================
 */
-rvStateThread::rvStateThread( void )
+rvStateThread::rvStateThread()
 {
 	owner		= NULL;
 	insertAfter	= NULL;
 	lastResult	= SRESULT_DONE;
 
-	states.Clear( );
-	interrupted.Clear( );
+	states.Clear();
+	interrupted.Clear();
 
 	memset( &fl, 0, sizeof( fl ) );
 }
@@ -87,7 +87,7 @@ rvStateThread::rvStateThread( void )
 rvStateThread::~rvStateThread
 =====================
 */
-rvStateThread::~rvStateThread( void )
+rvStateThread::~rvStateThread()
 {
 	Clear( true );
 }
@@ -147,7 +147,7 @@ rvStateThread::Set
 */
 stateResult_t rvStateThread::SetState( const char* name, int blendFrames, int delay, int flags )
 {
-	Clear( );
+	Clear();
 	return PostState( name, blendFrames, delay, flags );
 }
 
@@ -163,7 +163,7 @@ stateResult_t rvStateThread::InterruptState( const char* name, int blendFrames, 
 	// Move all states to the front of the interrupted list in the same order
 	for( call = states.Prev(); call; call = states.Prev() )
 	{
-		call->node.Remove( );
+		call->node.Remove();
 		call->node.AddToFront( interrupted );
 	}
 
@@ -223,8 +223,8 @@ void rvStateThread::Clear( bool ignoreStateCalls )
 	insertAfter		= NULL;
 	fl.stateCleared	= true;
 
-	states.Clear( );
-	interrupted.Clear( );
+	states.Clear();
+	interrupted.Clear();
 }
 
 /*
@@ -232,7 +232,7 @@ void rvStateThread::Clear( bool ignoreStateCalls )
 rvStateThread::Execute
 =====================
 */
-stateResult_t rvStateThread::Execute( void )
+stateResult_t rvStateThread::Execute()
 {
 	stateCall_t*	call = NULL;
 	int				count;
@@ -244,14 +244,14 @@ stateResult_t rvStateThread::Execute( void )
 	int				historyEnd;
 
 	// If our main state loop is empty copy over any states in the interrupted state
-	if( !states.Next( ) )
+	if( !states.Next() )
 	{
 		for( call = interrupted.Next(); call; call = interrupted.Next() )
 		{
-			call->node.Remove( );
+			call->node.Remove();
 			call->node.AddToEnd( states );
 		}
-		assert( !interrupted.Next( ) );
+		assert( !interrupted.Next() );
 	}
 
 	// State thread is idle if there are no states
@@ -276,7 +276,7 @@ stateResult_t rvStateThread::Execute( void )
 		// If this state is only called when being cleared then just skip it
 		if( call->flags & SFLAG_ONCLEARONLY )
 		{
-			call->node.Remove( );
+			call->node.Remove();
 			delete call;
 			continue;
 		}
@@ -362,7 +362,7 @@ stateResult_t rvStateThread::Execute( void )
 			}
 
 			// Done with state so remove it from list
-			call->node.Remove( );
+			call->node.Remove();
 			delete call;
 		}
 
@@ -416,9 +416,9 @@ stateResult_t rvStateThread::Execute( void )
 	fl.executing = false;
 
 	// Move interrupted states back into the main state list when the main state list is empty
-	if( !states.Next() && interrupted.Next( ) )
+	if( !states.Next() && interrupted.Next() )
 	{
-		return Execute( );
+		return Execute();
 	}
 
 	return lastResult;

@@ -32,7 +32,7 @@ END_CLASS
 rvmMonsterZombieCommandoChaingun::Init
 ========================
 */
-void rvmMonsterZombieCommandoChaingun::Init( void )
+void rvmMonsterZombieCommandoChaingun::Init()
 {
 	fire.LinkTo( scriptObject, "fire" );
 	crouch_fire.LinkTo( scriptObject, "crouch_fire" );
@@ -49,7 +49,7 @@ void rvmMonsterZombieCommandoChaingun::Init( void )
 rvmMonsterZombieCommandoChaingun::AI_Begin
 ========================
 */
-void rvmMonsterZombieCommandoChaingun::AI_Begin( void )
+void rvmMonsterZombieCommandoChaingun::AI_Begin()
 {
 	run_distance = ZOMBIE_CGUN_RUNDISTANCE;
 	walk_turn = ZOMBIE_CGUN_WALKTURN;

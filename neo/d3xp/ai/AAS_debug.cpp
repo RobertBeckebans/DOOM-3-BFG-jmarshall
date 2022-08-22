@@ -211,7 +211,7 @@ idAASLocal::DrawAreas
 ============
 */
 // jmarshall
-void idAASLocal::DrawAreas( void ) const
+void idAASLocal::DrawAreas() const
 {
 	int viewAreaNum = PointReachableAreaNum( gameLocal.GetLocalPlayer()->GetOrigin(), DefaultSearchBounds(), ( AREA_REACHABLE_WALK | AREA_REACHABLE_FLY ) );
 

@@ -47,7 +47,7 @@ void rvmWeaponFlashlight::Init( idWeapon* weapon )
 rvmWeaponFlashlight::UpdateLightIntensity
 ================
 */
-void rvmWeaponFlashlight::UpdateLightIntensity( void )
+void rvmWeaponFlashlight::UpdateLightIntensity()
 {
 	// TODO this has to interact with scripts somehow
 }
@@ -57,7 +57,7 @@ void rvmWeaponFlashlight::UpdateLightIntensity( void )
 rvmWeaponFlashlight::UpdateSkin
 ================
 */
-void rvmWeaponFlashlight::UpdateSkin( void )
+void rvmWeaponFlashlight::UpdateSkin()
 {
 	if( on && ( intensity > FLASHLIGHT_MIN_SKIN_INTENSITY ) )
 	{

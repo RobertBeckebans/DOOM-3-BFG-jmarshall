@@ -459,11 +459,11 @@ public:
 	void					MapRestart();
 	static void				MapRestart_f( const idCmdArgs& args );
 
-	float					SysScriptTime( void ) const
+	float					SysScriptTime() const
 	{
 		return MS2SEC( realClientTime );
 	}
-	float					SysScriptFrameTime( void ) const
+	float					SysScriptFrameTime() const
 	{
 		return MS2SEC( time - previousTime );
 	}
@@ -472,7 +472,7 @@ public:
 	const char* 			GetMapName() const;
 	void					DelayRemoveEntity( idEntity* entity, int delay );
 
-	bool					InfluenceActive( void ) const;
+	bool					InfluenceActive() const;
 	idEntity*				GetEntity( const char* name );
 // jmarshall - bots
 	void					AddBot( const char* name );
@@ -526,7 +526,7 @@ public:
 
 	void					SetCamera( idCamera* cam );
 	idCamera* 				GetCamera() const;
-	bool			        SkipCinematic( void );
+	bool			        SkipCinematic();
 	void					CalcFov( float base_fov, float& fov_x, float& fov_y ) const;
 
 	void					AddEntityToHash( const char* name, idEntity* ent );
@@ -620,7 +620,7 @@ public:
 		return nextGibTime;
 	};
 // jmarshall
-	idAAS*					GetBotAAS( void )
+	idAAS*					GetBotAAS()
 	{
 		return bot_aas;
 	}

@@ -1660,13 +1660,13 @@ class rvRandom
 private:
 	static	unsigned long	mSeed;
 public:
-	rvRandom( void )
+	rvRandom()
 	{
 		mSeed = 0x89abcdef;
 	}
 
 	// for a non seed based init
-	static	int				Init( void );
+	static	int				Init();
 
 	// Init the seed to a unique number
 	static	void			Init( unsigned long seed )

@@ -25,7 +25,7 @@ public:
 	{
 		Clear();
 	};
-	void				Clear( void )
+	void				Clear()
 	{
 		currentToken = 0;
 		tokens.Clear();
@@ -34,15 +34,15 @@ public:
 	int					SetTokens( const char* buffer );
 	const char* NextToken( const char* errorstring = NULL );
 
-	bool				TokenAvailable( void )
+	bool				TokenAvailable()
 	{
 		return currentToken < tokens.Num();
 	};
-	int					Num( void )
+	int					Num()
 	{
 		return tokens.Num();
 	};
-	void				UnGetToken( void )
+	void				UnGetToken()
 	{
 		if( currentToken > 0 )
 		{
@@ -60,7 +60,7 @@ public:
 			return NULL;
 		}
 	};
-	const char* CurrentToken( void )
+	const char* CurrentToken()
 	{
 		return GetToken( currentToken );
 	};

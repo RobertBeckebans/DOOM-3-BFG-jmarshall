@@ -9,7 +9,7 @@ public:
 	CLASS_PROTOTYPE( rvmWeaponHandgrenade );
 
 	virtual void			Init( idWeapon* weapon );
-	virtual void			OwnerDied( void ) override;
+	virtual void			OwnerDied() override;
 
 	stateResult_t			Raise( stateParms_t* parms );
 	stateResult_t			Lower( stateParms_t* parms );
@@ -17,8 +17,8 @@ public:
 	stateResult_t			Fire( stateParms_t* parms );
 	stateResult_t			Reload( stateParms_t* parms );
 private:
-	void					GrenadeNade( void );
-	void					GrenadeNoNade( void );
+	void					GrenadeNade();
+	void					GrenadeNoNade();
 	void					UpdateSkin();
 
 	void					ExplodeInHand();
