@@ -358,7 +358,7 @@ model monster_demon_imp {
 
 entityDef monster_demon_imp {
 	"inherit"						"monster_default"
-	"spawnclass"					"rvmMonsterDemonImp"
+	"spawnclass"					"iceMonsterDemonImp"
 	"scriptobject"					"monster_demon_imp"
 	"model"							"monster_demon_imp"
 	"ragdoll"						"monster_demon_imp"

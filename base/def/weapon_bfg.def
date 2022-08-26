@@ -63,7 +63,7 @@ entityDef weapon_bfg {
 	
 	"smoke_muzzle"				"BFG_barrel.ptr"
 	
-	"weapon_class"				"rvmWeaponBFG"
+	"weapon_class"				"iceWeaponBFG"
 	"def_projectile"			"projectile_bfg"
 	"ammoType"					"ammo_bfg"
 	"ammoRequired"				"1"

@@ -539,7 +539,7 @@ model model_monster_zsec_machinegun {
 
 entityDef monster_zsec_machinegun {
 	"inherit"						"monster_zsec_shotgun"
-	"spawnclass"					"rvmMonsterZombieSecurityPistol"
+	"spawnclass"					"iceMonsterZombieSecurityPistol"
 	"scriptobject"					"monster_zombie_security_pistol"
 	"model"							"model_monster_zsec_machinegun"
 	"size"							"40 40 72"

@@ -59,7 +59,7 @@ entityDef weapon_rocketlauncher {
 	"hide_time"					"0.3"				// time to hide weapon when talking to npcs or looking at guis
 	"hide_distance"				"-20"				// distance to offset weapon when talking to npcs or looking at guis
 
-	"weapon_class"				"rvmWeaponRocketLauncher"
+	"weapon_class"				"iceWeaponRocketLauncher"
 	"def_projectile"			"projectile_rocket"
 	"ammoType"					"ammo_rockets"
 	"ammoRequired"				"1"

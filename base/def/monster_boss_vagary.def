@@ -128,7 +128,7 @@ entityDef monster_boss_vagary {
 	"editor_maxs"					"48 48 96"
 
 	"inherit"						"monster_default"
-	"spawnclass"					"rvmMonsterBossVagary"
+	"spawnclass"					"iceMonsterBossVagary"
 	"scriptobject"					"monster_boss_vagary"
 	"ragdoll"						"monster_demon_vagary"
 	"model"							"monster_boss_vagary"

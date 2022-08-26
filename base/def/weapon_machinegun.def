@@ -60,7 +60,7 @@ entityDef weapon_machinegun {
 	
 	"modelindex"				"MODELINDEX_MACHINEGUN"
 
-	"weapon_class"				"rvmWeaponMachineGun"
+	"weapon_class"				"iceWeaponMachineGun"
 	"def_projectile"			"projectile_bullet_machinegun"
 	"ammoType"					"ammo_clip"
 	"ammoRequired"				"1"

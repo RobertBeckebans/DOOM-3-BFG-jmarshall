@@ -11,7 +11,7 @@ entityDef zombie_default {
 	"blink_min"						"2.0s"
 	"blink_max"						"8.0"
 	
-	"spawnclass"					"rvmMonsterZombie"
+	"spawnclass"					"iceMonsterZombie"
 
 	"head_look"						"1"	
 	

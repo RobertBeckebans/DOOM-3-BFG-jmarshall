@@ -57,7 +57,7 @@ model monster_flying_lostsoul2 {
 
 entityDef monster_flying_lostsoul2 {
 	"inherit"					"monster_default"
-	"spawnclass"				"rvmMonsterLostSoul"
+	"spawnclass"				"iceMonsterLostSoul"
 	"scriptobject"				"monster_flying_lostsoul"
 	"model"						"monster_flying_lostsoul2"
 	"ragdoll"					"monster_demon_lost"

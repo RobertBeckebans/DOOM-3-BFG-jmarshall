@@ -51,7 +51,7 @@ entityDef weapon_chaingun {
 	"gui"						"guis/weapons/chaingun.gui"
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
 	
-	"weapon_class"				"rvmWeaponChainGun"
+	"weapon_class"				"iceWeaponChainGun"
 	"def_projectile"			"projectile_chaingunbullet"
 	"ammoType"					"ammo_belt"
 	"ammoRequired"				"1"

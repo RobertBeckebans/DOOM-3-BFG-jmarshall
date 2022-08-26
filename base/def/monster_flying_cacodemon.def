@@ -72,7 +72,7 @@ model monster_flying_cacodemon {
 
 entityDef monster_flying_cacodemon {
 	"inherit"						"monster_default"
-	"spawnclass"					"rvmMonsterFlyingCacodemon"
+	"spawnclass"					"iceMonsterFlyingCacodemon"
 	"scriptobject"					"monster_flying_cacodemon"
 	"model"							"monster_flying_cacodemon"
 	"ragdoll"						"monster_demon_cacodemon"

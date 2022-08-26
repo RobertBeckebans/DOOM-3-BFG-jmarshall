@@ -66,7 +66,7 @@ model model_monster_zombie_morgue {
 
 entityDef monster_zombie_morgue {
 	"inherit"						"zombie_default"
-	"spawnclass"					"rvmMonsterZombieMorgue"
+	"spawnclass"					"iceMonsterZombieMorgue"
 	"scriptobject"					"monster_zombie_morgue"
 	"size"							"48 48 68"
 	"use_aas"						"aas48"

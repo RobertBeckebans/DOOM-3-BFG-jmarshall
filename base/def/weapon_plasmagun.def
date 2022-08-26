@@ -63,7 +63,7 @@ entityDef weapon_plasmagun {
 	"gui"						"guis/weapons/plasmagun.gui"
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
 
-	"weapon_class"				"rvmWeaponPlasmaGun"
+	"weapon_class"				"iceWeaponPlasmaGun"
 	"def_projectile"			"projectile_plasmablast"
 	"muzzle_launch"				"1"
 	"ammoType"					"ammo_cells"

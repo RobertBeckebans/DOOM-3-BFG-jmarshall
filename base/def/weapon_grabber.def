@@ -77,7 +77,7 @@ entityDef weapon_grabber {
 	"smoke_muzzle"			"grabbersmoke.prt"
 	"smoke_joint"			"smokeparticle"
 
-	"weapon_class"			"rvmWeaponGrabber"
+	"weapon_class"			"iceWeaponGrabber"
 	"def_melee"				"damage_flashlight"
 	"melee_distance"		"32"
 	"ammoType"				""

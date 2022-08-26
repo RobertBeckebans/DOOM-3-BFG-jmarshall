@@ -24,7 +24,7 @@ model delta2a_commando {
 
 entityDef delta2a_commando {
 	"inherit"						"monster_zombie_commando"
-	"spawnclass"					"rvmMonsterZombieCommandoTentacle"
+	"spawnclass"					"iceMonsterZombieCommandoTentacle"
 	"scriptobject"					"monster_zombie_commando_tentacle"
 	"model"							"delta2a_commando"
 }

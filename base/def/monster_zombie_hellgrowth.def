@@ -25,7 +25,7 @@ model monster_zombie_hellgrowth {
 entityDef monster_zombie_hellgrowth {
 
 	"inherit"						"zombie_default"
-	"spawnclass"					"rvmMonsterZombieBernie"
+	"spawnclass"					"iceMonsterZombieBernie"
 	"scriptobject"					"monster_zombie_bernie"
 	"ragdoll"						"monster_zombie_bernie"
 	"model"							"monster_zombie_hellgrowth"

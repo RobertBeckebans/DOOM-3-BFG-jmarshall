@@ -32,7 +32,7 @@ entityDef weapon_fists {
 	"inv_weapon"				"weapon_fists"
 	"icon"						"guis/assets/hud/wpn_12"
 
-	"weapon_class"				"rvmWeaponFist"
+	"weapon_class"				"iceWeaponFist"
 	"def_melee"					"damage_fists"
 	"melee_distance"			"48"
 	"ammoType"					""

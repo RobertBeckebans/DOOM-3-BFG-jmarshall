@@ -58,7 +58,7 @@ entityDef weapon_chainsaw {
 	"pdaIcon"					"guis/assets/hud/icons/chainsaw_new.tga"
 	"hudIcon"					"guis/assets/hud/icons/chainsaww.tga"	
 
-	"weapon_class"				"rvmWeaponChainsaw"
+	"weapon_class"				"iceWeaponChainsaw"
 	"def_melee"					"damage_chainsaw"
 	"melee_distance"			"64"
 	"ammoType"					""

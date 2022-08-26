@@ -35,7 +35,7 @@ entityDef weapon_pda {
 	"hide_time"					"0"								// time to hide weapon when talking to npcs or looking at guis
 	"hide_distance"				"0"								// distance to offset weapon when talking to npcs or looking at guis
 
-	"weapon_class"				"rvmWeaponPDA"
+	"weapon_class"				"iceWeaponPDA"
 
 	"spawnclass"				"idItem"
 	"ammoRequired"				"0"

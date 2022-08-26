@@ -152,7 +152,7 @@ entityDef monster_demon_hellknight {
 	"editor_mins"					"-48 -48 0"
 	"editor_maxs"					"48 48 96"
 	"inherit"						"monster_default"
-	"spawnclass"					"rvmMonsterDemonHellknight"
+	"spawnclass"					"iceMonsterDemonHellknight"
 	"scriptobject"					"monster_demon_hellknight"
 	"model"							"monster_demon_hellknight"
 	"ragdoll"						"monster_demon_hellknight"

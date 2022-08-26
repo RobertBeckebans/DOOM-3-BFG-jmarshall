@@ -749,7 +749,7 @@ entityDef monster_zombie_commando_cgun {
 	"inherit"						"monster_default"
 	"scriptobject"					"monster_zombie_commando_cgun"
 	"ragdoll"						"monster_zombie_commando_cgun"
-	"spawnclass"					"rvmMonsterZombieCommandoChaingun"
+	"spawnclass"					"iceMonsterZombieCommandoChaingun"
 	"size"							"48 48 68"
 	"use_aas"						"aas48"
 	"team"							"1"

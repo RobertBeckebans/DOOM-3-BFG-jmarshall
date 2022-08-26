@@ -34,7 +34,7 @@ entityDef ss_sawyer {
 	
 	"inherit"						"zombie_default"
 	"scriptobject"					"monster_zombie_sawyer"
-	"spawnclass"					"rvmMonsterZombieSawyer"
+	"spawnclass"					"iceMonsterZombieSawyer"
 	"size"							"48 48 68"
 	"use_aas"						"aas48"
 	"team"							"1"
