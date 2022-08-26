@@ -29,9 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "precompiled.h"
 #pragma hdrstop
-#include "../renderer/RenderWorld.h"
-#include "../ui/ListGUI.h"
-#include "../ui/UserInterface.h"
+
 #include "Game_local.h"
 
 /*

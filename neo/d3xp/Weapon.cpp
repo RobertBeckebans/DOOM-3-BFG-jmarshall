@@ -29,10 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "precompiled.h"
 #pragma hdrstop
-#include "../framework/DeclSkin.h"
-#include "../renderer/RenderWorld.h"
-#include "../ui/ListGUI.h"
-#include "../ui/UserInterface.h"
+
 #include "Game_local.h"
 #include "PredictedValue_impl.h"
 
@@ -1923,7 +1920,7 @@ idWeapon::OwnerDied
 void idWeapon::OwnerDied()
 {
 	currentWeaponObject->OwnerDied();
-	
+
 	// Update the grabber effects
 	/*
 	if( /*!common->IsMultiplayer() && grabberState != -1 )

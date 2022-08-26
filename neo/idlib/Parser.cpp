@@ -1763,6 +1763,7 @@ int idParser::EvaluateTokens( idToken* tokens, signed int* intvalue, double* flo
 			}
 			case TT_NUMBER:
 			{
+				// RB: FIXME this shit breaks typeinfogen 
 				//if( lastwasvalue )
 				//{
 				//	idParser::Error( "syntax error in #if/#elif" );

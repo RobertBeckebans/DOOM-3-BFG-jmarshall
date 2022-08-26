@@ -39,11 +39,16 @@ entityDef weapon_bfg {
 	"joint_attach"				"BFG_ATTACHER"
 	"def_dropItem"				"moveable_item_bfg"
 
-	"inv_name"					"BFG-9000"
+	"inv_name"					"#str_00100197"
 	"inv_weapon"				"weapon_bfg"
 	"inv_ammo_bfg"				"4"
 	"inv_item"					"5"
+
+	"inv_desc"					"#str_02540"
+	"display_name"				"#str_02022"
 	"icon"						"guis/assets/hud/wpn_8"
+	"pdaIcon"					"guis/assets/hud/icons/bfg_new.tga"
+	"hudIcon"					"guis/assets/hud/icons/bfgw.tga"	
 
 	"weaponAngleOffsetAverages" "15"
 	"weaponAngleOffsetScale" 	".5"
@@ -79,6 +84,11 @@ entityDef weapon_bfg {
 	"skin_invisible"			"skins/bfg_invis"
 	//"snd_hum"					"player_bfg_idle"
 	"spread"					"0"
+
+	"controllerShakeHighMag"	"1.0"
+	"controllerShakeHighTime"	"750"
+	"controllerShakeLowMag"		"1.0"
+	"controllerShakeLowTime"	"750"
 }
 
 entityDef env_bfg_overcharge {
@@ -93,6 +103,7 @@ entityDef moveable_item_bfg {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
 }
 
 model worldmodel_bfg {

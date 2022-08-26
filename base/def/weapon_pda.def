@@ -31,6 +31,7 @@ entityDef weapon_pda {
 	"snd_acquire"				"guisounds_compup"
 
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
+	"hudIcon"					"guis/assets/hud/icons/pda.tga"
 	
 	"hide_time"					"0"								// time to hide weapon when talking to npcs or looking at guis
 	"hide_distance"				"0"								// distance to offset weapon when talking to npcs or looking at guis

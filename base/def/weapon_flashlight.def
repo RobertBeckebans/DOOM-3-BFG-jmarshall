@@ -35,10 +35,14 @@ entityDef weapon_flashlight {
 	"model_world" 				"worldmodel_flashlight"
 	"joint_attach"				"FL_ATTACHER"
 
-	"inv_name"					"Flashlight"
+	"inv_name"					"#str_00100187"
 	"inv_weapon"				"weapon_flashlight"
 	"inv_item"					"5"
 	"icon"						"guis/assets/hud/wpn_10"
+
+	"inv_desc"					"#str_weapon_flashlight_desc"
+	"display_name"				"#str_02482"
+	"pdaIcon"					"guis/assets/hud/icons/flashlight_new.tga"
 	
 	"impact_damage_effect"		"1"
 	
@@ -77,6 +81,8 @@ entityDef moveable_item_flashlight {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
+	"no_touch"				"1"
 }
 
 model worldmodel_flashlight {
@@ -135,6 +141,7 @@ entityDef	damage_flashlight {
 	"snd_glass"					"monster_zombie_fat_wrench"
 //	"snd_liquid"				"bullet_impact_liquid"
 	"snd_plastic"				"flashlight_impact"
+	"snd_shatter"				"melee_impact_glass"	
 	
 	"snd_hit"			"flashlight_impact"		// TEMP
 	"snd_miss"			"fist_whoosh"			// TEMP
@@ -264,5 +271,4 @@ skin skins/models/weapons/flashlight_on_invis {
 	models/items/flashlight/flashlight2 models/items/flashlight/flashlight2_invis
 	models/characters/player/arm2	models/characters/player/arm2_invis
 }
-
 

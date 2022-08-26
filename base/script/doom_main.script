@@ -35,7 +35,7 @@ scriptEvent	float checkForEnemy(float use_fov);
 #include "script/weapon_base.script"
 #include "script/ai_base.script"
 
-// for dimming flashlight during plasma discharges in alphalabs2
+// jmarshall: for dimming flashlight during plasma discharges in alphalabs2
 float global_flashlight_intensity = 1.0;
 
 // ai

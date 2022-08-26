@@ -50,11 +50,16 @@ entityDef weapon_rocketlauncher {
 	"joint_attach"				"RL_ATTACHER"
 	"def_dropItem"				"moveable_item_rocketlauncher"
 
-	"inv_name"					"Rocket Launcher"
+	"inv_name"					"#str_01424"
 	"inv_weapon"				"weapon_rocketlauncher"
 	"inv_ammo_rockets"			"5"
 	"inv_item"					"5"
+	"inv_desc"					"#str_02539"
+	"display_name"				"#str_02480"
+
 	"icon"						"guis/assets/hud/wpn_6"
+	"pdaIcon"					"guis/assets/hud/icons/rocketlauncher_new.tga"
+	"hudIcon"					"guis/assets/hud/icons/rocketlauncherw.tga"	
 
 	"hide_time"					"0.3"				// time to hide weapon when talking to npcs or looking at guis
 	"hide_distance"				"-20"				// distance to offset weapon when talking to npcs or looking at guis
@@ -82,17 +87,22 @@ entityDef weapon_rocketlauncher {
 
 	"snd_acquire"				"sound_weapon_acquire"
 	"snd_respawn"				"sound_weapon_respawn"
-	
-	"skin_1"					"models/weapons/0rox.skin"
-	"skin_2"					"models/weapons/1rox.skin"
-	"skin_3"					"models/weapons/2rox.skin"
-	"skin_4"					"models/weapons/3rox.skin"
-	"skin_5"					"models/weapons/4rox.skin"
-	"skin_6"					"models/weapons/5rox.skin"
+
+	"skin_1"					"skins/models/weapons/0rox.skin"
+	"skin_2"					"skins/models/weapons/1rox.skin"
+	"skin_3"					"skins/models/weapons/2rox.skin"
+	"skin_4"					"skins/models/weapons/3rox.skin"
+	"skin_5"					"skins/models/weapons/4rox.skin"
+	"skin_6"					"skins/models/weapons/5rox.skin"
 	
 	"skin_invisible"			"skins/rocket_invis"
 	
 	"spread"					"1"
+
+	"controllerShakeHighMag"	"1.0"
+	"controllerShakeHighTime"	"500"
+	"controllerShakeLowMag"		"0.9"
+	"controllerShakeLowTime"	"750"
 }
 
 entityDef moveable_item_rocketlauncher {
@@ -101,6 +111,7 @@ entityDef moveable_item_rocketlauncher {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
 }
 
 model worldmodel_rocketlauncher {

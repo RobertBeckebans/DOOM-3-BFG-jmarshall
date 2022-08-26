@@ -5,7 +5,7 @@ Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2021 Justin Marshall
 
-This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
 Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -734,7 +734,7 @@ void iceBot::BotAimAtEnemy( bot_state_t* bs )
 	idVec3 dir, bestorigin, end, start, groundtarget, cmdmove, enemyvelocity;
 	idVec3 mins( -4, -4, -4 );
 	idVec3 maxs( 4, 4, 4 );
-	weaponinfo_t wi;
+	bot_weaponinfo_t wi;
 	//aas_entityinfo_t entinfo;
 	idPlayer* entinfo;
 	bot_goal_t goal;
@@ -1251,7 +1251,7 @@ void iceBot::BotCheckAttack( bot_state_t* bs )
 	//float selfpreservation;
 	idVec3 forward, right, start, end, dir;
 	idAngles angles;
-	weaponinfo_t wi;
+	bot_weaponinfo_t wi;
 	trace_t trace;
 	//aas_entityinfo_t entinfo;
 	idEntity* entinfo;

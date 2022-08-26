@@ -56,7 +56,7 @@ object monster_base : ai {
 	void		do_attack( float attack_flags );
 	boolean		checkTurretAttack();				// tests if monster can still do a turret attack from current location
 	
-	void		supports_native();
+	void		supports_native(); // jmarshall
 
 	// common functions
 	void		init();

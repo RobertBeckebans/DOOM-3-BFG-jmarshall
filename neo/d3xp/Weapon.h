@@ -417,7 +417,7 @@ private:
 	void					MuzzleRise( idVec3& origin, idMat3& axis );
 	void					UpdateNozzleFx();
 	void					UpdateFlashPosition();
-	
+
 public:
 	virtual void			CallNativeEvent( idStr& name ) override;
 

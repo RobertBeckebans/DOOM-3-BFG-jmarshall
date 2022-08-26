@@ -54,11 +54,16 @@ entityDef weapon_plasmagun {
 	
 	"modelindex"				"MODELINDEX_PLASMAGUN"
 
-	"inv_name"					"Plasma Gun"
+	"inv_name"					"#str_01456"
 	"inv_weapon"				"weapon_plasmagun"
 	"inv_ammo_cells"			"50"
 	"inv_item"					"5"
+	"inv_desc"					"#str_02538"
+	"display_name"				"#str_02479"
+
 	"icon"						"guis/assets/hud/wpn_5"
+	"pdaIcon"					"guis/assets/hud/icons/plasmagun_new.tga"
+	"hudIcon"					"guis/assets/hud/icons/plasmagunw.tga"	
 
 	"gui"						"guis/weapons/plasmagun.gui"
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
@@ -100,6 +105,11 @@ entityDef weapon_plasmagun {
 	"skin_invisible"			"skins/plasma_invis"
 	
 	"spread"					"0"
+
+	"controllerShakeHighMag"	"0.7"
+	"controllerShakeHighTime"	"25"
+	"controllerShakeLowMag"		"0.5"
+	"controllerShakeLowTime"	"75"
 }
 
 entityDef moveable_item_plasmagun {
@@ -108,6 +118,7 @@ entityDef moveable_item_plasmagun {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
 }
 
 model worldmodel_plasmagun {

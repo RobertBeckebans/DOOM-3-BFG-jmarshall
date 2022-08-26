@@ -5,7 +5,7 @@ Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2021 Justin Marshall
 
-This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
 Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -163,7 +163,7 @@ void idBotWeaponInfoManager::ParseProjectileInfo( idParser& parser, projectilein
 idBotWeaponInfoManager::ParseWeaponInfo
 ========================
 */
-void idBotWeaponInfoManager::ParseWeaponInfo( idParser& parser, weaponinfo_t& newWeaponInfo )
+void idBotWeaponInfoManager::ParseWeaponInfo( idParser& parser, bot_weaponinfo_t& newWeaponInfo )
 {
 	idToken token;
 	idToken valueToken;
@@ -258,7 +258,7 @@ void idBotWeaponInfoManager::LoadWeaponConfig( char* filename )
 	{
 		if( token == "weaponinfo" )
 		{
-			weaponinfo_t newWeaponInfo;
+			bot_weaponinfo_t newWeaponInfo;
 			ParseWeaponInfo( parser, newWeaponInfo );
 
 			if( newWeaponInfo.number < 0 || newWeaponInfo.number >= BOT_MAX_WEAPONS )
@@ -398,7 +398,7 @@ int idBotWeaponInfoManager::BotLoadWeaponWeights( int weaponstate, char* filenam
 idBotWeaponInfoManager::BotGetWeaponInfo
 =====================
 */
-void idBotWeaponInfoManager::BotGetWeaponInfo( int weaponstate, int weapon, weaponinfo_t* weaponinfo )
+void idBotWeaponInfoManager::BotGetWeaponInfo( int weaponstate, int weapon, bot_weaponinfo_t* weaponinfo )
 {
 	bot_weaponstate_t* ws;
 

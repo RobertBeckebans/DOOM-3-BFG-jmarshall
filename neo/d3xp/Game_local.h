@@ -462,7 +462,7 @@ public:
 
 	idMapFile* 				GetLevelMap();
 	const char* 			GetMapName() const;
-	
+
 // jmarshall begin
 	float					SysScriptTime() const
 	{
@@ -472,26 +472,26 @@ public:
 	{
 		return MS2SEC( time - previousTime );
 	}
-	
+
 	void					DelayRemoveEntity( idEntity* entity, int delay );
 
 	bool					InfluenceActive() const;
 	idEntity*				GetEntity( const char* name );
-	
+
 	float					Random( float range );
 	float					RandomDelay( float min, float max );
 	float					RandomTime( float delay );
 	float					DelayTime( float delay );
 
 	idEntity*				Spawn( const char* classname );
-	
+
 // jmarshall - bots
 	void					AddBot( const char* name );
 	int						TravelTimeToGoal( const idVec3& origin, const idVec3& goal );
 	int						GetBotItemEntry( const char* name );
 	void					Trace( trace_t& results, const idVec3& start, const idVec3& end, int contentMask, int passEntity );
 	void					AlertBots( idPlayer* player, idVec3 alert_position );
-	
+
 // jmarshall end
 
 	int						NumAAS() const;

@@ -95,15 +95,13 @@ idCVar g_spectatorChat( "g_spectatorChat", "0", CVAR_GAME | CVAR_ARCHIVE | CVAR_
 // sounds in this list get precached on MP start
 const char* idMultiplayerGame::GlobalSoundStrings[] =
 {
-// jmarshall
-	"sound/feedback/voc_youwin.wav",
-	"sound/feedback/voc_youlose.wav",
-	"sound/feedback/begin.wav",
-	"sound/feedback/3.wav",
-	"sound/feedback/2.wav",
-	"sound/feedback/1.wav",
-// jmarshall
-	"sound/feedback/sudden_death.wav",
+	"sound/vo/feedback/voc_youwin.wav",
+	"sound/vo/feedback/voc_youlose.wav",
+	"sound/vo/feedback/fight.wav",
+	"sound/vo/feedback/three.wav",
+	"sound/vo/feedback/two.wav",
+	"sound/vo/feedback/one.wav",
+	"sound/vo/feedback/sudden_death.wav",
 	"sound/vo/ctf/flag_capped_yours.wav",
 	"sound/vo/ctf/flag_capped_theirs.wav",
 	"sound/vo/ctf/flag_return.wav",
@@ -1575,11 +1573,11 @@ void idMultiplayerGame::NewState( gameState_t news, idPlayer* player )
 			outMsg.InitWrite( msgBuf, sizeof( msgBuf ) );
 			outMsg.WriteLong( warmupEndTime );
 			session->GetActingGameStateLobbyBase().SendReliable( GAME_RELIABLE_MESSAGE_WARMUPTIME, outMsg, false );
-			
+
 			// jmarshall
 			PlayGlobalSound( -1, SND_PREPAREFORBATTLE );
 			// jmarshall end
-			
+
 			// Reset all the scores.
 			for( i = 0; i < gameLocal.numClients; i++ )
 			{

@@ -1256,7 +1256,7 @@ void idGameLocal::ClientRunFrame( idUserCmdMgr& cmdMgr, bool lastPredictFrame, g
 	// jmarshall
 	RunSharedThink();
 	// jmarshall end
-	
+
 	// service any pending events
 	idEvent::ServiceEvents();
 

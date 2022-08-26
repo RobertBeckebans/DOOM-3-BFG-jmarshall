@@ -76,7 +76,8 @@ object char_sentry : character {
 	void		flashlight_off();
 	void		flashlight_on();
 	void		ignore( entity ignore_ent );
-
+	// boolean		checkForEnemy( float use_fov ); jmarshall: is native now
+	
 	float		checkDestinationDistance();
 	void		updatePlayerPositionThread();
 
@@ -545,46 +546,6 @@ void char_sentry::ignore( entity ignore_ent ) {
 	ignore_enemy_time = sys.getTime() + 2;
 }
 
-/*
-=====================
-char_sentry::checkForEnemy
-=====================
-boolean	char_sentry::checkForEnemy( float use_fov ) {
-	entity enemy;
-	entity ent;
-
-	enemy = $null_entity;
-	if ( lead_player && $player1.hasEnemies() ) {
-		enemy = closestReachableEnemyOfEntity( $player1 );
-		if ( ( ignore_enemy_time > sys.getTime() ) && ( ignore_enemy == enemy ) ) {
-			enemy = $null_entity;
-		}
-		if ( !enemy ) {
-			enemy = $player1.closestEnemyToPoint( getOrigin() );
-			if ( ( ignore_enemy_time > sys.getTime() ) && ( ignore_enemy == enemy ) ) {
-				enemy = $null_entity;
-			}
-		}
-	}
-	
-	if ( !enemy ) {
-		enemy = findEnemyAI( false );
-		if ( ( ignore_enemy_time > sys.getTime() ) && ( ignore_enemy == enemy ) ) {
-			enemy = $null_entity;
-		}
-	}
-
-	if ( enemy ) {
-		startSound( "snd_sight_enemy", SND_CHANNEL_VOICE, false );
-		setEnemy( enemy );
-        return true;
-	} else {
-		clearEnemy();
-	}
-
-	return false;
-}
-*/
 
 /*
 =====================

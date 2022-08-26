@@ -53,12 +53,12 @@ entityDef weapon_machinegun {
 	"weaponOffsetScale"			"0.005"
 
 
-	"inv_name"					"Machinegun"
+	"inv_name"					"#str_00100180"
 	"inv_weapon"				"weapon_machinegun"
 	"inv_ammo_clip"				"10"
 	"inv_item"					"5"
-	
-	"modelindex"				"MODELINDEX_MACHINEGUN"
+	"inv_desc"					"#str_02535"
+	"display_name"				"#str_02476"
 
 	"weapon_class"				"iceWeaponMachineGun"
 	"def_projectile"			"projectile_bullet_machinegun"
@@ -75,6 +75,8 @@ entityDef weapon_machinegun {
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
 	
 	"icon"						"guis/assets/hud/wpn_3"
+	"pdaIcon"					"guis/assets/hud/icons/machinegun_new.tga"
+	"hudIcon"					"guis/assets/hud/icons/machinegunw.tga"	
 	"muzzle_kick_time"			"0.2"
 	"muzzle_kick_maxtime"		"0.6"
 	"muzzle_kick_angles"		"0 0 0"
@@ -96,6 +98,11 @@ entityDef weapon_machinegun {
 	"skin_invisible"			"skins/machinegun_invis"
 	
 	"spread"					"1"
+
+	"controllerShakeHighMag"	"0.5"
+	"controllerShakeHighTime"	"100"
+	"controllerShakeLowMag"		"0.3"
+	"controllerShakeLowTime"	"60"
 }
 
 entityDef moveable_item_machinegun {
@@ -104,7 +111,9 @@ entityDef moveable_item_machinegun {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
 }
+
 
 model worldmodel_machinegun {
 	mesh		 				models/md5/weapons/machinegun_world/worldmachinegun.md5mesh

@@ -42,11 +42,16 @@ entityDef weapon_chaingun {
 	"joint_attach"				"CHAINGUN_ATTACHER"
 	"def_dropItem"				"moveable_item_chaingun"
 
-	"inv_name"					"Chaingun"
+	"inv_name"					"#str_00100181"
 	"inv_weapon"				"weapon_chaingun"
 	"inv_ammo_belt"				"30"
 	"inv_item"					"5"
+	"inv_desc"					"#str_02536"
+	"display_name"				"#str_02477"
+
 	"icon"						"guis/assets/hud/wpn_11"
+	"pdaIcon"					"guis/assets/hud/icons/chaingun_new.tga"
+	"hudIcon"					"guis/assets/hud/icons/chaingunw.tga"	
 
 	"gui"						"guis/weapons/chaingun.gui"
 	"mtr_guiLightShader"		"lights/viewWeaponGuiLight"
@@ -96,6 +101,11 @@ entityDef weapon_chaingun {
 	"ejectBrassDelay"			"10"
 	
 	"spread"					"5"
+
+	"controllerShakeHighMag"	"1.0"
+	"controllerShakeHighTime"	"100"
+	"controllerShakeLowMag"		"0.9"
+	"controllerShakeLowTime"	"250"
 }
 
 entityDef moveable_item_chaingun {
@@ -104,6 +114,7 @@ entityDef moveable_item_chaingun {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
 }
 
 model worldmodel_chaingun {

@@ -6178,31 +6178,31 @@ static classVariableInfo_t projectileinfo_t_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t weaponinfo_t_typeInfo[] = {
-	{ "int", "valid", (intptr_t)(&((weaponinfo_t *)0)->valid), sizeof( ((weaponinfo_t *)0)->valid ) },
-	{ "int", "number", (intptr_t)(&((weaponinfo_t *)0)->number), sizeof( ((weaponinfo_t *)0)->number ) },
-	{ "idStr", "name", (intptr_t)(&((weaponinfo_t *)0)->name), sizeof( ((weaponinfo_t *)0)->name ) },
-	{ "idStr", "model", (intptr_t)(&((weaponinfo_t *)0)->model), sizeof( ((weaponinfo_t *)0)->model ) },
-	{ "int", "level", (intptr_t)(&((weaponinfo_t *)0)->level), sizeof( ((weaponinfo_t *)0)->level ) },
-	{ "int", "weaponindex", (intptr_t)(&((weaponinfo_t *)0)->weaponindex), sizeof( ((weaponinfo_t *)0)->weaponindex ) },
-	{ "int", "flags", (intptr_t)(&((weaponinfo_t *)0)->flags), sizeof( ((weaponinfo_t *)0)->flags ) },
-	{ "idStr", "projectile", (intptr_t)(&((weaponinfo_t *)0)->projectile), sizeof( ((weaponinfo_t *)0)->projectile ) },
-	{ "int", "numprojectiles", (intptr_t)(&((weaponinfo_t *)0)->numprojectiles), sizeof( ((weaponinfo_t *)0)->numprojectiles ) },
-	{ "float", "hspread", (intptr_t)(&((weaponinfo_t *)0)->hspread), sizeof( ((weaponinfo_t *)0)->hspread ) },
-	{ "float", "vspread", (intptr_t)(&((weaponinfo_t *)0)->vspread), sizeof( ((weaponinfo_t *)0)->vspread ) },
-	{ "float", "speed", (intptr_t)(&((weaponinfo_t *)0)->speed), sizeof( ((weaponinfo_t *)0)->speed ) },
-	{ "float", "acceleration", (intptr_t)(&((weaponinfo_t *)0)->acceleration), sizeof( ((weaponinfo_t *)0)->acceleration ) },
-	{ "idVec3", "recoil", (intptr_t)(&((weaponinfo_t *)0)->recoil), sizeof( ((weaponinfo_t *)0)->recoil ) },
-	{ "idVec3", "offset", (intptr_t)(&((weaponinfo_t *)0)->offset), sizeof( ((weaponinfo_t *)0)->offset ) },
-	{ "idVec3", "angleoffset", (intptr_t)(&((weaponinfo_t *)0)->angleoffset), sizeof( ((weaponinfo_t *)0)->angleoffset ) },
-	{ "float", "extrazvelocity", (intptr_t)(&((weaponinfo_t *)0)->extrazvelocity), sizeof( ((weaponinfo_t *)0)->extrazvelocity ) },
-	{ "int", "ammoamount", (intptr_t)(&((weaponinfo_t *)0)->ammoamount), sizeof( ((weaponinfo_t *)0)->ammoamount ) },
-	{ "int", "ammoindex", (intptr_t)(&((weaponinfo_t *)0)->ammoindex), sizeof( ((weaponinfo_t *)0)->ammoindex ) },
-	{ "float", "activate", (intptr_t)(&((weaponinfo_t *)0)->activate), sizeof( ((weaponinfo_t *)0)->activate ) },
-	{ "float", "reload", (intptr_t)(&((weaponinfo_t *)0)->reload), sizeof( ((weaponinfo_t *)0)->reload ) },
-	{ "float", "spinup", (intptr_t)(&((weaponinfo_t *)0)->spinup), sizeof( ((weaponinfo_t *)0)->spinup ) },
-	{ "float", "spindown", (intptr_t)(&((weaponinfo_t *)0)->spindown), sizeof( ((weaponinfo_t *)0)->spindown ) },
-	{ "projectileinfo_t", "proj", (intptr_t)(&((weaponinfo_t *)0)->proj), sizeof( ((weaponinfo_t *)0)->proj ) },
+static classVariableInfo_t bot_weaponinfo_t_typeInfo[] = {
+	{ "int", "valid", (intptr_t)(&((bot_weaponinfo_t *)0)->valid), sizeof( ((bot_weaponinfo_t *)0)->valid ) },
+	{ "int", "number", (intptr_t)(&((bot_weaponinfo_t *)0)->number), sizeof( ((bot_weaponinfo_t *)0)->number ) },
+	{ "idStr", "name", (intptr_t)(&((bot_weaponinfo_t *)0)->name), sizeof( ((bot_weaponinfo_t *)0)->name ) },
+	{ "idStr", "model", (intptr_t)(&((bot_weaponinfo_t *)0)->model), sizeof( ((bot_weaponinfo_t *)0)->model ) },
+	{ "int", "level", (intptr_t)(&((bot_weaponinfo_t *)0)->level), sizeof( ((bot_weaponinfo_t *)0)->level ) },
+	{ "int", "weaponindex", (intptr_t)(&((bot_weaponinfo_t *)0)->weaponindex), sizeof( ((bot_weaponinfo_t *)0)->weaponindex ) },
+	{ "int", "flags", (intptr_t)(&((bot_weaponinfo_t *)0)->flags), sizeof( ((bot_weaponinfo_t *)0)->flags ) },
+	{ "idStr", "projectile", (intptr_t)(&((bot_weaponinfo_t *)0)->projectile), sizeof( ((bot_weaponinfo_t *)0)->projectile ) },
+	{ "int", "numprojectiles", (intptr_t)(&((bot_weaponinfo_t *)0)->numprojectiles), sizeof( ((bot_weaponinfo_t *)0)->numprojectiles ) },
+	{ "float", "hspread", (intptr_t)(&((bot_weaponinfo_t *)0)->hspread), sizeof( ((bot_weaponinfo_t *)0)->hspread ) },
+	{ "float", "vspread", (intptr_t)(&((bot_weaponinfo_t *)0)->vspread), sizeof( ((bot_weaponinfo_t *)0)->vspread ) },
+	{ "float", "speed", (intptr_t)(&((bot_weaponinfo_t *)0)->speed), sizeof( ((bot_weaponinfo_t *)0)->speed ) },
+	{ "float", "acceleration", (intptr_t)(&((bot_weaponinfo_t *)0)->acceleration), sizeof( ((bot_weaponinfo_t *)0)->acceleration ) },
+	{ "idVec3", "recoil", (intptr_t)(&((bot_weaponinfo_t *)0)->recoil), sizeof( ((bot_weaponinfo_t *)0)->recoil ) },
+	{ "idVec3", "offset", (intptr_t)(&((bot_weaponinfo_t *)0)->offset), sizeof( ((bot_weaponinfo_t *)0)->offset ) },
+	{ "idVec3", "angleoffset", (intptr_t)(&((bot_weaponinfo_t *)0)->angleoffset), sizeof( ((bot_weaponinfo_t *)0)->angleoffset ) },
+	{ "float", "extrazvelocity", (intptr_t)(&((bot_weaponinfo_t *)0)->extrazvelocity), sizeof( ((bot_weaponinfo_t *)0)->extrazvelocity ) },
+	{ "int", "ammoamount", (intptr_t)(&((bot_weaponinfo_t *)0)->ammoamount), sizeof( ((bot_weaponinfo_t *)0)->ammoamount ) },
+	{ "int", "ammoindex", (intptr_t)(&((bot_weaponinfo_t *)0)->ammoindex), sizeof( ((bot_weaponinfo_t *)0)->ammoindex ) },
+	{ "float", "activate", (intptr_t)(&((bot_weaponinfo_t *)0)->activate), sizeof( ((bot_weaponinfo_t *)0)->activate ) },
+	{ "float", "reload", (intptr_t)(&((bot_weaponinfo_t *)0)->reload), sizeof( ((bot_weaponinfo_t *)0)->reload ) },
+	{ "float", "spinup", (intptr_t)(&((bot_weaponinfo_t *)0)->spinup), sizeof( ((bot_weaponinfo_t *)0)->spinup ) },
+	{ "float", "spindown", (intptr_t)(&((bot_weaponinfo_t *)0)->spindown), sizeof( ((bot_weaponinfo_t *)0)->spindown ) },
+	{ "projectileinfo_t", "proj", (intptr_t)(&((bot_weaponinfo_t *)0)->proj), sizeof( ((bot_weaponinfo_t *)0)->proj ) },
 	{ NULL, 0 }
 };
 
@@ -6216,7 +6216,7 @@ static classVariableInfo_t bot_weaponstate_t_typeInfo[] = {
 static classVariableInfo_t idBotWeaponInfoManager_typeInfo[] = {
 	{ ": idList < projectileinfo_t >", "projectileinfo", (intptr_t)(&((idBotWeaponInfoManager *)0)->projectileinfo), sizeof( ((idBotWeaponInfoManager *)0)->projectileinfo ) },
 	{ "bot_weaponstate_t[1]", "botweaponstates", (intptr_t)(&((idBotWeaponInfoManager *)0)->botweaponstates), sizeof( ((idBotWeaponInfoManager *)0)->botweaponstates ) },
-	{ "weaponinfo_t[32]", "weaponinfo", (intptr_t)(&((idBotWeaponInfoManager *)0)->weaponinfo), sizeof( ((idBotWeaponInfoManager *)0)->weaponinfo ) },
+	{ "bot_weaponinfo_t[32]", "weaponinfo", (intptr_t)(&((idBotWeaponInfoManager *)0)->weaponinfo), sizeof( ((idBotWeaponInfoManager *)0)->weaponinfo ) },
 	{ NULL, 0 }
 };
 
@@ -7736,7 +7736,7 @@ static classTypeInfo_t classTypeInfo[] = {
 	{ "idBotCharacterStatsManager", "", sizeof(idBotCharacterStatsManager), idBotCharacterStatsManager_typeInfo },
 	{ "idBotFuzzyWeightManager", "", sizeof(idBotFuzzyWeightManager), idBotFuzzyWeightManager_typeInfo },
 	{ "projectileinfo_t", "", sizeof(projectileinfo_t), projectileinfo_t_typeInfo },
-	{ "weaponinfo_t", "", sizeof(weaponinfo_t), weaponinfo_t_typeInfo },
+	{ "bot_weaponinfo_t", "", sizeof(bot_weaponinfo_t), bot_weaponinfo_t_typeInfo },
 	{ "bot_weaponstate_t", "", sizeof(bot_weaponstate_t), bot_weaponstate_t_typeInfo },
 	{ "idBotWeaponInfoManager", "", sizeof(idBotWeaponInfoManager), idBotWeaponInfoManager_typeInfo },
 	{ "bot_goal_t", "", sizeof(bot_goal_t), bot_goal_t_typeInfo },

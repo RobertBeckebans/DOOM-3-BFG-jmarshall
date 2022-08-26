@@ -1455,7 +1455,7 @@ idThread* idActor::ConstructScriptObject()
 
 	// call script object's constructor
 	constructor = scriptObject.GetConstructor();
-	
+
 	// jmarshall
 	if( constructor )
 	{

@@ -48,9 +48,10 @@ object ai {
 	boolean		AI_PAIN;
 	float		AI_SPECIAL_DAMAGE;		// value of "special_damage" on projectile
 	boolean		AI_DEAD;
-	// common state variables
+	// jmarshal: common state variables
 	boolean		run;
 	boolean		blocked;
+	// jmarshal end
 
 	boolean		AI_ENEMY_VISIBLE;
 	boolean		AI_ENEMY_IN_FOV;
@@ -65,6 +66,7 @@ object ai {
 	boolean		AI_HIT_ENEMY;
 	boolean		AI_OBSTACLE_IN_PATH;
 	boolean		AI_PUSHED;
+	// jmarshal begin
 	boolean		AI_ATTACKING;
 		
 	boolean		ambush;
@@ -75,6 +77,7 @@ object ai {
 	boolean		can_run;
 	float		run_distance;			// distance to trigger running when chasing enemy
 	float		walk_turn;				// max turn amount allowed when running
+	// jmarshal end
 };
 
 /***********************************************************************

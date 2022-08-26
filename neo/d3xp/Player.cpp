@@ -29,13 +29,9 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "precompiled.h"
 #pragma hdrstop
-#include "../renderer/RenderSystem.h"
-#include "../renderer/RenderWorld.h"
-#include "../sys/Snapshot.h"
-#include "../framework/Common_local.h"
-#include "../ui/ListGUI.h"
-#include "../ui/UserInterface.h"
+
 #include "Game_local.h"
+#include "../framework/Common_local.h"
 #include "PredictedValue_impl.h"
 
 idCVar flashlight_batteryDrainTimeMS( "flashlight_batteryDrainTimeMS", "30000", CVAR_INTEGER, "amount of time (in MS) it takes for full battery to drain (-1 == no battery drain)" );
@@ -111,7 +107,9 @@ const idEventDef EV_Player_ExitTeleporter( "exitTeleporter" );
 const idEventDef EV_Player_StopAudioLog( "stopAudioLog" );
 const idEventDef EV_Player_HideTip( "hideTip" );
 const idEventDef EV_Player_LevelTrigger( "levelTrigger" );
-const idEventDef EV_SpectatorTouch( "spectatorTouch", "et" );
+// RB: changed to internal event as it was not exposed to Doom Script by default and broke the automatic export
+const idEventDef EV_SpectatorTouch( "<spectatorTouch>", "et" );
+// RB end
 const idEventDef EV_Player_GiveInventoryItem( "giveInventoryItem", "s" );
 const idEventDef EV_Player_RemoveInventoryItem( "removeInventoryItem", "s" );
 const idEventDef EV_Player_GetIdealWeapon( "getIdealWeapon", NULL, 's' );

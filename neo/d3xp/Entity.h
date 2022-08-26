@@ -273,7 +273,7 @@ public:
 	void					BecomeInactive( int flags );
 	void					UpdatePVSAreas( const idVec3& pos );
 	void					BecomeReplicated();
-	
+
 // jmarshall
 	float					GetFloat( const char* key );
 	const char*				GetKey( const char* key );

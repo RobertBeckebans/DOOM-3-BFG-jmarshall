@@ -54,11 +54,16 @@ entityDef weapon_shotgun {
 	
 	"modelindex"				"MODELINDEX_SHOTGUN"
 
-	"inv_name"					"Shotgun"
+	"inv_name"					"#str_00243"
 	"inv_weapon"				"weapon_shotgun"
 	"inv_ammo_shells"			"4"
 	"inv_item"					"5"
+
+	"inv_desc"					"#str_02534"
+	"display_name"				"#str_01820"
 	"icon"						"guis/assets/hud/wpn_2"
+	"pdaIcon"					"guis/assets/hud/icons/shotgun_new.tga"	
+	"hudIcon"					"guis/assets/hud/icons/shotgunw.tga"	
 
 	"weapon_class"				"iceWeaponShotgun"
 	"def_projectile"			"projectile_bullet_shotgun"
@@ -91,6 +96,11 @@ entityDef weapon_shotgun {
 	"skin_invisible"			"skins/shotgun_invis"
 	
 	"spread"					"22"
+
+	"controllerShakeHighMag"	"1.0"
+	"controllerShakeHighTime"	"120"
+	"controllerShakeLowMag"		"10.9"
+	"controllerShakeLowTime"	"250"
 }
 
 entityDef moveable_item_shotgun {
@@ -100,6 +110,7 @@ entityDef moveable_item_shotgun {
 	"density"					"0.05"
 	"friction"					"0.2"
 	"bouncyness"				"0"
+	"snd_bounce"				"smallbox"
 }
 
 model worldmodel_shotgun {
@@ -160,8 +171,8 @@ model viewmodel_shotgun {
 }
 
 entityDef	damage_shotgun {
-	"minDamage"			"4"
-	"maxDamage"			"7"
+	"minDamage"			"9"
+	"maxDamage"			"14"
 
 	"kickDir"			"1 0 0"
 
