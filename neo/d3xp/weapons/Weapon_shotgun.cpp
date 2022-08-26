@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponShotgun )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponShotgun )
 END_CLASS
 
 #define SHOTGUN_FIRERATE		1.333
@@ -29,12 +29,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponShotgun::Init
+iceWeaponShotgun::Init
 ===============
 */
-void rvmWeaponShotgun::Init( idWeapon* weapon )
+void iceWeaponShotgun::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 	spread = weapon->GetFloat( "spread" ); // weapon->GetFloat("spread")
@@ -43,10 +43,10 @@ void rvmWeaponShotgun::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponShotgun::Raise
+iceWeaponShotgun::Raise
 ===============
 */
-stateResult_t rvmWeaponShotgun::Raise( stateParms_t* parms )
+stateResult_t iceWeaponShotgun::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -75,10 +75,10 @@ stateResult_t rvmWeaponShotgun::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponShotgun::Lower
+iceWeaponShotgun::Lower
 ===============
 */
-stateResult_t rvmWeaponShotgun::Lower( stateParms_t* parms )
+stateResult_t iceWeaponShotgun::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -107,10 +107,10 @@ stateResult_t rvmWeaponShotgun::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponShotgun::Idle
+iceWeaponShotgun::Idle
 ===============
 */
-stateResult_t rvmWeaponShotgun::Idle( stateParms_t* parms )
+stateResult_t iceWeaponShotgun::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -135,10 +135,10 @@ stateResult_t rvmWeaponShotgun::Idle( stateParms_t* parms )
 }
 /*
 ===============
-rvmWeaponShotgun::Fire
+iceWeaponShotgun::Fire
 ===============
 */
-stateResult_t rvmWeaponShotgun::Fire( stateParms_t* parms )
+stateResult_t iceWeaponShotgun::Fire( stateParms_t* parms )
 {
 	int ammoClip = owner->AmmoInClip();
 
@@ -185,10 +185,10 @@ stateResult_t rvmWeaponShotgun::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponShotgun::Reload
+iceWeaponShotgun::Reload
 ===============
 */
-stateResult_t rvmWeaponShotgun::Reload( stateParms_t* parms )
+stateResult_t iceWeaponShotgun::Reload( stateParms_t* parms )
 {
 	float ammoClip;
 	float ammoAvail;

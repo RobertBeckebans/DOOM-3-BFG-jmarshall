@@ -7,11 +7,11 @@
 
 	This file has been generated with the Type Info Generator v1.1 (c) 2004 id Software
 
-	955 constants
+	957 constants
 	92 enums
-	474 classes/structs/unions
+	475 classes/structs/unions
 	3 templates
-	8 max inheritance level for 'rvmMonsterZombieSawyer'
+	8 max inheritance level for 'iceMonsterZombieSawyer'
 
 ===================================================================================
 */
@@ -795,9 +795,11 @@ static constantInfo_t constantInfo[] = {
 	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_ANTIALIASING", "3" },
 	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_POSTFX", "4" },
 	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_SHADOWMAPPING", "5" },
-	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_BRIGHTNESS", "6" },
-	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_VOLUME", "7" },
-	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::MAX_SYSTEM_FIELDS", "8" },
+	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_SSAO", "6" },
+	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_AMBIENT_BRIGHTNESS", "7" },
+	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_BRIGHTNESS", "8" },
+	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::SYSTEM_FIELD_VOLUME", "9" },
+	{ "int", "idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings::MAX_SYSTEM_FIELDS", "10" },
 	{ "int", "idMenuScreen_Shell_Stereoscopics::idMenuDataSource_StereoSettings::STEREO_FIELD_ENABLE", "0" },
 	{ "int", "idMenuScreen_Shell_Stereoscopics::idMenuDataSource_StereoSettings::STEREO_FIELD_SEPERATION", "1" },
 	{ "int", "idMenuScreen_Shell_Stereoscopics::idMenuDataSource_StereoSettings::STEREO_FIELD_SWAP_EYES", "2" },
@@ -1996,9 +1998,11 @@ static enumValueInfo_t idMenuScreen_Shell_SystemOptions_idMenuDataSource_SystemS
 	{ "SYSTEM_FIELD_ANTIALIASING", 3 },
 	{ "SYSTEM_FIELD_POSTFX", 4 },
 	{ "SYSTEM_FIELD_SHADOWMAPPING", 5 },
-	{ "SYSTEM_FIELD_BRIGHTNESS", 6 },
-	{ "SYSTEM_FIELD_VOLUME", 7 },
-	{ "MAX_SYSTEM_FIELDS", 8 },
+	{ "SYSTEM_FIELD_SSAO", 6 },
+	{ "SYSTEM_FIELD_AMBIENT_BRIGHTNESS", 7 },
+	{ "SYSTEM_FIELD_BRIGHTNESS", 8 },
+	{ "SYSTEM_FIELD_VOLUME", 9 },
+	{ "MAX_SYSTEM_FIELDS", 10 },
 	{ NULL, 0 }
 };
 
@@ -2950,9 +2954,9 @@ static classVariableInfo_t timeState_t_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmGameDelayRemoveEntry_t_typeInfo[] = {
-	{ "int32_t", "removeTime", (intptr_t)(&((rvmGameDelayRemoveEntry_t *)0)->removeTime), sizeof( ((rvmGameDelayRemoveEntry_t *)0)->removeTime ) },
-	{ "idEntity *", "entity", (intptr_t)(&((rvmGameDelayRemoveEntry_t *)0)->entity), sizeof( ((rvmGameDelayRemoveEntry_t *)0)->entity ) },
+static classVariableInfo_t iceGameDelayRemoveEntry_t_typeInfo[] = {
+	{ "int32_t", "removeTime", (intptr_t)(&((iceGameDelayRemoveEntry_t *)0)->removeTime), sizeof( ((iceGameDelayRemoveEntry_t *)0)->removeTime ) },
+	{ "idEntity *", "entity", (intptr_t)(&((iceGameDelayRemoveEntry_t *)0)->entity), sizeof( ((iceGameDelayRemoveEntry_t *)0)->entity ) },
 	{ NULL, 0 }
 };
 
@@ -3058,8 +3062,8 @@ static classVariableInfo_t idGameLocal_typeInfo[] = {
 	{ "idArray < int , MAX_PLAYERS >", "lastCmdRunTimeOnClient", (intptr_t)(&((idGameLocal *)0)->lastCmdRunTimeOnClient), sizeof( ((idGameLocal *)0)->lastCmdRunTimeOnClient ) },
 	{ "idArray < int , MAX_PLAYERS >", "lastCmdRunTimeOnServer", (intptr_t)(&((idGameLocal *)0)->lastCmdRunTimeOnServer), sizeof( ((idGameLocal *)0)->lastCmdRunTimeOnServer ) },
 	{ "const idDeclEntityDef *", "botItemTable", (intptr_t)(&((idGameLocal *)0)->botItemTable), sizeof( ((idGameLocal *)0)->botItemTable ) },
-	{ "idList < rvmBot * >", "registeredBots", (intptr_t)(&((idGameLocal *)0)->registeredBots), sizeof( ((idGameLocal *)0)->registeredBots ) },
-	{ "idList < rvmGameDelayRemoveEntry_t >", "delayRemoveEntities", (intptr_t)(&((idGameLocal *)0)->delayRemoveEntities), sizeof( ((idGameLocal *)0)->delayRemoveEntities ) },
+	{ "idList < iceBot * >", "registeredBots", (intptr_t)(&((idGameLocal *)0)->registeredBots), sizeof( ((idGameLocal *)0)->registeredBots ) },
+	{ "idList < iceGameDelayRemoveEntry_t >", "delayRemoveEntities", (intptr_t)(&((idGameLocal *)0)->delayRemoveEntities), sizeof( ((idGameLocal *)0)->delayRemoveEntities ) },
 	{ "idAAS *", "bot_aas", (intptr_t)(&((idGameLocal *)0)->bot_aas), sizeof( ((idGameLocal *)0)->bot_aas ) },
 	{ NULL, 0 }
 };
@@ -4502,18 +4506,18 @@ static classVariableInfo_t WeaponLight_t_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponObject_typeInfo[] = {
-	{ ": idWeapon *", "owner", (intptr_t)(&((rvmWeaponObject *)0)->owner), sizeof( ((rvmWeaponObject *)0)->owner ) },
-	{ ": rvStateThread", "stateThread", (intptr_t)(&((rvmWeaponObject *)0)->stateThread), sizeof( ((rvmWeaponObject *)0)->stateThread ) },
-	{ "float", "next_attack", (intptr_t)(&((rvmWeaponObject *)0)->next_attack), sizeof( ((rvmWeaponObject *)0)->next_attack ) },
+static classVariableInfo_t iceWeaponObject_typeInfo[] = {
+	{ ": idWeapon *", "owner", (intptr_t)(&((iceWeaponObject *)0)->owner), sizeof( ((iceWeaponObject *)0)->owner ) },
+	{ ": rvStateThread", "stateThread", (intptr_t)(&((iceWeaponObject *)0)->stateThread), sizeof( ((iceWeaponObject *)0)->stateThread ) },
+	{ "float", "next_attack", (intptr_t)(&((iceWeaponObject *)0)->next_attack), sizeof( ((iceWeaponObject *)0)->next_attack ) },
 	{ NULL, 0 }
 };
 
 static classVariableInfo_t idWeapon_typeInfo[] = {
 	{ ": int", "animBlendFrames", (intptr_t)(&((idWeapon *)0)->animBlendFrames), sizeof( ((idWeapon *)0)->animBlendFrames ) },
 	{ "int", "animDoneTime", (intptr_t)(&((idWeapon *)0)->animDoneTime), sizeof( ((idWeapon *)0)->animDoneTime ) },
-	{ "bool", "isPlayerFlashlight", (intptr_t)(&((idWeapon *)0)->isPlayerFlashlight), sizeof( ((idWeapon *)0)->isPlayerFlashlight ) },
 	{ "bool", "isLinked", (intptr_t)(&((idWeapon *)0)->isLinked), sizeof( ((idWeapon *)0)->isLinked ) },
+	{ "bool", "isPlayerFlashlight", (intptr_t)(&((idWeapon *)0)->isPlayerFlashlight), sizeof( ((idWeapon *)0)->isPlayerFlashlight ) },
 	{ "idEntity *", "projectileEnt", (intptr_t)(&((idWeapon *)0)->projectileEnt), sizeof( ((idWeapon *)0)->projectileEnt ) },
 	{ "idPlayer *", "owner", (intptr_t)(&((idWeapon *)0)->owner), sizeof( ((idWeapon *)0)->owner ) },
 	{ "idEntityPtr < idAnimatedEntity >", "worldModel", (intptr_t)(&((idWeapon *)0)->worldModel), sizeof( ((idWeapon *)0)->worldModel ) },
@@ -4606,9 +4610,9 @@ static classVariableInfo_t idWeapon_typeInfo[] = {
 	{ "float", "weaponAngleOffsetMax", (intptr_t)(&((idWeapon *)0)->weaponAngleOffsetMax), sizeof( ((idWeapon *)0)->weaponAngleOffsetMax ) },
 	{ "float", "weaponOffsetTime", (intptr_t)(&((idWeapon *)0)->weaponOffsetTime), sizeof( ((idWeapon *)0)->weaponOffsetTime ) },
 	{ "float", "weaponOffsetScale", (intptr_t)(&((idWeapon *)0)->weaponOffsetScale), sizeof( ((idWeapon *)0)->weaponOffsetScale ) },
-	{ "idGrabber", "grabber", (intptr_t)(&((idWeapon *)0)->grabber), sizeof( ((idWeapon *)0)->grabber ) },
+	{ ": idGrabber", "grabber", (intptr_t)(&((idWeapon *)0)->grabber), sizeof( ((idWeapon *)0)->grabber ) },
 	{ "int", "grabberState", (intptr_t)(&((idWeapon *)0)->grabberState), sizeof( ((idWeapon *)0)->grabberState ) },
-	{ ": rvmWeaponObject *", "currentWeaponObject", (intptr_t)(&((idWeapon *)0)->currentWeaponObject), sizeof( ((idWeapon *)0)->currentWeaponObject ) },
+	{ ": iceWeaponObject *", "currentWeaponObject", (intptr_t)(&((idWeapon *)0)->currentWeaponObject), sizeof( ((idWeapon *)0)->currentWeaponObject ) },
 	{ "bool", "OutOfAmmo", (intptr_t)(&((idWeapon *)0)->OutOfAmmo), sizeof( ((idWeapon *)0)->OutOfAmmo ) },
 	{ NULL, 0 }
 };
@@ -4988,6 +4992,8 @@ static classVariableInfo_t idPlayer_typeInfo[] = {
 	{ "usercmd_t", "oldCmd", (intptr_t)(&((idPlayer *)0)->oldCmd), sizeof( ((idPlayer *)0)->oldCmd ) },
 	{ "usercmd_t", "usercmd", (intptr_t)(&((idPlayer *)0)->usercmd), sizeof( ((idPlayer *)0)->usercmd ) },
 	{ "idPlayerView", "playerView", (intptr_t)(&((idPlayer *)0)->playerView), sizeof( ((idPlayer *)0)->playerView ) },
+	{ "renderEntity_t", "laserSightRenderEntity", (intptr_t)(&((idPlayer *)0)->laserSightRenderEntity), sizeof( ((idPlayer *)0)->laserSightRenderEntity ) },
+	{ "qhandle_t", "laserSightHandle", (intptr_t)(&((idPlayer *)0)->laserSightHandle), sizeof( ((idPlayer *)0)->laserSightHandle ) },
 	{ "bool", "noclip", (intptr_t)(&((idPlayer *)0)->noclip), sizeof( ((idPlayer *)0)->noclip ) },
 	{ "bool", "godmode", (intptr_t)(&((idPlayer *)0)->godmode), sizeof( ((idPlayer *)0)->godmode ) },
 	{ "bool", "spawnAnglesSet", (intptr_t)(&((idPlayer *)0)->spawnAnglesSet), sizeof( ((idPlayer *)0)->spawnAnglesSet ) },
@@ -5965,116 +5971,116 @@ static classVariableInfo_t idCombatNode_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmAI_Follower_typeInfo[] = {
-	{ ": bool", "inCustomAnim", (intptr_t)(&((rvmAI_Follower *)0)->inCustomAnim), sizeof( ((rvmAI_Follower *)0)->inCustomAnim ) },
-	{ "idEntity *", "leader", (intptr_t)(&((rvmAI_Follower *)0)->leader), sizeof( ((rvmAI_Follower *)0)->leader ) },
+static classVariableInfo_t iceAI_Follower_typeInfo[] = {
+	{ ": bool", "inCustomAnim", (intptr_t)(&((iceAI_Follower *)0)->inCustomAnim), sizeof( ((iceAI_Follower *)0)->inCustomAnim ) },
+	{ "idEntity *", "leader", (intptr_t)(&((iceAI_Follower *)0)->leader), sizeof( ((iceAI_Follower *)0)->leader ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterBossVagary_typeInfo[] = {
-	{ ": float", "nextDodge", (intptr_t)(&((rvmMonsterBossVagary *)0)->nextDodge), sizeof( ((rvmMonsterBossVagary *)0)->nextDodge ) },
-	{ "float", "nextAttack", (intptr_t)(&((rvmMonsterBossVagary *)0)->nextAttack), sizeof( ((rvmMonsterBossVagary *)0)->nextAttack ) },
-	{ "float", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterBossVagary *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterBossVagary *)0)->nextNoFOVAttack ) },
-	{ "idEntity *", "combat_node", (intptr_t)(&((rvmMonsterBossVagary *)0)->combat_node), sizeof( ((rvmMonsterBossVagary *)0)->combat_node ) },
-	{ "idEntity *", "throwEntity", (intptr_t)(&((rvmMonsterBossVagary *)0)->throwEntity), sizeof( ((rvmMonsterBossVagary *)0)->throwEntity ) },
-	{ "int", "num", (intptr_t)(&((rvmMonsterBossVagary *)0)->num), sizeof( ((rvmMonsterBossVagary *)0)->num ) },
-	{ "int", "i", (intptr_t)(&((rvmMonsterBossVagary *)0)->i), sizeof( ((rvmMonsterBossVagary *)0)->i ) },
-	{ "idVec3", "pos", (intptr_t)(&((rvmMonsterBossVagary *)0)->pos), sizeof( ((rvmMonsterBossVagary *)0)->pos ) },
-	{ "float", "waitTime", (intptr_t)(&((rvmMonsterBossVagary *)0)->waitTime), sizeof( ((rvmMonsterBossVagary *)0)->waitTime ) },
-	{ "float", "t", (intptr_t)(&((rvmMonsterBossVagary *)0)->t), sizeof( ((rvmMonsterBossVagary *)0)->t ) },
-	{ "idVec3", "offset", (intptr_t)(&((rvmMonsterBossVagary *)0)->offset), sizeof( ((rvmMonsterBossVagary *)0)->offset ) },
-	{ "idVec3", "vel", (intptr_t)(&((rvmMonsterBossVagary *)0)->vel), sizeof( ((rvmMonsterBossVagary *)0)->vel ) },
-	{ "float", "start_offset", (intptr_t)(&((rvmMonsterBossVagary *)0)->start_offset), sizeof( ((rvmMonsterBossVagary *)0)->start_offset ) },
+static classVariableInfo_t iceMonsterBossVagary_typeInfo[] = {
+	{ ": float", "nextDodge", (intptr_t)(&((iceMonsterBossVagary *)0)->nextDodge), sizeof( ((iceMonsterBossVagary *)0)->nextDodge ) },
+	{ "float", "nextAttack", (intptr_t)(&((iceMonsterBossVagary *)0)->nextAttack), sizeof( ((iceMonsterBossVagary *)0)->nextAttack ) },
+	{ "float", "nextNoFOVAttack", (intptr_t)(&((iceMonsterBossVagary *)0)->nextNoFOVAttack), sizeof( ((iceMonsterBossVagary *)0)->nextNoFOVAttack ) },
+	{ "idEntity *", "combat_node", (intptr_t)(&((iceMonsterBossVagary *)0)->combat_node), sizeof( ((iceMonsterBossVagary *)0)->combat_node ) },
+	{ "idEntity *", "throwEntity", (intptr_t)(&((iceMonsterBossVagary *)0)->throwEntity), sizeof( ((iceMonsterBossVagary *)0)->throwEntity ) },
+	{ "int", "num", (intptr_t)(&((iceMonsterBossVagary *)0)->num), sizeof( ((iceMonsterBossVagary *)0)->num ) },
+	{ "int", "i", (intptr_t)(&((iceMonsterBossVagary *)0)->i), sizeof( ((iceMonsterBossVagary *)0)->i ) },
+	{ "idVec3", "pos", (intptr_t)(&((iceMonsterBossVagary *)0)->pos), sizeof( ((iceMonsterBossVagary *)0)->pos ) },
+	{ "float", "waitTime", (intptr_t)(&((iceMonsterBossVagary *)0)->waitTime), sizeof( ((iceMonsterBossVagary *)0)->waitTime ) },
+	{ "float", "t", (intptr_t)(&((iceMonsterBossVagary *)0)->t), sizeof( ((iceMonsterBossVagary *)0)->t ) },
+	{ "idVec3", "offset", (intptr_t)(&((iceMonsterBossVagary *)0)->offset), sizeof( ((iceMonsterBossVagary *)0)->offset ) },
+	{ "idVec3", "vel", (intptr_t)(&((iceMonsterBossVagary *)0)->vel), sizeof( ((iceMonsterBossVagary *)0)->vel ) },
+	{ "float", "start_offset", (intptr_t)(&((iceMonsterBossVagary *)0)->start_offset), sizeof( ((iceMonsterBossVagary *)0)->start_offset ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterDemonHellknight_typeInfo[] = {
-	{ ": float", "nextAttack", (intptr_t)(&((rvmMonsterDemonHellknight *)0)->nextAttack), sizeof( ((rvmMonsterDemonHellknight *)0)->nextAttack ) },
-	{ "float", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterDemonHellknight *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterDemonHellknight *)0)->nextNoFOVAttack ) },
-	{ "idEntity *", "combat_node", (intptr_t)(&((rvmMonsterDemonHellknight *)0)->combat_node), sizeof( ((rvmMonsterDemonHellknight *)0)->combat_node ) },
-	{ "idScriptString", "range_attack_anim", (intptr_t)(&((rvmMonsterDemonHellknight *)0)->range_attack_anim), sizeof( ((rvmMonsterDemonHellknight *)0)->range_attack_anim ) },
+static classVariableInfo_t iceMonsterDemonHellknight_typeInfo[] = {
+	{ ": float", "nextAttack", (intptr_t)(&((iceMonsterDemonHellknight *)0)->nextAttack), sizeof( ((iceMonsterDemonHellknight *)0)->nextAttack ) },
+	{ "float", "nextNoFOVAttack", (intptr_t)(&((iceMonsterDemonHellknight *)0)->nextNoFOVAttack), sizeof( ((iceMonsterDemonHellknight *)0)->nextNoFOVAttack ) },
+	{ "idEntity *", "combat_node", (intptr_t)(&((iceMonsterDemonHellknight *)0)->combat_node), sizeof( ((iceMonsterDemonHellknight *)0)->combat_node ) },
+	{ "idScriptString", "range_attack_anim", (intptr_t)(&((iceMonsterDemonHellknight *)0)->range_attack_anim), sizeof( ((iceMonsterDemonHellknight *)0)->range_attack_anim ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterDemonImp_typeInfo[] = {
-	{ ": float", "nextDodge", (intptr_t)(&((rvmMonsterDemonImp *)0)->nextDodge), sizeof( ((rvmMonsterDemonImp *)0)->nextDodge ) },
-	{ "float", "nextAttack", (intptr_t)(&((rvmMonsterDemonImp *)0)->nextAttack), sizeof( ((rvmMonsterDemonImp *)0)->nextAttack ) },
-	{ "float", "nextLeap", (intptr_t)(&((rvmMonsterDemonImp *)0)->nextLeap), sizeof( ((rvmMonsterDemonImp *)0)->nextLeap ) },
-	{ "float", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterDemonImp *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterDemonImp *)0)->nextNoFOVAttack ) },
-	{ "idEntity *", "combat_node", (intptr_t)(&((rvmMonsterDemonImp *)0)->combat_node), sizeof( ((rvmMonsterDemonImp *)0)->combat_node ) },
-	{ "idScriptString", "range_attack_anim", (intptr_t)(&((rvmMonsterDemonImp *)0)->range_attack_anim), sizeof( ((rvmMonsterDemonImp *)0)->range_attack_anim ) },
-	{ "idScriptVector", "jumpVelocity", (intptr_t)(&((rvmMonsterDemonImp *)0)->jumpVelocity), sizeof( ((rvmMonsterDemonImp *)0)->jumpVelocity ) },
+static classVariableInfo_t iceMonsterDemonImp_typeInfo[] = {
+	{ ": float", "nextDodge", (intptr_t)(&((iceMonsterDemonImp *)0)->nextDodge), sizeof( ((iceMonsterDemonImp *)0)->nextDodge ) },
+	{ "float", "nextAttack", (intptr_t)(&((iceMonsterDemonImp *)0)->nextAttack), sizeof( ((iceMonsterDemonImp *)0)->nextAttack ) },
+	{ "float", "nextLeap", (intptr_t)(&((iceMonsterDemonImp *)0)->nextLeap), sizeof( ((iceMonsterDemonImp *)0)->nextLeap ) },
+	{ "float", "nextNoFOVAttack", (intptr_t)(&((iceMonsterDemonImp *)0)->nextNoFOVAttack), sizeof( ((iceMonsterDemonImp *)0)->nextNoFOVAttack ) },
+	{ "idEntity *", "combat_node", (intptr_t)(&((iceMonsterDemonImp *)0)->combat_node), sizeof( ((iceMonsterDemonImp *)0)->combat_node ) },
+	{ "idScriptString", "range_attack_anim", (intptr_t)(&((iceMonsterDemonImp *)0)->range_attack_anim), sizeof( ((iceMonsterDemonImp *)0)->range_attack_anim ) },
+	{ "idScriptVector", "jumpVelocity", (intptr_t)(&((iceMonsterDemonImp *)0)->jumpVelocity), sizeof( ((iceMonsterDemonImp *)0)->jumpVelocity ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterLostSoul_typeInfo[] = {
-	{ ": float", "nextAttack", (intptr_t)(&((rvmMonsterLostSoul *)0)->nextAttack), sizeof( ((rvmMonsterLostSoul *)0)->nextAttack ) },
-	{ "float", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterLostSoul *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterLostSoul *)0)->nextNoFOVAttack ) },
-	{ "float", "noMeleeTime", (intptr_t)(&((rvmMonsterLostSoul *)0)->noMeleeTime), sizeof( ((rvmMonsterLostSoul *)0)->noMeleeTime ) },
-	{ "float", "fly_offset", (intptr_t)(&((rvmMonsterLostSoul *)0)->fly_offset), sizeof( ((rvmMonsterLostSoul *)0)->fly_offset ) },
-	{ ": idVec3", "vel", (intptr_t)(&((rvmMonsterLostSoul *)0)->vel), sizeof( ((rvmMonsterLostSoul *)0)->vel ) },
-	{ "idVec3", "pos", (intptr_t)(&((rvmMonsterLostSoul *)0)->pos), sizeof( ((rvmMonsterLostSoul *)0)->pos ) },
-	{ "float", "endtime", (intptr_t)(&((rvmMonsterLostSoul *)0)->endtime), sizeof( ((rvmMonsterLostSoul *)0)->endtime ) },
+static classVariableInfo_t iceMonsterLostSoul_typeInfo[] = {
+	{ ": float", "nextAttack", (intptr_t)(&((iceMonsterLostSoul *)0)->nextAttack), sizeof( ((iceMonsterLostSoul *)0)->nextAttack ) },
+	{ "float", "nextNoFOVAttack", (intptr_t)(&((iceMonsterLostSoul *)0)->nextNoFOVAttack), sizeof( ((iceMonsterLostSoul *)0)->nextNoFOVAttack ) },
+	{ "float", "noMeleeTime", (intptr_t)(&((iceMonsterLostSoul *)0)->noMeleeTime), sizeof( ((iceMonsterLostSoul *)0)->noMeleeTime ) },
+	{ "float", "fly_offset", (intptr_t)(&((iceMonsterLostSoul *)0)->fly_offset), sizeof( ((iceMonsterLostSoul *)0)->fly_offset ) },
+	{ ": idVec3", "vel", (intptr_t)(&((iceMonsterLostSoul *)0)->vel), sizeof( ((iceMonsterLostSoul *)0)->vel ) },
+	{ "idVec3", "pos", (intptr_t)(&((iceMonsterLostSoul *)0)->pos), sizeof( ((iceMonsterLostSoul *)0)->pos ) },
+	{ "float", "endtime", (intptr_t)(&((iceMonsterLostSoul *)0)->endtime), sizeof( ((iceMonsterLostSoul *)0)->endtime ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterFlyingCacodemon_typeInfo[] = {
-	{ ": float", "nextAttack", (intptr_t)(&((rvmMonsterFlyingCacodemon *)0)->nextAttack), sizeof( ((rvmMonsterFlyingCacodemon *)0)->nextAttack ) },
-	{ "float", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterFlyingCacodemon *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterFlyingCacodemon *)0)->nextNoFOVAttack ) },
-	{ "idEntity *", "combat_node", (intptr_t)(&((rvmMonsterFlyingCacodemon *)0)->combat_node), sizeof( ((rvmMonsterFlyingCacodemon *)0)->combat_node ) },
+static classVariableInfo_t iceMonsterFlyingCacodemon_typeInfo[] = {
+	{ ": float", "nextAttack", (intptr_t)(&((iceMonsterFlyingCacodemon *)0)->nextAttack), sizeof( ((iceMonsterFlyingCacodemon *)0)->nextAttack ) },
+	{ "float", "nextNoFOVAttack", (intptr_t)(&((iceMonsterFlyingCacodemon *)0)->nextNoFOVAttack), sizeof( ((iceMonsterFlyingCacodemon *)0)->nextNoFOVAttack ) },
+	{ "idEntity *", "combat_node", (intptr_t)(&((iceMonsterFlyingCacodemon *)0)->combat_node), sizeof( ((iceMonsterFlyingCacodemon *)0)->combat_node ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombie_typeInfo[] = {
-	{ ": idScriptBool", "can_run", (intptr_t)(&((rvmMonsterZombie *)0)->can_run), sizeof( ((rvmMonsterZombie *)0)->can_run ) },
+static classVariableInfo_t iceMonsterZombie_typeInfo[] = {
+	{ ": idScriptBool", "can_run", (intptr_t)(&((iceMonsterZombie *)0)->can_run), sizeof( ((iceMonsterZombie *)0)->can_run ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombieSawyer_typeInfo[] = {
-	{ "float", "next_hit_time", (intptr_t)(&((rvmMonsterZombieSawyer *)0)->next_hit_time), sizeof( ((rvmMonsterZombieSawyer *)0)->next_hit_time ) },
-	{ "int", "smoke_frames", (intptr_t)(&((rvmMonsterZombieSawyer *)0)->smoke_frames), sizeof( ((rvmMonsterZombieSawyer *)0)->smoke_frames ) },
+static classVariableInfo_t iceMonsterZombieSawyer_typeInfo[] = {
+	{ "float", "next_hit_time", (intptr_t)(&((iceMonsterZombieSawyer *)0)->next_hit_time), sizeof( ((iceMonsterZombieSawyer *)0)->next_hit_time ) },
+	{ "int", "smoke_frames", (intptr_t)(&((iceMonsterZombieSawyer *)0)->smoke_frames), sizeof( ((iceMonsterZombieSawyer *)0)->smoke_frames ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombieBernie_typeInfo[] = {
+static classVariableInfo_t iceMonsterZombieBernie_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombieMorgue_typeInfo[] = {
+static classVariableInfo_t iceMonsterZombieMorgue_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombieSecurityPistol_typeInfo[] = {
-	{ ": idEntity *", "combat_node", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->combat_node), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->combat_node ) },
-	{ "idScriptBool", "fire", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->fire), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->fire ) },
-	{ "idScriptBool", "crouch_fire", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->crouch_fire), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->crouch_fire ) },
-	{ "idScriptBool", "run_attack", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->run_attack), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->run_attack ) },
-	{ "idScriptFloat", "nextDodge", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->nextDodge), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->nextDodge ) },
-	{ "idScriptFloat", "nextAttack", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->nextAttack), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->nextAttack ) },
-	{ "idScriptFloat", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->nextNoFOVAttack ) },
-	{ "float", "zsecp_num_stand_attacks", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->zsecp_num_stand_attacks), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->zsecp_num_stand_attacks ) },
-	{ "float", "zsecp_num_crouch_attacks", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->zsecp_num_crouch_attacks), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->zsecp_num_crouch_attacks ) },
-	{ ": float", "attackTime", (intptr_t)(&((rvmMonsterZombieSecurityPistol *)0)->attackTime), sizeof( ((rvmMonsterZombieSecurityPistol *)0)->attackTime ) },
+static classVariableInfo_t iceMonsterZombieSecurityPistol_typeInfo[] = {
+	{ ": idEntity *", "combat_node", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->combat_node), sizeof( ((iceMonsterZombieSecurityPistol *)0)->combat_node ) },
+	{ "idScriptBool", "fire", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->fire), sizeof( ((iceMonsterZombieSecurityPistol *)0)->fire ) },
+	{ "idScriptBool", "crouch_fire", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->crouch_fire), sizeof( ((iceMonsterZombieSecurityPistol *)0)->crouch_fire ) },
+	{ "idScriptBool", "run_attack", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->run_attack), sizeof( ((iceMonsterZombieSecurityPistol *)0)->run_attack ) },
+	{ "idScriptFloat", "nextDodge", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->nextDodge), sizeof( ((iceMonsterZombieSecurityPistol *)0)->nextDodge ) },
+	{ "idScriptFloat", "nextAttack", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->nextAttack), sizeof( ((iceMonsterZombieSecurityPistol *)0)->nextAttack ) },
+	{ "idScriptFloat", "nextNoFOVAttack", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->nextNoFOVAttack), sizeof( ((iceMonsterZombieSecurityPistol *)0)->nextNoFOVAttack ) },
+	{ "float", "zsecp_num_stand_attacks", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->zsecp_num_stand_attacks), sizeof( ((iceMonsterZombieSecurityPistol *)0)->zsecp_num_stand_attacks ) },
+	{ "float", "zsecp_num_crouch_attacks", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->zsecp_num_crouch_attacks), sizeof( ((iceMonsterZombieSecurityPistol *)0)->zsecp_num_crouch_attacks ) },
+	{ ": float", "attackTime", (intptr_t)(&((iceMonsterZombieSecurityPistol *)0)->attackTime), sizeof( ((iceMonsterZombieSecurityPistol *)0)->attackTime ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombieCommandoTentacle_typeInfo[] = {
-	{ ": float", "nextAttack", (intptr_t)(&((rvmMonsterZombieCommandoTentacle *)0)->nextAttack), sizeof( ((rvmMonsterZombieCommandoTentacle *)0)->nextAttack ) },
-	{ "float", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterZombieCommandoTentacle *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterZombieCommandoTentacle *)0)->nextNoFOVAttack ) },
-	{ "boolean", "tentacleDamage", (intptr_t)(&((rvmMonsterZombieCommandoTentacle *)0)->tentacleDamage), sizeof( ((rvmMonsterZombieCommandoTentacle *)0)->tentacleDamage ) },
+static classVariableInfo_t iceMonsterZombieCommandoTentacle_typeInfo[] = {
+	{ ": float", "nextAttack", (intptr_t)(&((iceMonsterZombieCommandoTentacle *)0)->nextAttack), sizeof( ((iceMonsterZombieCommandoTentacle *)0)->nextAttack ) },
+	{ "float", "nextNoFOVAttack", (intptr_t)(&((iceMonsterZombieCommandoTentacle *)0)->nextNoFOVAttack), sizeof( ((iceMonsterZombieCommandoTentacle *)0)->nextNoFOVAttack ) },
+	{ "boolean", "tentacleDamage", (intptr_t)(&((iceMonsterZombieCommandoTentacle *)0)->tentacleDamage), sizeof( ((iceMonsterZombieCommandoTentacle *)0)->tentacleDamage ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmMonsterZombieCommandoChaingun_typeInfo[] = {
-	{ ": idScriptBool", "fire", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->fire), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->fire ) },
-	{ "idScriptBool", "crouch_fire", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->crouch_fire), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->crouch_fire ) },
-	{ "idScriptBool", "step_left", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->step_left), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->step_left ) },
-	{ "idScriptBool", "step_right", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->step_right), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->step_right ) },
-	{ "idScriptFloat", "nextDodge", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->nextDodge), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->nextDodge ) },
-	{ "idScriptFloat", "nextAttack", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->nextAttack), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->nextAttack ) },
-	{ "idScriptFloat", "nextNoFOVAttack", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->nextNoFOVAttack), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->nextNoFOVAttack ) },
-	{ ": idEntity *", "combat_node", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->combat_node), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->combat_node ) },
-	{ "float", "attackTime", (intptr_t)(&((rvmMonsterZombieCommandoChaingun *)0)->attackTime), sizeof( ((rvmMonsterZombieCommandoChaingun *)0)->attackTime ) },
+static classVariableInfo_t iceMonsterZombieCommandoChaingun_typeInfo[] = {
+	{ ": idScriptBool", "fire", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->fire), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->fire ) },
+	{ "idScriptBool", "crouch_fire", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->crouch_fire), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->crouch_fire ) },
+	{ "idScriptBool", "step_left", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->step_left), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->step_left ) },
+	{ "idScriptBool", "step_right", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->step_right), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->step_right ) },
+	{ "idScriptFloat", "nextDodge", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->nextDodge), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->nextDodge ) },
+	{ "idScriptFloat", "nextAttack", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->nextAttack), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->nextAttack ) },
+	{ "idScriptFloat", "nextNoFOVAttack", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->nextNoFOVAttack), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->nextNoFOVAttack ) },
+	{ ": idEntity *", "combat_node", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->combat_node), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->combat_node ) },
+	{ "float", "attackTime", (intptr_t)(&((iceMonsterZombieCommandoChaingun *)0)->attackTime), sizeof( ((iceMonsterZombieCommandoChaingun *)0)->attackTime ) },
 	{ NULL, 0 }
 };
 
@@ -6352,14 +6358,14 @@ static classVariableInfo_t bot_state_t_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmBot_typeInfo[] = {
-	{ ": bot_state_t", "bs", (intptr_t)(&((rvmBot *)0)->bs), sizeof( ((rvmBot *)0)->bs ) },
-	{ "bool", "hasSpawned", (intptr_t)(&((rvmBot *)0)->hasSpawned), sizeof( ((rvmBot *)0)->hasSpawned ) },
-	{ ": int", "weapon_machinegun", (intptr_t)(&((rvmBot *)0)->weapon_machinegun), sizeof( ((rvmBot *)0)->weapon_machinegun ) },
-	{ "int", "weapon_shotgun", (intptr_t)(&((rvmBot *)0)->weapon_shotgun), sizeof( ((rvmBot *)0)->weapon_shotgun ) },
-	{ "int", "weapon_plasmagun", (intptr_t)(&((rvmBot *)0)->weapon_plasmagun), sizeof( ((rvmBot *)0)->weapon_plasmagun ) },
-	{ "int", "weapon_rocketlauncher", (intptr_t)(&((rvmBot *)0)->weapon_rocketlauncher), sizeof( ((rvmBot *)0)->weapon_rocketlauncher ) },
-	{ ": idAAS *", "aas", (intptr_t)(&((rvmBot *)0)->aas), sizeof( ((rvmBot *)0)->aas ) },
+static classVariableInfo_t iceBot_typeInfo[] = {
+	{ ": bot_state_t", "bs", (intptr_t)(&((iceBot *)0)->bs), sizeof( ((iceBot *)0)->bs ) },
+	{ "bool", "hasSpawned", (intptr_t)(&((iceBot *)0)->hasSpawned), sizeof( ((iceBot *)0)->hasSpawned ) },
+	{ ": int", "weapon_machinegun", (intptr_t)(&((iceBot *)0)->weapon_machinegun), sizeof( ((iceBot *)0)->weapon_machinegun ) },
+	{ "int", "weapon_shotgun", (intptr_t)(&((iceBot *)0)->weapon_shotgun), sizeof( ((iceBot *)0)->weapon_shotgun ) },
+	{ "int", "weapon_plasmagun", (intptr_t)(&((iceBot *)0)->weapon_plasmagun), sizeof( ((iceBot *)0)->weapon_plasmagun ) },
+	{ "int", "weapon_rocketlauncher", (intptr_t)(&((iceBot *)0)->weapon_rocketlauncher), sizeof( ((iceBot *)0)->weapon_rocketlauncher ) },
+	{ ": idAAS *", "aas", (intptr_t)(&((iceBot *)0)->aas), sizeof( ((iceBot *)0)->aas ) },
 	{ NULL, 0 }
 };
 
@@ -6379,122 +6385,122 @@ static classVariableInfo_t idTestModel_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponFist_typeInfo[] = {
-	{ "bool", "side", (intptr_t)(&((rvmWeaponFist *)0)->side), sizeof( ((rvmWeaponFist *)0)->side ) },
+static classVariableInfo_t iceWeaponFist_typeInfo[] = {
+	{ "bool", "side", (intptr_t)(&((iceWeaponFist *)0)->side), sizeof( ((iceWeaponFist *)0)->side ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponPistol_typeInfo[] = {
-	{ ": float", "spread", (intptr_t)(&((rvmWeaponPistol *)0)->spread), sizeof( ((rvmWeaponPistol *)0)->spread ) },
-	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((rvmWeaponPistol *)0)->snd_lowammo), sizeof( ((rvmWeaponPistol *)0)->snd_lowammo ) },
+static classVariableInfo_t iceWeaponPistol_typeInfo[] = {
+	{ ": float", "spread", (intptr_t)(&((iceWeaponPistol *)0)->spread), sizeof( ((iceWeaponPistol *)0)->spread ) },
+	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((iceWeaponPistol *)0)->snd_lowammo), sizeof( ((iceWeaponPistol *)0)->snd_lowammo ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponFlashlight_typeInfo[] = {
-	{ "bool", "on", (intptr_t)(&((rvmWeaponFlashlight *)0)->on), sizeof( ((rvmWeaponFlashlight *)0)->on ) },
-	{ "float", "intensity", (intptr_t)(&((rvmWeaponFlashlight *)0)->intensity), sizeof( ((rvmWeaponFlashlight *)0)->intensity ) },
-	{ "idStr", "skin_on", (intptr_t)(&((rvmWeaponFlashlight *)0)->skin_on), sizeof( ((rvmWeaponFlashlight *)0)->skin_on ) },
-	{ "idStr", "skin_on_invis", (intptr_t)(&((rvmWeaponFlashlight *)0)->skin_on_invis), sizeof( ((rvmWeaponFlashlight *)0)->skin_on_invis ) },
-	{ "idStr", "skin_off", (intptr_t)(&((rvmWeaponFlashlight *)0)->skin_off), sizeof( ((rvmWeaponFlashlight *)0)->skin_off ) },
-	{ "idStr", "skin_off_invis", (intptr_t)(&((rvmWeaponFlashlight *)0)->skin_off_invis), sizeof( ((rvmWeaponFlashlight *)0)->skin_off_invis ) },
+static classVariableInfo_t iceWeaponFlashlight_typeInfo[] = {
+	{ "bool", "on", (intptr_t)(&((iceWeaponFlashlight *)0)->on), sizeof( ((iceWeaponFlashlight *)0)->on ) },
+	{ "float", "intensity", (intptr_t)(&((iceWeaponFlashlight *)0)->intensity), sizeof( ((iceWeaponFlashlight *)0)->intensity ) },
+	{ "idStr", "skin_on", (intptr_t)(&((iceWeaponFlashlight *)0)->skin_on), sizeof( ((iceWeaponFlashlight *)0)->skin_on ) },
+	{ "idStr", "skin_on_invis", (intptr_t)(&((iceWeaponFlashlight *)0)->skin_on_invis), sizeof( ((iceWeaponFlashlight *)0)->skin_on_invis ) },
+	{ "idStr", "skin_off", (intptr_t)(&((iceWeaponFlashlight *)0)->skin_off), sizeof( ((iceWeaponFlashlight *)0)->skin_off ) },
+	{ "idStr", "skin_off_invis", (intptr_t)(&((iceWeaponFlashlight *)0)->skin_off_invis), sizeof( ((iceWeaponFlashlight *)0)->skin_off_invis ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponPDA_typeInfo[] = {
+static classVariableInfo_t iceWeaponPDA_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponShotgun_typeInfo[] = {
-	{ ": float", "spread", (intptr_t)(&((rvmWeaponShotgun *)0)->spread), sizeof( ((rvmWeaponShotgun *)0)->spread ) },
-	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((rvmWeaponShotgun *)0)->snd_lowammo), sizeof( ((rvmWeaponShotgun *)0)->snd_lowammo ) },
+static classVariableInfo_t iceWeaponShotgun_typeInfo[] = {
+	{ ": float", "spread", (intptr_t)(&((iceWeaponShotgun *)0)->spread), sizeof( ((iceWeaponShotgun *)0)->spread ) },
+	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((iceWeaponShotgun *)0)->snd_lowammo), sizeof( ((iceWeaponShotgun *)0)->snd_lowammo ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponDoubleShotgun_typeInfo[] = {
+static classVariableInfo_t iceWeaponDoubleShotgun_typeInfo[] = {
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponMachineGun_typeInfo[] = {
-	{ ": float", "spread", (intptr_t)(&((rvmWeaponMachineGun *)0)->spread), sizeof( ((rvmWeaponMachineGun *)0)->spread ) },
-	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((rvmWeaponMachineGun *)0)->snd_lowammo), sizeof( ((rvmWeaponMachineGun *)0)->snd_lowammo ) },
+static classVariableInfo_t iceWeaponMachineGun_typeInfo[] = {
+	{ ": float", "spread", (intptr_t)(&((iceWeaponMachineGun *)0)->spread), sizeof( ((iceWeaponMachineGun *)0)->spread ) },
+	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((iceWeaponMachineGun *)0)->snd_lowammo), sizeof( ((iceWeaponMachineGun *)0)->snd_lowammo ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponPlasmaGun_typeInfo[] = {
-	{ ": float", "spread", (intptr_t)(&((rvmWeaponPlasmaGun *)0)->spread), sizeof( ((rvmWeaponPlasmaGun *)0)->spread ) },
-	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((rvmWeaponPlasmaGun *)0)->snd_lowammo), sizeof( ((rvmWeaponPlasmaGun *)0)->snd_lowammo ) },
+static classVariableInfo_t iceWeaponPlasmaGun_typeInfo[] = {
+	{ ": float", "spread", (intptr_t)(&((iceWeaponPlasmaGun *)0)->spread), sizeof( ((iceWeaponPlasmaGun *)0)->spread ) },
+	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((iceWeaponPlasmaGun *)0)->snd_lowammo), sizeof( ((iceWeaponPlasmaGun *)0)->snd_lowammo ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponChainGun_typeInfo[] = {
-	{ ": idAnimatedEntity *", "world_model", (intptr_t)(&((rvmWeaponChainGun *)0)->world_model), sizeof( ((rvmWeaponChainGun *)0)->world_model ) },
-	{ "jointHandle_t", "world_barrel_joint", (intptr_t)(&((rvmWeaponChainGun *)0)->world_barrel_joint), sizeof( ((rvmWeaponChainGun *)0)->world_barrel_joint ) },
-	{ "jointHandle_t", "barrel_joint", (intptr_t)(&((rvmWeaponChainGun *)0)->barrel_joint), sizeof( ((rvmWeaponChainGun *)0)->barrel_joint ) },
-	{ "float", "barrel_angle", (intptr_t)(&((rvmWeaponChainGun *)0)->barrel_angle), sizeof( ((rvmWeaponChainGun *)0)->barrel_angle ) },
-	{ "float", "current_rate", (intptr_t)(&((rvmWeaponChainGun *)0)->current_rate), sizeof( ((rvmWeaponChainGun *)0)->current_rate ) },
-	{ "float", "start_rate", (intptr_t)(&((rvmWeaponChainGun *)0)->start_rate), sizeof( ((rvmWeaponChainGun *)0)->start_rate ) },
-	{ "float", "end_rate", (intptr_t)(&((rvmWeaponChainGun *)0)->end_rate), sizeof( ((rvmWeaponChainGun *)0)->end_rate ) },
-	{ "float", "spin_start", (intptr_t)(&((rvmWeaponChainGun *)0)->spin_start), sizeof( ((rvmWeaponChainGun *)0)->spin_start ) },
-	{ "float", "spin_end", (intptr_t)(&((rvmWeaponChainGun *)0)->spin_end), sizeof( ((rvmWeaponChainGun *)0)->spin_end ) },
-	{ "float", "spread", (intptr_t)(&((rvmWeaponChainGun *)0)->spread), sizeof( ((rvmWeaponChainGun *)0)->spread ) },
-	{ "int", "numSkipFrames", (intptr_t)(&((rvmWeaponChainGun *)0)->numSkipFrames), sizeof( ((rvmWeaponChainGun *)0)->numSkipFrames ) },
-	{ "const idSoundShader *", "snd_windup", (intptr_t)(&((rvmWeaponChainGun *)0)->snd_windup), sizeof( ((rvmWeaponChainGun *)0)->snd_windup ) },
-	{ "const idSoundShader *", "snd_winddown", (intptr_t)(&((rvmWeaponChainGun *)0)->snd_winddown), sizeof( ((rvmWeaponChainGun *)0)->snd_winddown ) },
+static classVariableInfo_t iceWeaponChainGun_typeInfo[] = {
+	{ ": idAnimatedEntity *", "world_model", (intptr_t)(&((iceWeaponChainGun *)0)->world_model), sizeof( ((iceWeaponChainGun *)0)->world_model ) },
+	{ "jointHandle_t", "world_barrel_joint", (intptr_t)(&((iceWeaponChainGun *)0)->world_barrel_joint), sizeof( ((iceWeaponChainGun *)0)->world_barrel_joint ) },
+	{ "jointHandle_t", "barrel_joint", (intptr_t)(&((iceWeaponChainGun *)0)->barrel_joint), sizeof( ((iceWeaponChainGun *)0)->barrel_joint ) },
+	{ "float", "barrel_angle", (intptr_t)(&((iceWeaponChainGun *)0)->barrel_angle), sizeof( ((iceWeaponChainGun *)0)->barrel_angle ) },
+	{ "float", "current_rate", (intptr_t)(&((iceWeaponChainGun *)0)->current_rate), sizeof( ((iceWeaponChainGun *)0)->current_rate ) },
+	{ "float", "start_rate", (intptr_t)(&((iceWeaponChainGun *)0)->start_rate), sizeof( ((iceWeaponChainGun *)0)->start_rate ) },
+	{ "float", "end_rate", (intptr_t)(&((iceWeaponChainGun *)0)->end_rate), sizeof( ((iceWeaponChainGun *)0)->end_rate ) },
+	{ "float", "spin_start", (intptr_t)(&((iceWeaponChainGun *)0)->spin_start), sizeof( ((iceWeaponChainGun *)0)->spin_start ) },
+	{ "float", "spin_end", (intptr_t)(&((iceWeaponChainGun *)0)->spin_end), sizeof( ((iceWeaponChainGun *)0)->spin_end ) },
+	{ "float", "spread", (intptr_t)(&((iceWeaponChainGun *)0)->spread), sizeof( ((iceWeaponChainGun *)0)->spread ) },
+	{ "int", "numSkipFrames", (intptr_t)(&((iceWeaponChainGun *)0)->numSkipFrames), sizeof( ((iceWeaponChainGun *)0)->numSkipFrames ) },
+	{ "const idSoundShader *", "snd_windup", (intptr_t)(&((iceWeaponChainGun *)0)->snd_windup), sizeof( ((iceWeaponChainGun *)0)->snd_windup ) },
+	{ "const idSoundShader *", "snd_winddown", (intptr_t)(&((iceWeaponChainGun *)0)->snd_winddown), sizeof( ((iceWeaponChainGun *)0)->snd_winddown ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponRocketLauncher_typeInfo[] = {
-	{ "float", "spread", (intptr_t)(&((rvmWeaponRocketLauncher *)0)->spread), sizeof( ((rvmWeaponRocketLauncher *)0)->spread ) },
-	{ "idStr", "skin_invisible", (intptr_t)(&((rvmWeaponRocketLauncher *)0)->skin_invisible), sizeof( ((rvmWeaponRocketLauncher *)0)->skin_invisible ) },
+static classVariableInfo_t iceWeaponRocketLauncher_typeInfo[] = {
+	{ "float", "spread", (intptr_t)(&((iceWeaponRocketLauncher *)0)->spread), sizeof( ((iceWeaponRocketLauncher *)0)->spread ) },
+	{ "idStr", "skin_invisible", (intptr_t)(&((iceWeaponRocketLauncher *)0)->skin_invisible), sizeof( ((iceWeaponRocketLauncher *)0)->skin_invisible ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponBFG_typeInfo[] = {
-	{ "float", "spread", (intptr_t)(&((rvmWeaponBFG *)0)->spread), sizeof( ((rvmWeaponBFG *)0)->spread ) },
-	{ "float", "fuse_start", (intptr_t)(&((rvmWeaponBFG *)0)->fuse_start), sizeof( ((rvmWeaponBFG *)0)->fuse_start ) },
-	{ "float", "fuse_end", (intptr_t)(&((rvmWeaponBFG *)0)->fuse_end), sizeof( ((rvmWeaponBFG *)0)->fuse_end ) },
-	{ "float", "powerLevel", (intptr_t)(&((rvmWeaponBFG *)0)->powerLevel), sizeof( ((rvmWeaponBFG *)0)->powerLevel ) },
-	{ "float", "fire_time", (intptr_t)(&((rvmWeaponBFG *)0)->fire_time), sizeof( ((rvmWeaponBFG *)0)->fire_time ) },
+static classVariableInfo_t iceWeaponBFG_typeInfo[] = {
+	{ "float", "spread", (intptr_t)(&((iceWeaponBFG *)0)->spread), sizeof( ((iceWeaponBFG *)0)->spread ) },
+	{ "float", "fuse_start", (intptr_t)(&((iceWeaponBFG *)0)->fuse_start), sizeof( ((iceWeaponBFG *)0)->fuse_start ) },
+	{ "float", "fuse_end", (intptr_t)(&((iceWeaponBFG *)0)->fuse_end), sizeof( ((iceWeaponBFG *)0)->fuse_end ) },
+	{ "float", "powerLevel", (intptr_t)(&((iceWeaponBFG *)0)->powerLevel), sizeof( ((iceWeaponBFG *)0)->powerLevel ) },
+	{ "float", "fire_time", (intptr_t)(&((iceWeaponBFG *)0)->fire_time), sizeof( ((iceWeaponBFG *)0)->fire_time ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponHandgrenade_typeInfo[] = {
-	{ ": float", "spread", (intptr_t)(&((rvmWeaponHandgrenade *)0)->spread), sizeof( ((rvmWeaponHandgrenade *)0)->spread ) },
-	{ "float", "fuse_start", (intptr_t)(&((rvmWeaponHandgrenade *)0)->fuse_start), sizeof( ((rvmWeaponHandgrenade *)0)->fuse_start ) },
-	{ "idStr", "skin_nade", (intptr_t)(&((rvmWeaponHandgrenade *)0)->skin_nade), sizeof( ((rvmWeaponHandgrenade *)0)->skin_nade ) },
-	{ "idStr", "skin_nade_invis", (intptr_t)(&((rvmWeaponHandgrenade *)0)->skin_nade_invis), sizeof( ((rvmWeaponHandgrenade *)0)->skin_nade_invis ) },
-	{ "idStr", "skin_nonade", (intptr_t)(&((rvmWeaponHandgrenade *)0)->skin_nonade), sizeof( ((rvmWeaponHandgrenade *)0)->skin_nonade ) },
-	{ "idStr", "skin_nonade_invis", (intptr_t)(&((rvmWeaponHandgrenade *)0)->skin_nonade_invis), sizeof( ((rvmWeaponHandgrenade *)0)->skin_nonade_invis ) },
-	{ "idProjectile *", "projectile", (intptr_t)(&((rvmWeaponHandgrenade *)0)->projectile), sizeof( ((rvmWeaponHandgrenade *)0)->projectile ) },
-	{ "boolean", "show_grenade", (intptr_t)(&((rvmWeaponHandgrenade *)0)->show_grenade), sizeof( ((rvmWeaponHandgrenade *)0)->show_grenade ) },
-	{ ": float", "fuse_end", (intptr_t)(&((rvmWeaponHandgrenade *)0)->fuse_end), sizeof( ((rvmWeaponHandgrenade *)0)->fuse_end ) },
-	{ "float", "current_time", (intptr_t)(&((rvmWeaponHandgrenade *)0)->current_time), sizeof( ((rvmWeaponHandgrenade *)0)->current_time ) },
-	{ "float", "time_held", (intptr_t)(&((rvmWeaponHandgrenade *)0)->time_held), sizeof( ((rvmWeaponHandgrenade *)0)->time_held ) },
-	{ "float", "power", (intptr_t)(&((rvmWeaponHandgrenade *)0)->power), sizeof( ((rvmWeaponHandgrenade *)0)->power ) },
-	{ "boolean", "exploded", (intptr_t)(&((rvmWeaponHandgrenade *)0)->exploded), sizeof( ((rvmWeaponHandgrenade *)0)->exploded ) },
-	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((rvmWeaponHandgrenade *)0)->snd_lowammo), sizeof( ((rvmWeaponHandgrenade *)0)->snd_lowammo ) },
+static classVariableInfo_t iceWeaponHandgrenade_typeInfo[] = {
+	{ ": float", "spread", (intptr_t)(&((iceWeaponHandgrenade *)0)->spread), sizeof( ((iceWeaponHandgrenade *)0)->spread ) },
+	{ "float", "fuse_start", (intptr_t)(&((iceWeaponHandgrenade *)0)->fuse_start), sizeof( ((iceWeaponHandgrenade *)0)->fuse_start ) },
+	{ "idStr", "skin_nade", (intptr_t)(&((iceWeaponHandgrenade *)0)->skin_nade), sizeof( ((iceWeaponHandgrenade *)0)->skin_nade ) },
+	{ "idStr", "skin_nade_invis", (intptr_t)(&((iceWeaponHandgrenade *)0)->skin_nade_invis), sizeof( ((iceWeaponHandgrenade *)0)->skin_nade_invis ) },
+	{ "idStr", "skin_nonade", (intptr_t)(&((iceWeaponHandgrenade *)0)->skin_nonade), sizeof( ((iceWeaponHandgrenade *)0)->skin_nonade ) },
+	{ "idStr", "skin_nonade_invis", (intptr_t)(&((iceWeaponHandgrenade *)0)->skin_nonade_invis), sizeof( ((iceWeaponHandgrenade *)0)->skin_nonade_invis ) },
+	{ "idProjectile *", "projectile", (intptr_t)(&((iceWeaponHandgrenade *)0)->projectile), sizeof( ((iceWeaponHandgrenade *)0)->projectile ) },
+	{ "boolean", "show_grenade", (intptr_t)(&((iceWeaponHandgrenade *)0)->show_grenade), sizeof( ((iceWeaponHandgrenade *)0)->show_grenade ) },
+	{ ": float", "fuse_end", (intptr_t)(&((iceWeaponHandgrenade *)0)->fuse_end), sizeof( ((iceWeaponHandgrenade *)0)->fuse_end ) },
+	{ "float", "current_time", (intptr_t)(&((iceWeaponHandgrenade *)0)->current_time), sizeof( ((iceWeaponHandgrenade *)0)->current_time ) },
+	{ "float", "time_held", (intptr_t)(&((iceWeaponHandgrenade *)0)->time_held), sizeof( ((iceWeaponHandgrenade *)0)->time_held ) },
+	{ "float", "power", (intptr_t)(&((iceWeaponHandgrenade *)0)->power), sizeof( ((iceWeaponHandgrenade *)0)->power ) },
+	{ "boolean", "exploded", (intptr_t)(&((iceWeaponHandgrenade *)0)->exploded), sizeof( ((iceWeaponHandgrenade *)0)->exploded ) },
+	{ "const idSoundShader *", "snd_lowammo", (intptr_t)(&((iceWeaponHandgrenade *)0)->snd_lowammo), sizeof( ((iceWeaponHandgrenade *)0)->snd_lowammo ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponChainsaw_typeInfo[] = {
-	{ ": bool", "side", (intptr_t)(&((rvmWeaponChainsaw *)0)->side), sizeof( ((rvmWeaponChainsaw *)0)->side ) },
+static classVariableInfo_t iceWeaponChainsaw_typeInfo[] = {
+	{ ": bool", "side", (intptr_t)(&((iceWeaponChainsaw *)0)->side), sizeof( ((iceWeaponChainsaw *)0)->side ) },
 	{ NULL, 0 }
 };
 
-static classVariableInfo_t rvmWeaponGrabber_typeInfo[] = {
-	{ "const idSoundShader *", "snd_fireloop", (intptr_t)(&((rvmWeaponGrabber *)0)->snd_fireloop), sizeof( ((rvmWeaponGrabber *)0)->snd_fireloop ) },
-	{ "const idSoundShader *", "snd_electroloop", (intptr_t)(&((rvmWeaponGrabber *)0)->snd_electroloop), sizeof( ((rvmWeaponGrabber *)0)->snd_electroloop ) },
-	{ "const idSoundShader *", "snd_mainfire", (intptr_t)(&((rvmWeaponGrabber *)0)->snd_mainfire), sizeof( ((rvmWeaponGrabber *)0)->snd_mainfire ) },
-	{ "const idSoundShader *", "snd_cangrab", (intptr_t)(&((rvmWeaponGrabber *)0)->snd_cangrab), sizeof( ((rvmWeaponGrabber *)0)->snd_cangrab ) },
-	{ "const idSoundShader *", "snd_warning", (intptr_t)(&((rvmWeaponGrabber *)0)->snd_warning), sizeof( ((rvmWeaponGrabber *)0)->snd_warning ) },
-	{ "const idSoundShader *", "snd_stopfire", (intptr_t)(&((rvmWeaponGrabber *)0)->snd_stopfire), sizeof( ((rvmWeaponGrabber *)0)->snd_stopfire ) },
-	{ ": float", "next_attack", (intptr_t)(&((rvmWeaponGrabber *)0)->next_attack), sizeof( ((rvmWeaponGrabber *)0)->next_attack ) },
-	{ "float", "fireStartTime", (intptr_t)(&((rvmWeaponGrabber *)0)->fireStartTime), sizeof( ((rvmWeaponGrabber *)0)->fireStartTime ) },
-	{ "bool", "warningBeep1", (intptr_t)(&((rvmWeaponGrabber *)0)->warningBeep1), sizeof( ((rvmWeaponGrabber *)0)->warningBeep1 ) },
-	{ "bool", "warningBeep2", (intptr_t)(&((rvmWeaponGrabber *)0)->warningBeep2), sizeof( ((rvmWeaponGrabber *)0)->warningBeep2 ) },
-	{ "bool", "warningBeep3", (intptr_t)(&((rvmWeaponGrabber *)0)->warningBeep3), sizeof( ((rvmWeaponGrabber *)0)->warningBeep3 ) },
-	{ "bool", "warningBeep4", (intptr_t)(&((rvmWeaponGrabber *)0)->warningBeep4), sizeof( ((rvmWeaponGrabber *)0)->warningBeep4 ) },
-	{ "float", "grabberState", (intptr_t)(&((rvmWeaponGrabber *)0)->grabberState), sizeof( ((rvmWeaponGrabber *)0)->grabberState ) },
+static classVariableInfo_t iceWeaponGrabber_typeInfo[] = {
+	{ "const idSoundShader *", "snd_fireloop", (intptr_t)(&((iceWeaponGrabber *)0)->snd_fireloop), sizeof( ((iceWeaponGrabber *)0)->snd_fireloop ) },
+	{ "const idSoundShader *", "snd_electroloop", (intptr_t)(&((iceWeaponGrabber *)0)->snd_electroloop), sizeof( ((iceWeaponGrabber *)0)->snd_electroloop ) },
+	{ "const idSoundShader *", "snd_mainfire", (intptr_t)(&((iceWeaponGrabber *)0)->snd_mainfire), sizeof( ((iceWeaponGrabber *)0)->snd_mainfire ) },
+	{ "const idSoundShader *", "snd_cangrab", (intptr_t)(&((iceWeaponGrabber *)0)->snd_cangrab), sizeof( ((iceWeaponGrabber *)0)->snd_cangrab ) },
+	{ "const idSoundShader *", "snd_warning", (intptr_t)(&((iceWeaponGrabber *)0)->snd_warning), sizeof( ((iceWeaponGrabber *)0)->snd_warning ) },
+	{ "const idSoundShader *", "snd_stopfire", (intptr_t)(&((iceWeaponGrabber *)0)->snd_stopfire), sizeof( ((iceWeaponGrabber *)0)->snd_stopfire ) },
+	{ ": float", "next_attack", (intptr_t)(&((iceWeaponGrabber *)0)->next_attack), sizeof( ((iceWeaponGrabber *)0)->next_attack ) },
+	{ "float", "fireStartTime", (intptr_t)(&((iceWeaponGrabber *)0)->fireStartTime), sizeof( ((iceWeaponGrabber *)0)->fireStartTime ) },
+	{ "bool", "warningBeep1", (intptr_t)(&((iceWeaponGrabber *)0)->warningBeep1), sizeof( ((iceWeaponGrabber *)0)->warningBeep1 ) },
+	{ "bool", "warningBeep2", (intptr_t)(&((iceWeaponGrabber *)0)->warningBeep2), sizeof( ((iceWeaponGrabber *)0)->warningBeep2 ) },
+	{ "bool", "warningBeep3", (intptr_t)(&((iceWeaponGrabber *)0)->warningBeep3), sizeof( ((iceWeaponGrabber *)0)->warningBeep3 ) },
+	{ "bool", "warningBeep4", (intptr_t)(&((iceWeaponGrabber *)0)->warningBeep4), sizeof( ((iceWeaponGrabber *)0)->warningBeep4 ) },
+	{ "float", "grabberState", (intptr_t)(&((iceWeaponGrabber *)0)->grabberState), sizeof( ((iceWeaponGrabber *)0)->grabberState ) },
 	{ NULL, 0 }
 };
 
@@ -6683,6 +6689,10 @@ static classVariableInfo_t idMenuWidget_DynamicList_typeInfo[] = {
 };
 
 static classVariableInfo_t idMenuWidget_ScoreboardList_typeInfo[] = {
+	{ NULL, 0 }
+};
+
+static classVariableInfo_t idMenuWidget_SystemOptionsList_typeInfo[] = {
 	{ NULL, 0 }
 };
 
@@ -7061,11 +7071,13 @@ static classVariableInfo_t idMenuScreen_Shell_ControllerLayout_typeInfo[] = {
 static classVariableInfo_t idMenuScreen_Shell_SystemOptions_idMenuDataSource_SystemSettings_typeInfo[] = {
 	{ ": int", "originalFramerate", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalFramerate), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalFramerate ) },
 	{ "int", "originalAntialias", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalAntialias), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalAntialias ) },
-	{ "int", "originalPostProcessing", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalPostProcessing), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalPostProcessing ) },
 	{ "int", "originalVsync", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalVsync), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalVsync ) },
 	{ "float", "originalBrightness", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalBrightness), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalBrightness ) },
 	{ "float", "originalVolume", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalVolume), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalVolume ) },
 	{ "int", "originalShadowMapping", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalShadowMapping), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalShadowMapping ) },
+	{ "int", "originalSSAO", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalSSAO), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalSSAO ) },
+	{ "int", "originalPostProcessing", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalPostProcessing), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalPostProcessing ) },
+	{ "float", "originalAmbientBrightness", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalAmbientBrightness), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->originalAmbientBrightness ) },
 	{ "idList < vidMode_t >", "modeList", (intptr_t)(&((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->modeList), sizeof( ((idMenuScreen_Shell_SystemOptions::idMenuDataSource_SystemSettings *)0)->modeList ) },
 	{ NULL, 0 }
 };
@@ -7440,7 +7452,7 @@ static classTypeInfo_t classTypeInfo[] = {
 	{ "idEventQueue", "", sizeof(idEventQueue), idEventQueue_typeInfo },
 //	{ "idEntityPtr< class type >", "", sizeof(idEntityPtr< class type >), idEntityPtr_class_type__typeInfo },
 	{ "timeState_t", "", sizeof(timeState_t), timeState_t_typeInfo },
-	{ "rvmGameDelayRemoveEntry_t", "", sizeof(rvmGameDelayRemoveEntry_t), rvmGameDelayRemoveEntry_t_typeInfo },
+	{ "iceGameDelayRemoveEntry_t", "", sizeof(iceGameDelayRemoveEntry_t), iceGameDelayRemoveEntry_t_typeInfo },
 	{ "idGameLocal::netInterpolationInfo_t", "", sizeof(idGameLocal::netInterpolationInfo_t), idGameLocal_netInterpolationInfo_t_typeInfo },
 	{ "idGameLocal", "idGame", sizeof(idGameLocal), idGameLocal_typeInfo },
 	{ "idGameError", "idException", sizeof(idGameError), idGameError_typeInfo },
@@ -7580,7 +7592,7 @@ static classTypeInfo_t classTypeInfo[] = {
 //	{ "idPredictedValue< class type_ >", "", sizeof(idPredictedValue< class type_ >), idPredictedValue_class_type___typeInfo },
 	{ "WeaponParticle_t", "", sizeof(WeaponParticle_t), WeaponParticle_t_typeInfo },
 	{ "WeaponLight_t", "", sizeof(WeaponLight_t), WeaponLight_t_typeInfo },
-	{ "rvmWeaponObject", "idClass", sizeof(rvmWeaponObject), rvmWeaponObject_typeInfo },
+	{ "iceWeaponObject", "idClass", sizeof(iceWeaponObject), iceWeaponObject_typeInfo },
 	{ "idWeapon", "idAnimatedEntity", sizeof(idWeapon), idWeapon_typeInfo },
 	{ "rvmLightStyleState_t", "", sizeof(rvmLightStyleState_t), rvmLightStyleState_t_typeInfo },
 	{ "idLight", "idEntity", sizeof(idLight), idLight_typeInfo },
@@ -7700,19 +7712,19 @@ static classTypeInfo_t classTypeInfo[] = {
 	{ "idMoveState", "", sizeof(idMoveState), idMoveState_typeInfo },
 	{ "idAI", "idActor", sizeof(idAI), idAI_typeInfo },
 	{ "idCombatNode", "idEntity", sizeof(idCombatNode), idCombatNode_typeInfo },
-	{ "rvmAI_Follower", "idAI", sizeof(rvmAI_Follower), rvmAI_Follower_typeInfo },
-	{ "rvmMonsterBossVagary", "idAI", sizeof(rvmMonsterBossVagary), rvmMonsterBossVagary_typeInfo },
-	{ "rvmMonsterDemonHellknight", "idAI", sizeof(rvmMonsterDemonHellknight), rvmMonsterDemonHellknight_typeInfo },
-	{ "rvmMonsterDemonImp", "idAI", sizeof(rvmMonsterDemonImp), rvmMonsterDemonImp_typeInfo },
-	{ "rvmMonsterLostSoul", "idAI", sizeof(rvmMonsterLostSoul), rvmMonsterLostSoul_typeInfo },
-	{ "rvmMonsterFlyingCacodemon", "idAI", sizeof(rvmMonsterFlyingCacodemon), rvmMonsterFlyingCacodemon_typeInfo },
-	{ "rvmMonsterZombie", "idAI", sizeof(rvmMonsterZombie), rvmMonsterZombie_typeInfo },
-	{ "rvmMonsterZombieSawyer", "rvmMonsterZombie", sizeof(rvmMonsterZombieSawyer), rvmMonsterZombieSawyer_typeInfo },
-	{ "rvmMonsterZombieBernie", "rvmMonsterZombie", sizeof(rvmMonsterZombieBernie), rvmMonsterZombieBernie_typeInfo },
-	{ "rvmMonsterZombieMorgue", "rvmMonsterZombie", sizeof(rvmMonsterZombieMorgue), rvmMonsterZombieMorgue_typeInfo },
-	{ "rvmMonsterZombieSecurityPistol", "rvmMonsterZombie", sizeof(rvmMonsterZombieSecurityPistol), rvmMonsterZombieSecurityPistol_typeInfo },
-	{ "rvmMonsterZombieCommandoTentacle", "rvmMonsterZombie", sizeof(rvmMonsterZombieCommandoTentacle), rvmMonsterZombieCommandoTentacle_typeInfo },
-	{ "rvmMonsterZombieCommandoChaingun", "idAI", sizeof(rvmMonsterZombieCommandoChaingun), rvmMonsterZombieCommandoChaingun_typeInfo },
+	{ "iceAI_Follower", "idAI", sizeof(iceAI_Follower), iceAI_Follower_typeInfo },
+	{ "iceMonsterBossVagary", "idAI", sizeof(iceMonsterBossVagary), iceMonsterBossVagary_typeInfo },
+	{ "iceMonsterDemonHellknight", "idAI", sizeof(iceMonsterDemonHellknight), iceMonsterDemonHellknight_typeInfo },
+	{ "iceMonsterDemonImp", "idAI", sizeof(iceMonsterDemonImp), iceMonsterDemonImp_typeInfo },
+	{ "iceMonsterLostSoul", "idAI", sizeof(iceMonsterLostSoul), iceMonsterLostSoul_typeInfo },
+	{ "iceMonsterFlyingCacodemon", "idAI", sizeof(iceMonsterFlyingCacodemon), iceMonsterFlyingCacodemon_typeInfo },
+	{ "iceMonsterZombie", "idAI", sizeof(iceMonsterZombie), iceMonsterZombie_typeInfo },
+	{ "iceMonsterZombieSawyer", "iceMonsterZombie", sizeof(iceMonsterZombieSawyer), iceMonsterZombieSawyer_typeInfo },
+	{ "iceMonsterZombieBernie", "iceMonsterZombie", sizeof(iceMonsterZombieBernie), iceMonsterZombieBernie_typeInfo },
+	{ "iceMonsterZombieMorgue", "iceMonsterZombie", sizeof(iceMonsterZombieMorgue), iceMonsterZombieMorgue_typeInfo },
+	{ "iceMonsterZombieSecurityPistol", "iceMonsterZombie", sizeof(iceMonsterZombieSecurityPistol), iceMonsterZombieSecurityPistol_typeInfo },
+	{ "iceMonsterZombieCommandoTentacle", "iceMonsterZombie", sizeof(iceMonsterZombieCommandoTentacle), iceMonsterZombieCommandoTentacle_typeInfo },
+	{ "iceMonsterZombieCommandoChaingun", "idAI", sizeof(iceMonsterZombieCommandoChaingun), iceMonsterZombieCommandoChaingun_typeInfo },
 	{ "fuzzyseperator_t", "", sizeof(fuzzyseperator_t), fuzzyseperator_t_typeInfo },
 	{ "weight_t", "", sizeof(weight_t), weight_t_typeInfo },
 	{ "weightconfig_t", "", sizeof(weightconfig_t), weightconfig_t_typeInfo },
@@ -7736,22 +7748,22 @@ static classTypeInfo_t classTypeInfo[] = {
 	{ "bot_goalstate_t", "", sizeof(bot_goalstate_t), bot_goalstate_t_typeInfo },
 	{ "idBotGoalManager", "", sizeof(idBotGoalManager), idBotGoalManager_typeInfo },
 	{ "bot_state_t", "", sizeof(bot_state_t), bot_state_t_typeInfo },
-	{ "rvmBot", "idPlayer", sizeof(rvmBot), rvmBot_typeInfo },
+	{ "iceBot", "idPlayer", sizeof(iceBot), iceBot_typeInfo },
 	{ "idTestModel", "idAnimatedEntity", sizeof(idTestModel), idTestModel_typeInfo },
-	{ "rvmWeaponFist", "rvmWeaponObject", sizeof(rvmWeaponFist), rvmWeaponFist_typeInfo },
-	{ "rvmWeaponPistol", "rvmWeaponObject", sizeof(rvmWeaponPistol), rvmWeaponPistol_typeInfo },
-	{ "rvmWeaponFlashlight", "rvmWeaponObject", sizeof(rvmWeaponFlashlight), rvmWeaponFlashlight_typeInfo },
-	{ "rvmWeaponPDA", "rvmWeaponObject", sizeof(rvmWeaponPDA), rvmWeaponPDA_typeInfo },
-	{ "rvmWeaponShotgun", "rvmWeaponObject", sizeof(rvmWeaponShotgun), rvmWeaponShotgun_typeInfo },
-	{ "rvmWeaponDoubleShotgun", "rvmWeaponObject", sizeof(rvmWeaponDoubleShotgun), rvmWeaponDoubleShotgun_typeInfo },
-	{ "rvmWeaponMachineGun", "rvmWeaponObject", sizeof(rvmWeaponMachineGun), rvmWeaponMachineGun_typeInfo },
-	{ "rvmWeaponPlasmaGun", "rvmWeaponObject", sizeof(rvmWeaponPlasmaGun), rvmWeaponPlasmaGun_typeInfo },
-	{ "rvmWeaponChainGun", "rvmWeaponObject", sizeof(rvmWeaponChainGun), rvmWeaponChainGun_typeInfo },
-	{ "rvmWeaponRocketLauncher", "rvmWeaponObject", sizeof(rvmWeaponRocketLauncher), rvmWeaponRocketLauncher_typeInfo },
-	{ "rvmWeaponBFG", "rvmWeaponObject", sizeof(rvmWeaponBFG), rvmWeaponBFG_typeInfo },
-	{ "rvmWeaponHandgrenade", "rvmWeaponObject", sizeof(rvmWeaponHandgrenade), rvmWeaponHandgrenade_typeInfo },
-	{ "rvmWeaponChainsaw", "rvmWeaponObject", sizeof(rvmWeaponChainsaw), rvmWeaponChainsaw_typeInfo },
-	{ "rvmWeaponGrabber", "rvmWeaponObject", sizeof(rvmWeaponGrabber), rvmWeaponGrabber_typeInfo },
+	{ "iceWeaponFist", "iceWeaponObject", sizeof(iceWeaponFist), iceWeaponFist_typeInfo },
+	{ "iceWeaponPistol", "iceWeaponObject", sizeof(iceWeaponPistol), iceWeaponPistol_typeInfo },
+	{ "iceWeaponFlashlight", "iceWeaponObject", sizeof(iceWeaponFlashlight), iceWeaponFlashlight_typeInfo },
+	{ "iceWeaponPDA", "iceWeaponObject", sizeof(iceWeaponPDA), iceWeaponPDA_typeInfo },
+	{ "iceWeaponShotgun", "iceWeaponObject", sizeof(iceWeaponShotgun), iceWeaponShotgun_typeInfo },
+	{ "iceWeaponDoubleShotgun", "iceWeaponObject", sizeof(iceWeaponDoubleShotgun), iceWeaponDoubleShotgun_typeInfo },
+	{ "iceWeaponMachineGun", "iceWeaponObject", sizeof(iceWeaponMachineGun), iceWeaponMachineGun_typeInfo },
+	{ "iceWeaponPlasmaGun", "iceWeaponObject", sizeof(iceWeaponPlasmaGun), iceWeaponPlasmaGun_typeInfo },
+	{ "iceWeaponChainGun", "iceWeaponObject", sizeof(iceWeaponChainGun), iceWeaponChainGun_typeInfo },
+	{ "iceWeaponRocketLauncher", "iceWeaponObject", sizeof(iceWeaponRocketLauncher), iceWeaponRocketLauncher_typeInfo },
+	{ "iceWeaponBFG", "iceWeaponObject", sizeof(iceWeaponBFG), iceWeaponBFG_typeInfo },
+	{ "iceWeaponHandgrenade", "iceWeaponObject", sizeof(iceWeaponHandgrenade), iceWeaponHandgrenade_typeInfo },
+	{ "iceWeaponChainsaw", "iceWeaponObject", sizeof(iceWeaponChainsaw), iceWeaponChainsaw_typeInfo },
+	{ "iceWeaponGrabber", "iceWeaponObject", sizeof(iceWeaponGrabber), iceWeaponGrabber_typeInfo },
 	{ "widgetTransition_t", "", sizeof(widgetTransition_t), widgetTransition_t_typeInfo },
 	{ "scoreboardInfo_t", "", sizeof(scoreboardInfo_t), scoreboardInfo_t_typeInfo },
 	{ "idSort_SavesByDate", "idSort_Quick< idSaveGameDetails , idSort_SavesByDate >", sizeof(idSort_SavesByDate), idSort_SavesByDate_typeInfo },
@@ -7777,6 +7789,7 @@ static classTypeInfo_t classTypeInfo[] = {
 	{ "idMenuWidget_LobbyList", "idMenuWidget_List", sizeof(idMenuWidget_LobbyList), idMenuWidget_LobbyList_typeInfo },
 	{ "idMenuWidget_DynamicList", "idMenuWidget_List", sizeof(idMenuWidget_DynamicList), idMenuWidget_DynamicList_typeInfo },
 	{ "idMenuWidget_ScoreboardList", "idMenuWidget_DynamicList", sizeof(idMenuWidget_ScoreboardList), idMenuWidget_ScoreboardList_typeInfo },
+	{ "idMenuWidget_SystemOptionsList", "idMenuWidget_DynamicList", sizeof(idMenuWidget_SystemOptionsList), idMenuWidget_SystemOptionsList_typeInfo },
 	{ "idMenuWidget_NavBar", "idMenuWidget_DynamicList", sizeof(idMenuWidget_NavBar), idMenuWidget_NavBar_typeInfo },
 	{ "idMenuWidget_MenuBar", "idMenuWidget_DynamicList", sizeof(idMenuWidget_MenuBar), idMenuWidget_MenuBar_typeInfo },
 	{ "idMenuWidget_PDA_UserData", "idMenuWidget", sizeof(idMenuWidget_PDA_UserData), idMenuWidget_PDA_UserData_typeInfo },

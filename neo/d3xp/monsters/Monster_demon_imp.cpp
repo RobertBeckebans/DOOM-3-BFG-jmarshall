@@ -1,6 +1,31 @@
-// monster_demon_imp.cpp
-//
+/*
+===========================================================================
 
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
@@ -18,15 +43,15 @@
 #define IMP_LEAP_RANGE_MAX	480
 #define IMP_NOFOVTIME		4
 
-CLASS_DECLARATION( idAI, rvmMonsterDemonImp )
+CLASS_DECLARATION( idAI, iceMonsterDemonImp )
 END_CLASS
 
 /*
 =================
-rvmMonsterDemonImp::Init
+iceMonsterDemonImp::Init
 =================
 */
-void rvmMonsterDemonImp::Init()
+void iceMonsterDemonImp::Init()
 {
 	jumpVelocity.LinkTo( scriptObject, "jumpVelocity" );
 	range_attack_anim.LinkTo( scriptObject, "range_attack_anim" );
@@ -34,10 +59,10 @@ void rvmMonsterDemonImp::Init()
 
 /*
 =================
-rvmMonsterDemonImp::AI_Begin
+iceMonsterDemonImp::AI_Begin
 =================
 */
-void rvmMonsterDemonImp::AI_Begin()
+void iceMonsterDemonImp::AI_Begin()
 {
 	run_distance = IMP_RUNDISTANCE;
 	walk_turn = IMP_WALKTURN;
@@ -47,10 +72,10 @@ void rvmMonsterDemonImp::AI_Begin()
 
 /*
 =====================
-rvmMonsterDemonImp::state_Begin
+iceMonsterDemonImp::state_Begin
 =====================
 */
-stateResult_t rvmMonsterDemonImp::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::state_Begin( stateParms_t* parms )
 {
 	Event_AnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	Event_AnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
@@ -62,10 +87,10 @@ stateResult_t rvmMonsterDemonImp::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterDemonImp::state_Idle
+iceMonsterDemonImp::state_Idle
 =====================
 */
-stateResult_t rvmMonsterDemonImp::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -89,10 +114,10 @@ stateResult_t rvmMonsterDemonImp::state_Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterDemonImp::do_attack
+iceMonsterDemonImp::do_attack
 =====================
 */
-void rvmMonsterDemonImp::do_attack( int attack_flags )
+void iceMonsterDemonImp::do_attack( int attack_flags )
 {
 	nextNoFOVAttack = gameLocal.SysScriptTime() + IMP_NOFOVTIME;
 	if( attack_flags & ATTACK_DODGE_LEFT )
@@ -124,10 +149,10 @@ void rvmMonsterDemonImp::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterDemonImp::check_attacks
+iceMonsterDemonImp::check_attacks
 =====================
 */
-int rvmMonsterDemonImp::check_attacks()
+int iceMonsterDemonImp::check_attacks()
 {
 	float range;
 	float currentTime;
@@ -234,10 +259,10 @@ int rvmMonsterDemonImp::check_attacks()
 
 /*
 =====================
-rvmMonsterDemonImp::combat_range
+iceMonsterDemonImp::combat_range
 =====================
 */
-stateResult_t rvmMonsterDemonImp::combat_range( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::combat_range( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -264,10 +289,10 @@ stateResult_t rvmMonsterDemonImp::combat_range( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterDemonImp::combat_leap
+iceMonsterDemonImp::combat_leap
 =====================
 */
-stateResult_t rvmMonsterDemonImp::combat_leap( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::combat_leap( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -293,10 +318,10 @@ stateResult_t rvmMonsterDemonImp::combat_leap( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterDemonImp::combat_melee
+iceMonsterDemonImp::combat_melee
 =====================
 */
-stateResult_t rvmMonsterDemonImp::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -326,7 +351,7 @@ stateResult_t rvmMonsterDemonImp::combat_melee( stateParms_t* parms )
 monster_demon_imp::combat_dodge_left
 =====================
 */
-stateResult_t rvmMonsterDemonImp::combat_dodge_left( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::combat_dodge_left( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -354,7 +379,7 @@ stateResult_t rvmMonsterDemonImp::combat_dodge_left( stateParms_t* parms )
 monster_demon_imp::combat_dodge_right
 =====================
 */
-stateResult_t rvmMonsterDemonImp::combat_dodge_right( stateParms_t* parms )
+stateResult_t iceMonsterDemonImp::combat_dodge_right( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{

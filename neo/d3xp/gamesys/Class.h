@@ -4,6 +4,7 @@
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2012 Robert Beckebans
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -324,6 +325,7 @@ public:
 	static void					ListClasses_f( const idCmdArgs& args );
 	// RB begin
 	static void					ExportScriptEvents_f( const idCmdArgs& args );
+	static void					EditLights_f( const idCmdArgs& args );
 	// RB end
 	static idClass* 			CreateInstance( const char* name );
 	static int					GetNumTypes()

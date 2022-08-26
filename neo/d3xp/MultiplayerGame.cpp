@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -316,14 +317,11 @@ void idMultiplayerGame::UpdatePlayerRanks()
 	idPlayer* players[MAX_CLIENTS];
 	idEntity* ent;
 	idPlayer* player;
-// jmarshall
+	// jmarshall
 	mpPlayerState_t* playerStateSorted[MAX_CLIENTS];
-// jmarshall end
-
-// jmarshall
 	int leadFragCount = 0;
 	bool tiedScore = false;
-// jmarshall end
+	// jmarshall end
 
 	memset( players, 0, sizeof( players ) );
 	numRankedPlayers = 0;
@@ -403,15 +401,13 @@ void idMultiplayerGame::UpdatePlayerRanks()
 				for( k = numRankedPlayers; k > j; k-- )
 				{
 					players[ k ] = players[ k - 1 ];
-// jmarshall
+					// jmarshall
 					playerStateSorted[k] = &playerState[k - 1];
-// jmarshall end
 				}
 				players[ j ] = player;
 
-// jmarshall
+				// jmarshall
 				playerStateSorted[j] = &playerState[i];
-// jmarshall end
 				break;
 			}
 		}
@@ -419,14 +415,13 @@ void idMultiplayerGame::UpdatePlayerRanks()
 		{
 			players[ numRankedPlayers ] = player;
 
-// jmarshall
+			// jmarshall
 			playerStateSorted[numRankedPlayers] = &playerState[i];
-// jmarshall end
 		}
 		numRankedPlayers++;
 	}
 
-// jmarshall
+	// jmarshall
 	bool clientFeedbackList[MAX_CLIENTS] = { };
 
 	// Check for rank changes.
@@ -503,7 +498,7 @@ void idMultiplayerGame::UpdatePlayerRanks()
 		}
 	}
 
-// jmarshall end
+	// jmarshall end
 
 	memcpy( rankedPlayers, players, sizeof( players ) );
 }
@@ -1487,9 +1482,9 @@ void idMultiplayerGame::NewState( gameState_t news, idPlayer* player )
 
 			teamPoints[0] = 0;
 			teamPoints[1] = 0;
-// jmarshall
+			// jmarshall
 			killsRemainingMessageState = 3;
-// jmarshall end
+			// jmarshall end
 			PlayGlobalSound( -1, SND_FIGHT );
 			matchStartedTime = gameLocal.serverTime;
 
@@ -1580,9 +1575,11 @@ void idMultiplayerGame::NewState( gameState_t news, idPlayer* player )
 			outMsg.InitWrite( msgBuf, sizeof( msgBuf ) );
 			outMsg.WriteLong( warmupEndTime );
 			session->GetActingGameStateLobbyBase().SendReliable( GAME_RELIABLE_MESSAGE_WARMUPTIME, outMsg, false );
-// jmarshall
+			
+			// jmarshall
 			PlayGlobalSound( -1, SND_PREPAREFORBATTLE );
-// jmarshall end
+			// jmarshall end
+			
 			// Reset all the scores.
 			for( i = 0; i < gameLocal.numClients; i++ )
 			{

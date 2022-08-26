@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -205,7 +206,7 @@ public:
 	void					UpdateAnimState();
 	void					SetAnimState( int channel, const char* name, int blendFrames );
 	const char* 			GetAnimState( int channel ) const;
-	idAnimState&			GetAnimStateVar( int channel );
+	idAnimState&			GetAnimStateVar( int channel ); // jmarshall
 	bool					InAnimState( int channel, const char* name ) const;
 	const char* 			WaitState() const;
 	void					SetWaitState( const char* _waitstate );

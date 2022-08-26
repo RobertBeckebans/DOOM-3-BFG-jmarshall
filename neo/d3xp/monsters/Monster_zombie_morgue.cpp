@@ -1,40 +1,66 @@
-// Monster_zombie_morgue.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
 
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmMonsterZombie, rvmMonsterZombieMorgue )
+CLASS_DECLARATION( iceMonsterZombie, iceMonsterZombieMorgue )
 END_CLASS
 
 /*
 =================
-rvmMonsterZombieMorgue::Init
+iceMonsterZombieMorgue::Init
 =================
 */
-void rvmMonsterZombieMorgue::Init()
+void iceMonsterZombieMorgue::Init()
 {
 
 }
 
 /*
 =================
-rvmMonsterZombieMorgue::AI_Begin
+iceMonsterZombieMorgue::AI_Begin
 =================
 */
-void rvmMonsterZombieMorgue::AI_Begin()
+void iceMonsterZombieMorgue::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }
 
 /*
 =====================
-rvmMonsterZombieMorgue::state_Begin
+iceMonsterZombieMorgue::state_Begin
 =====================
 */
-stateResult_t rvmMonsterZombieMorgue::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterZombieMorgue::state_Begin( stateParms_t* parms )
 {
 	Event_AnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 8 );
 	Event_AnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 8 );
@@ -46,10 +72,10 @@ stateResult_t rvmMonsterZombieMorgue::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieMorgue::state_Idle
+iceMonsterZombieMorgue::state_Idle
 =====================
 */
-stateResult_t rvmMonsterZombieMorgue::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterZombieMorgue::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -70,7 +96,7 @@ stateResult_t rvmMonsterZombieMorgue::state_Idle( stateParms_t* parms )
 monster_zombie::combat_melee
 =====================
 */
-stateResult_t rvmMonsterZombieMorgue::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterZombieMorgue::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -99,10 +125,10 @@ stateResult_t rvmMonsterZombieMorgue::combat_melee( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieMorgue::check_attacks
+iceMonsterZombieMorgue::check_attacks
 =====================
 */
-int rvmMonsterZombieMorgue::check_attacks()
+int iceMonsterZombieMorgue::check_attacks()
 {
 	int attack_flags;
 
@@ -117,10 +143,10 @@ int rvmMonsterZombieMorgue::check_attacks()
 
 /*
 =====================
-rvmMonsterZombieMorgue::do_attack
+iceMonsterZombieMorgue::do_attack
 =====================
 */
-void rvmMonsterZombieMorgue::do_attack( int attack_flags )
+void iceMonsterZombieMorgue::do_attack( int attack_flags )
 {
 	if( attack_flags & ATTACK_MELEE )
 	{

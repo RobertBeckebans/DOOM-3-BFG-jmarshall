@@ -1,22 +1,49 @@
-// Monster_zombie_sawyer.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
+
 #include "../Game_local.h"
 
 #define SAWYER_SMOKE_PARTICLES	0
 #define SAWYER_BLOOD_PARTICLES	1
 
-CLASS_DECLARATION( rvmMonsterZombie, rvmMonsterZombieSawyer )
+CLASS_DECLARATION( iceMonsterZombie, iceMonsterZombieSawyer )
 END_CLASS
 
 /*
 ====================
-rvmMonsterZombieSawyer::AI_Begin
+iceMonsterZombieSawyer::AI_Begin
 ====================
 */
-void rvmMonsterZombieSawyer::AI_Begin()
+void iceMonsterZombieSawyer::AI_Begin()
 {
 	Event_SetSmokeVisibility( ALL_PARTICLES, 0 );
 	Event_SetSmokeVisibility( SAWYER_SMOKE_PARTICLES, 1 ); // This was called as a seperate event before; possibly a optimization?
@@ -25,10 +52,10 @@ void rvmMonsterZombieSawyer::AI_Begin()
 
 /*
 =====================
-rvmMonsterZombieSawyer::state_Begin
+iceMonsterZombieSawyer::state_Begin
 =====================
 */
-stateResult_t rvmMonsterZombieSawyer::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterZombieSawyer::state_Begin( stateParms_t* parms )
 {
 	Event_AnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	Event_AnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
@@ -40,10 +67,10 @@ stateResult_t rvmMonsterZombieSawyer::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieSawyer::state_Idle
+iceMonsterZombieSawyer::state_Idle
 =====================
 */
-stateResult_t rvmMonsterZombieSawyer::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterZombieSawyer::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -61,10 +88,10 @@ stateResult_t rvmMonsterZombieSawyer::state_Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieSawyer::check_attacks
+iceMonsterZombieSawyer::check_attacks
 =====================
 */
-int rvmMonsterZombieSawyer::check_attacks()
+int iceMonsterZombieSawyer::check_attacks()
 {
 	int attack_flags;
 
@@ -79,10 +106,10 @@ int rvmMonsterZombieSawyer::check_attacks()
 
 /*
 =====================
-rvmMonsterZombieSawyer::do_attack
+iceMonsterZombieSawyer::do_attack
 =====================
 */
-void rvmMonsterZombieSawyer::do_attack( int attack_flags )
+void iceMonsterZombieSawyer::do_attack( int attack_flags )
 {
 	if( attack_flags & ATTACK_MELEE )
 	{
@@ -93,10 +120,10 @@ void rvmMonsterZombieSawyer::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterZombieSawyer::combat_melee
+iceMonsterZombieSawyer::combat_melee
 =====================
 */
-stateResult_t rvmMonsterZombieSawyer::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterZombieSawyer::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{

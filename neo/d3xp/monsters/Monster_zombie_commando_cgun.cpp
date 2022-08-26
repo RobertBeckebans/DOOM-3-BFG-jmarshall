@@ -1,5 +1,31 @@
-// Monster_zombie_commando_cgun.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
@@ -24,15 +50,15 @@
 
 #define ATTACK_ZCC_CROUCHFIRE					ATTACK_SPECIAL1
 
-CLASS_DECLARATION( idAI, rvmMonsterZombieCommandoChaingun )
+CLASS_DECLARATION( idAI, iceMonsterZombieCommandoChaingun )
 END_CLASS
 
 /*
 ========================
-rvmMonsterZombieCommandoChaingun::Init
+iceMonsterZombieCommandoChaingun::Init
 ========================
 */
-void rvmMonsterZombieCommandoChaingun::Init()
+void iceMonsterZombieCommandoChaingun::Init()
 {
 	fire.LinkTo( scriptObject, "fire" );
 	crouch_fire.LinkTo( scriptObject, "crouch_fire" );
@@ -46,10 +72,10 @@ void rvmMonsterZombieCommandoChaingun::Init()
 
 /*
 ========================
-rvmMonsterZombieCommandoChaingun::AI_Begin
+iceMonsterZombieCommandoChaingun::AI_Begin
 ========================
 */
-void rvmMonsterZombieCommandoChaingun::AI_Begin()
+void iceMonsterZombieCommandoChaingun::AI_Begin()
 {
 	run_distance = ZOMBIE_CGUN_RUNDISTANCE;
 	walk_turn = ZOMBIE_CGUN_WALKTURN;
@@ -59,10 +85,10 @@ void rvmMonsterZombieCommandoChaingun::AI_Begin()
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::state_Begin
+iceMonsterZombieCommandoChaingun::state_Begin
 =====================
 */
-stateResult_t rvmMonsterZombieCommandoChaingun::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterZombieCommandoChaingun::state_Begin( stateParms_t* parms )
 {
 	fire = false;
 	crouch_fire = false;
@@ -78,10 +104,10 @@ stateResult_t rvmMonsterZombieCommandoChaingun::state_Begin( stateParms_t* parms
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::state_Idle
+iceMonsterZombieCommandoChaingun::state_Idle
 =====================
 */
-stateResult_t rvmMonsterZombieCommandoChaingun::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterZombieCommandoChaingun::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -103,10 +129,10 @@ stateResult_t rvmMonsterZombieCommandoChaingun::state_Idle( stateParms_t* parms 
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::do_attack
+iceMonsterZombieCommandoChaingun::do_attack
 =====================
 */
-void rvmMonsterZombieCommandoChaingun::do_attack( int attack_flags )
+void iceMonsterZombieCommandoChaingun::do_attack( int attack_flags )
 {
 	nextNoFOVAttack = gameLocal.SysScriptTime() + ZOMBIE_CGUN_NOFOVTIME;
 	if( attack_flags & ATTACK_DODGE_LEFT )
@@ -121,7 +147,7 @@ void rvmMonsterZombieCommandoChaingun::do_attack( int attack_flags )
 	else if( attack_flags & ATTACK_COMBAT_NODE )
 	{
 		//combat_ainode(combat_node);
-		gameLocal.Error( "rvmMonsterZombieSecurityPistol::CombatAINode\n" );
+		gameLocal.Error( "iceMonsterZombieSecurityPistol::CombatAINode\n" );
 	}
 	else if( attack_flags & ATTACK_MISSILE )
 	{
@@ -138,10 +164,10 @@ void rvmMonsterZombieCommandoChaingun::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::check_attacks
+iceMonsterZombieCommandoChaingun::check_attacks
 =====================
 */
-int rvmMonsterZombieCommandoChaingun::check_attacks()
+int iceMonsterZombieCommandoChaingun::check_attacks()
 {
 	float currentTime;
 	int attack_flags;
@@ -225,10 +251,10 @@ int rvmMonsterZombieCommandoChaingun::check_attacks()
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::stand_attack
+iceMonsterZombieCommandoChaingun::stand_attack
 =====================
 */
-stateResult_t rvmMonsterZombieCommandoChaingun::stand_attack( stateParms_t* parms )
+stateResult_t iceMonsterZombieCommandoChaingun::stand_attack( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -341,10 +367,10 @@ done:
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::crouch_attack
+iceMonsterZombieCommandoChaingun::crouch_attack
 =====================
 */
-stateResult_t rvmMonsterZombieCommandoChaingun::crouch_attack( stateParms_t* parms )
+stateResult_t iceMonsterZombieCommandoChaingun::crouch_attack( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -419,10 +445,10 @@ done:
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::combat_dodge_left
+iceMonsterZombieCommandoChaingun::combat_dodge_left
 =====================
 */
-stateResult_t rvmMonsterZombieCommandoChaingun::combat_dodge_left( stateParms_t* parms )
+stateResult_t iceMonsterZombieCommandoChaingun::combat_dodge_left( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -447,10 +473,10 @@ stateResult_t rvmMonsterZombieCommandoChaingun::combat_dodge_left( stateParms_t*
 
 /*
 =====================
-rvmMonsterZombieCommandoChaingun::combat_dodge_right
+iceMonsterZombieCommandoChaingun::combat_dodge_right
 =====================
 */
-stateResult_t rvmMonsterZombieCommandoChaingun::combat_dodge_right( stateParms_t* parms )
+stateResult_t iceMonsterZombieCommandoChaingun::combat_dodge_right( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{

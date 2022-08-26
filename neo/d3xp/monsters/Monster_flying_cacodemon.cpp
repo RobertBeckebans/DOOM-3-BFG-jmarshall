@@ -1,5 +1,31 @@
-// Monster_flying_cacodemon.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
@@ -9,34 +35,34 @@
 #define CACO_ATTACK_RATE	3
 #define CACO_NOFOVTIME		4
 
-CLASS_DECLARATION( idAI, rvmMonsterFlyingCacodemon )
+CLASS_DECLARATION( idAI, iceMonsterFlyingCacodemon )
 END_CLASS
 
 /*
 =================
-rvmMonsterFlyingCacodemon::Init
+iceMonsterFlyingCacodemon::Init
 =================
 */
-void rvmMonsterFlyingCacodemon::Init()
+void iceMonsterFlyingCacodemon::Init()
 {
 }
 
 /*
 =================
-rvmMonsterFlyingCacodemon::AI_Begin
+iceMonsterFlyingCacodemon::AI_Begin
 =================
 */
-void rvmMonsterFlyingCacodemon::AI_Begin()
+void iceMonsterFlyingCacodemon::AI_Begin()
 {
 	Event_SetState( "state_Idle" );
 }
 
 /*
 =====================
-rvmMonsterFlyingCacodemon::state_Begin
+iceMonsterFlyingCacodemon::state_Begin
 =====================
 */
-stateResult_t rvmMonsterFlyingCacodemon::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterFlyingCacodemon::state_Begin( stateParms_t* parms )
 {
 	Event_SetMoveType( MOVETYPE_FLY );
 	Event_AnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 8 );
@@ -46,10 +72,10 @@ stateResult_t rvmMonsterFlyingCacodemon::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterFlyingCacodemon::state_Idle
+iceMonsterFlyingCacodemon::state_Idle
 =====================
 */
-stateResult_t rvmMonsterFlyingCacodemon::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterFlyingCacodemon::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -71,10 +97,10 @@ stateResult_t rvmMonsterFlyingCacodemon::state_Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterFlyingCacodemon::do_attack
+iceMonsterFlyingCacodemon::do_attack
 =====================
 */
-void rvmMonsterFlyingCacodemon::do_attack( int attack_flags )
+void iceMonsterFlyingCacodemon::do_attack( int attack_flags )
 {
 	nextNoFOVAttack = gameLocal.SysScriptTime() + CACO_NOFOVTIME;
 	if( attack_flags & ATTACK_COMBAT_NODE )
@@ -94,10 +120,10 @@ void rvmMonsterFlyingCacodemon::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterFlyingCacodemon::check_attacks
+iceMonsterFlyingCacodemon::check_attacks
 =====================
 */
-int rvmMonsterFlyingCacodemon::check_attacks()
+int iceMonsterFlyingCacodemon::check_attacks()
 {
 	float currentTime;
 	float canMelee;
@@ -140,7 +166,7 @@ int rvmMonsterFlyingCacodemon::check_attacks()
 monster_zombie::combat_range
 =====================
 */
-stateResult_t rvmMonsterFlyingCacodemon::combat_range( stateParms_t* parms )
+stateResult_t iceMonsterFlyingCacodemon::combat_range( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -172,7 +198,7 @@ stateResult_t rvmMonsterFlyingCacodemon::combat_range( stateParms_t* parms )
 monster_zombie::combat_melee
 =====================
 */
-stateResult_t rvmMonsterFlyingCacodemon::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterFlyingCacodemon::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{

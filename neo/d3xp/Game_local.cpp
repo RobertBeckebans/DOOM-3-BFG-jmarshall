@@ -366,7 +366,7 @@ void idGameLocal::Init()
 		return;
 	}
 
-	// load in the bot itemtable.
+	// jmarshall: load in the bot itemtable.
 	botItemTable = FindEntityDef( "bot_itemtable", false );
 	if( botItemTable == NULL )
 	{
@@ -1082,6 +1082,7 @@ void idGameLocal::LoadMap( const char* mapName, int randseed )
 		aasList[ i ]->Init( idStr( mapFileName ).SetFileExtension( aasNames[ i ] ).c_str(), mapFile->GetGeometryCRC() );
 	}
 
+	// jmarshall: aas48 for bots
 	bot_aas = GetAAS( "aas48" );
 
 	// clear the smoke particle free list
@@ -6254,7 +6255,7 @@ idGameLocal::DelayRemoveEntity
 */
 void idGameLocal::DelayRemoveEntity( idEntity* entity, int delay )
 {
-	rvmGameDelayRemoveEntry_t entry;
+	iceGameDelayRemoveEntry_t entry;
 	entry.entity = entity;
 	entry.removeTime = gameLocal.time + delay;
 	delayRemoveEntities.Append( entry );
@@ -6490,14 +6491,14 @@ void idGameLocal::AlertBots( idPlayer* player, idVec3 alert_position )
 {
 	for( int i = 0; i < MAX_CLIENTS; i++ )
 	{
-		rvmBot* bot = NULL;
+		iceBot* bot = NULL;
 
 		if( entities[i] == NULL )
 		{
 			continue;
 		}
 
-		bot = entities[i]->Cast<rvmBot>();
+		bot = entities[i]->Cast<iceBot>();
 		if( bot == NULL )
 		{
 			continue;

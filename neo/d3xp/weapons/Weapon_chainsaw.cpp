@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponChainsaw )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponChainsaw )
 END_CLASS
 
 #define CHAINSAW_FIRERATE			0.1
@@ -18,12 +18,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponChainsaw::Init
+iceWeaponChainsaw::Init
 ===============
 */
-void rvmWeaponChainsaw::Init( idWeapon* weapon )
+void iceWeaponChainsaw::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 }
@@ -31,10 +31,10 @@ void rvmWeaponChainsaw::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponChainsaw::Raise
+iceWeaponChainsaw::Raise
 ===============
 */
-stateResult_t rvmWeaponChainsaw::Raise( stateParms_t* parms )
+stateResult_t iceWeaponChainsaw::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -63,10 +63,10 @@ stateResult_t rvmWeaponChainsaw::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainsaw::Lower
+iceWeaponChainsaw::Lower
 ===============
 */
-stateResult_t rvmWeaponChainsaw::Lower( stateParms_t* parms )
+stateResult_t iceWeaponChainsaw::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -95,10 +95,10 @@ stateResult_t rvmWeaponChainsaw::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainsaw::Idle
+iceWeaponChainsaw::Idle
 ===============
 */
-stateResult_t rvmWeaponChainsaw::Idle( stateParms_t* parms )
+stateResult_t iceWeaponChainsaw::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -124,20 +124,20 @@ stateResult_t rvmWeaponChainsaw::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainsaw::Reload
+iceWeaponChainsaw::Reload
 ===============
 */
-stateResult_t rvmWeaponChainsaw::Reload( stateParms_t* parms )
+stateResult_t iceWeaponChainsaw::Reload( stateParms_t* parms )
 {
 	return SRESULT_DONE;
 }
 
 /*
 ===============
-rvmWeaponChainsaw::Fire
+iceWeaponChainsaw::Fire
 ===============
 */
-stateResult_t rvmWeaponChainsaw::Fire( stateParms_t* parms )
+stateResult_t iceWeaponChainsaw::Fire( stateParms_t* parms )
 {
 	float currentTime;
 

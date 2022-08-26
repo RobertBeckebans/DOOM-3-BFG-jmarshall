@@ -3,8 +3,9 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
-This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
 
 Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,13 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-/***********************************************************************
-
-game/ai/AI_Vagary.cpp
-
-Vagary specific AI code
-
-***********************************************************************/
 
 #include "precompiled.h"
 #pragma hdrstop
@@ -75,34 +69,34 @@ Vagary specific AI code
 #define VAGARY_IDLE_TO_TURRETATTACK	4
 #define VAGARY_TURRETATTACK_TO_IDLE	4
 
-CLASS_DECLARATION( idAI, rvmMonsterBossVagary )
+CLASS_DECLARATION( idAI, iceMonsterBossVagary )
 END_CLASS
 
 /*
 =================
-rvmMonsterDemonHellknight::Init
+iceMonsterDemonHellknight::Init
 =================
 */
-void rvmMonsterBossVagary::Init()
+void iceMonsterBossVagary::Init()
 {
 }
 
 /*
 =================
-rvmMonsterDemonHellknight::AI_Begin
+iceMonsterDemonHellknight::AI_Begin
 =================
 */
-void rvmMonsterBossVagary::AI_Begin()
+void iceMonsterBossVagary::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }
 
 /*
 =====================
-rvmMonsterBossVagary::state_Begin
+iceMonsterBossVagary::state_Begin
 =====================
 */
-stateResult_t rvmMonsterBossVagary::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterBossVagary::state_Begin( stateParms_t* parms )
 {
 	Event_AnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	Event_AnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
@@ -114,10 +108,10 @@ stateResult_t rvmMonsterBossVagary::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterBossVagary::state_Idle
+iceMonsterBossVagary::state_Idle
 =====================
 */
-stateResult_t rvmMonsterBossVagary::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterBossVagary::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -139,10 +133,10 @@ stateResult_t rvmMonsterBossVagary::state_Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterBossVagary::do_attack
+iceMonsterBossVagary::do_attack
 =====================
 */
-void rvmMonsterBossVagary::do_attack( int attack_flags )
+void iceMonsterBossVagary::do_attack( int attack_flags )
 {
 	nextNoFOVAttack = gameLocal.SysScriptTime() + VAGARY_NOFOVTIME;
 	if( attack_flags & ATTACK_DODGE_LEFT )
@@ -157,7 +151,7 @@ void rvmMonsterBossVagary::do_attack( int attack_flags )
 	else if( attack_flags & ATTACK_COMBAT_NODE )
 	{
 		//combat_ainode(combat_node);
-		gameLocal.Error( "rvmMonsterBossVagary::CombatAINode\n" );
+		gameLocal.Error( "iceMonsterBossVagary::CombatAINode\n" );
 	}
 	else if( attack_flags & ATTACK_MELEE )
 	{
@@ -173,10 +167,10 @@ void rvmMonsterBossVagary::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterBossVagary::combat_range
+iceMonsterBossVagary::combat_range
 =====================
 */
-stateResult_t rvmMonsterBossVagary::combat_range( stateParms_t* parms )
+stateResult_t iceMonsterBossVagary::combat_range( stateParms_t* parms )
 {
 	if( parms->stage == 10 )
 	{
@@ -264,10 +258,10 @@ stateResult_t rvmMonsterBossVagary::combat_range( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterBossVagary::combat_melee
+iceMonsterBossVagary::combat_melee
 =====================
 */
-stateResult_t rvmMonsterBossVagary::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterBossVagary::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -292,10 +286,10 @@ stateResult_t rvmMonsterBossVagary::combat_melee( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterBossVagary::combat_dodge_left
+iceMonsterBossVagary::combat_dodge_left
 =====================
 */
-stateResult_t rvmMonsterBossVagary::combat_dodge_left( stateParms_t* parms )
+stateResult_t iceMonsterBossVagary::combat_dodge_left( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -320,10 +314,10 @@ stateResult_t rvmMonsterBossVagary::combat_dodge_left( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterBossVagary::combat_dodge_right
+iceMonsterBossVagary::combat_dodge_right
 =====================
 */
-stateResult_t rvmMonsterBossVagary::combat_dodge_right( stateParms_t* parms )
+stateResult_t iceMonsterBossVagary::combat_dodge_right( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -349,10 +343,10 @@ stateResult_t rvmMonsterBossVagary::combat_dodge_right( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterBossVagary::check_attacks
+iceMonsterBossVagary::check_attacks
 =====================
 */
-int rvmMonsterBossVagary::check_attacks()
+int iceMonsterBossVagary::check_attacks()
 {
 	float canMelee;
 	float currentTime;
@@ -416,10 +410,10 @@ int rvmMonsterBossVagary::check_attacks()
 
 /*
 ================
-rvmMonsterBossVagary::ChooseObjectToThrow
+iceMonsterBossVagary::ChooseObjectToThrow
 ================
 */
-idEntity* rvmMonsterBossVagary::ChooseObjectToThrow( const idVec3& mins, const idVec3& maxs, float speed, float minDist, float offset )
+idEntity* iceMonsterBossVagary::ChooseObjectToThrow( const idVec3& mins, const idVec3& maxs, float speed, float minDist, float offset )
 {
 	idEntity* 	ent;
 	idEntity* 	entityList[ MAX_GENTITIES ];
@@ -487,10 +481,10 @@ idEntity* rvmMonsterBossVagary::ChooseObjectToThrow( const idVec3& mins, const i
 
 /*
 ================
-rvmMonsterBossVagary::ThrowObjectAtEnemy
+iceMonsterBossVagary::ThrowObjectAtEnemy
 ================
 */
-void rvmMonsterBossVagary::ThrowObjectAtEnemy( idEntity* ent, float speed )
+void iceMonsterBossVagary::ThrowObjectAtEnemy( idEntity* ent, float speed )
 {
 	idVec3		vel;
 	idEntity*	enemyEnt;

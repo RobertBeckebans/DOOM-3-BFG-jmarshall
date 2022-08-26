@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponHandgrenade )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponHandgrenade )
 END_CLASS
 
 #define HANDGRENADE_MINRELEASETIME		0.05
@@ -25,12 +25,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponHandgrenade::Init
+iceWeaponHandgrenade::Init
 ===============
 */
-void rvmWeaponHandgrenade::Init( idWeapon* weapon )
+void iceWeaponHandgrenade::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	projectile = NULL;
 	spread = owner->GetFloatKey( "spread" );
@@ -44,10 +44,10 @@ void rvmWeaponHandgrenade::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponHandgrenade::GrenadeNade
+iceWeaponHandgrenade::GrenadeNade
 ===============
 */
-void rvmWeaponHandgrenade::GrenadeNade()
+void iceWeaponHandgrenade::GrenadeNade()
 {
 	show_grenade = true;
 	UpdateSkin();
@@ -55,10 +55,10 @@ void rvmWeaponHandgrenade::GrenadeNade()
 
 /*
 ===============
-rvmWeaponHandgrenade::GrenadeNoNade
+iceWeaponHandgrenade::GrenadeNoNade
 ===============
 */
-void rvmWeaponHandgrenade::GrenadeNoNade()
+void iceWeaponHandgrenade::GrenadeNoNade()
 {
 	show_grenade = false;
 	UpdateSkin();
@@ -66,10 +66,10 @@ void rvmWeaponHandgrenade::GrenadeNoNade()
 
 /*
 ===============
-rvmWeaponHandgrenade::GrenadeNoNade
+iceWeaponHandgrenade::GrenadeNoNade
 ===============
 */
-void rvmWeaponHandgrenade::UpdateSkin()
+void iceWeaponHandgrenade::UpdateSkin()
 {
 	if( !show_grenade )
 	{
@@ -98,10 +98,10 @@ void rvmWeaponHandgrenade::UpdateSkin()
 
 /*
 ===============
-rvmWeaponHandgrenade::Raise
+iceWeaponHandgrenade::Raise
 ===============
 */
-stateResult_t rvmWeaponHandgrenade::Raise( stateParms_t* parms )
+stateResult_t iceWeaponHandgrenade::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -130,10 +130,10 @@ stateResult_t rvmWeaponHandgrenade::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponHandgrenade::Lower
+iceWeaponHandgrenade::Lower
 ===============
 */
-stateResult_t rvmWeaponHandgrenade::Lower( stateParms_t* parms )
+stateResult_t iceWeaponHandgrenade::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -162,10 +162,10 @@ stateResult_t rvmWeaponHandgrenade::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponHandgrenade::Idle
+iceWeaponHandgrenade::Idle
 ===============
 */
-stateResult_t rvmWeaponHandgrenade::Idle( stateParms_t* parms )
+stateResult_t iceWeaponHandgrenade::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -190,10 +190,10 @@ stateResult_t rvmWeaponHandgrenade::Idle( stateParms_t* parms )
 }
 /*
 ===============
-rvmWeaponHandgrenade::OwnerDied
+iceWeaponHandgrenade::OwnerDied
 ===============
 */
-void rvmWeaponHandgrenade::OwnerDied()
+void iceWeaponHandgrenade::OwnerDied()
 {
 	float time_held;
 
@@ -212,10 +212,10 @@ void rvmWeaponHandgrenade::OwnerDied()
 
 /*
 ===============
-rvmWeaponHandgrenade::Fire
+iceWeaponHandgrenade::Fire
 ===============
 */
-stateResult_t rvmWeaponHandgrenade::Fire( stateParms_t* parms )
+stateResult_t iceWeaponHandgrenade::Fire( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -333,20 +333,20 @@ stateResult_t rvmWeaponHandgrenade::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponHandgrenade::Reload
+iceWeaponHandgrenade::Reload
 ===============
 */
-stateResult_t rvmWeaponHandgrenade::Reload( stateParms_t* parms )
+stateResult_t iceWeaponHandgrenade::Reload( stateParms_t* parms )
 {
 	return SRESULT_DONE;
 }
 
 /*
 ===============
-rvmWeaponHandgrenade::ExplodeInHand
+iceWeaponHandgrenade::ExplodeInHand
 ===============
 */
-void rvmWeaponHandgrenade::ExplodeInHand()
+void iceWeaponHandgrenade::ExplodeInHand()
 {
 	idStr	entname;
 	idEntity* explosion;

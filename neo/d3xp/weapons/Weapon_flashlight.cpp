@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponFlashlight )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponFlashlight )
 END_CLASS
 
 // blend times
@@ -20,12 +20,12 @@ END_CLASS
 
 /*
 ================
-rvmWeaponFlashlight::Init
+iceWeaponFlashlight::Init
 ================
 */
-void rvmWeaponFlashlight::Init( idWeapon* weapon )
+void iceWeaponFlashlight::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	skin_on = owner->GetKey( "skin_on" );
 	skin_on_invis = owner->GetKey( "skin_on_invis" );
@@ -44,20 +44,20 @@ void rvmWeaponFlashlight::Init( idWeapon* weapon )
 
 /*
 ================
-rvmWeaponFlashlight::UpdateLightIntensity
+iceWeaponFlashlight::UpdateLightIntensity
 ================
 */
-void rvmWeaponFlashlight::UpdateLightIntensity()
+void iceWeaponFlashlight::UpdateLightIntensity()
 {
 	// TODO this has to interact with scripts somehow
 }
 
 /*
 ================
-rvmWeaponFlashlight::UpdateSkin
+iceWeaponFlashlight::UpdateSkin
 ================
 */
-void rvmWeaponFlashlight::UpdateSkin()
+void iceWeaponFlashlight::UpdateSkin()
 {
 	if( on && ( intensity > FLASHLIGHT_MIN_SKIN_INTENSITY ) )
 	{
@@ -85,10 +85,10 @@ void rvmWeaponFlashlight::UpdateSkin()
 
 /*
 ================
-rvmWeaponFlashlight::Raise
+iceWeaponFlashlight::Raise
 ================
 */
-stateResult_t rvmWeaponFlashlight::Raise( stateParms_t* parms )
+stateResult_t iceWeaponFlashlight::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -116,10 +116,10 @@ stateResult_t rvmWeaponFlashlight::Raise( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFlashlight::Lower
+iceWeaponFlashlight::Lower
 ================
 */
-stateResult_t rvmWeaponFlashlight::Lower( stateParms_t* parms )
+stateResult_t iceWeaponFlashlight::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -148,10 +148,10 @@ stateResult_t rvmWeaponFlashlight::Lower( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFlashlight::Idle
+iceWeaponFlashlight::Idle
 ================
 */
-stateResult_t rvmWeaponFlashlight::Idle( stateParms_t* parms )
+stateResult_t iceWeaponFlashlight::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -177,10 +177,10 @@ stateResult_t rvmWeaponFlashlight::Idle( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFlashlight::Fire
+iceWeaponFlashlight::Fire
 ================
 */
-stateResult_t rvmWeaponFlashlight::Fire( stateParms_t* parms )
+stateResult_t iceWeaponFlashlight::Fire( stateParms_t* parms )
 {
 	enum FIRE_State
 	{
@@ -215,10 +215,10 @@ stateResult_t rvmWeaponFlashlight::Fire( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFlashlight::Reload
+iceWeaponFlashlight::Reload
 ================
 */
-stateResult_t rvmWeaponFlashlight::Reload( stateParms_t* parms )
+stateResult_t iceWeaponFlashlight::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{

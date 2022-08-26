@@ -3,10 +3,10 @@
 
 #pragma once
 
-class rvmWeaponHandgrenade : public rvmWeaponObject
+class iceWeaponHandgrenade : public iceWeaponObject
 {
 public:
-	CLASS_PROTOTYPE( rvmWeaponHandgrenade );
+	CLASS_PROTOTYPE( iceWeaponHandgrenade );
 
 	virtual void			Init( idWeapon* weapon );
 	virtual void			OwnerDied() override;

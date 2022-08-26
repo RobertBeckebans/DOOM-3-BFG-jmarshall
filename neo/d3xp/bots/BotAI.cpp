@@ -1,5 +1,31 @@
-// BotAI.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
@@ -8,17 +34,17 @@
 
 #define IDEAL_ATTACKDIST			140
 
-int	rvmBot::WP_MACHINEGUN = -1;
-int	rvmBot::WP_SHOTGUN = -1;
-int	rvmBot::WP_PLASMAGUN = -1;
-int	rvmBot::WP_ROCKET_LAUNCHER = -1;
+int	iceBot::WP_MACHINEGUN = -1;
+int	iceBot::WP_SHOTGUN = -1;
+int	iceBot::WP_PLASMAGUN = -1;
+int	iceBot::WP_ROCKET_LAUNCHER = -1;
 
 /*
 =========================
-rvmBot::BotIsDead
+iceBot::BotIsDead
 =========================
 */
-bool rvmBot::BotIsDead( bot_state_t* bs )
+bool iceBot::BotIsDead( bot_state_t* bs )
 {
 	idPlayer* player = gameLocal.GetClientByNum( bs->client );
 	if( player->health <= 0 )
@@ -31,10 +57,10 @@ bool rvmBot::BotIsDead( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotReachedGoal
+iceBot::BotReachedGoal
 ==================
 */
-bool rvmBot::BotReachedGoal( bot_state_t* bs, bot_goal_t* goal )
+bool iceBot::BotReachedGoal( bot_state_t* bs, bot_goal_t* goal )
 {
 	if( goal->flags & GFL_ITEM )
 	{
@@ -66,10 +92,10 @@ bool rvmBot::BotReachedGoal( bot_state_t* bs, bot_goal_t* goal )
 
 /*
 ==================
-rvmBot::BotChooseWeapon
+iceBot::BotChooseWeapon
 ==================
 */
-void rvmBot::BotChooseWeapon( bot_state_t* bs )
+void iceBot::BotChooseWeapon( bot_state_t* bs )
 {
 	int newweaponnum;
 
@@ -94,10 +120,10 @@ void rvmBot::BotChooseWeapon( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotGetItemLongTermGoal
+iceBot::BotGetItemLongTermGoal
 ==================
 */
-int rvmBot::BotGetItemLongTermGoal( bot_state_t* bs, int tfl, bot_goal_t* goal )
+int iceBot::BotGetItemLongTermGoal( bot_state_t* bs, int tfl, bot_goal_t* goal )
 {
 	//if the bot has no goal
 	if( !botGoalManager.BotGetTopGoal( bs->gs, goal ) )
@@ -173,10 +199,10 @@ int rvmBot::BotGetItemLongTermGoal( bot_state_t* bs, int tfl, bot_goal_t* goal )
 
 /*
 ==================
-rvmBot::EntityIsDead
+iceBot::EntityIsDead
 ==================
 */
-bool rvmBot::EntityIsDead( idEntity* entity )
+bool iceBot::EntityIsDead( idEntity* entity )
 {
 	{
 		idPlayer* player = entity->Cast<idPlayer>();
@@ -195,7 +221,7 @@ BotEntityVisibleTest
 returns visibility in the range [0, 1] taking fog and water surfaces into account
 ==================
 */
-float rvmBot::BotEntityVisibleTest( int viewer, idVec3 eye, idAngles viewangles, float fov, int ent, bool allowHeightTest )
+float iceBot::BotEntityVisibleTest( int viewer, idVec3 eye, idAngles viewangles, float fov, int ent, bool allowHeightTest )
 {
 	int i, contents_mask, passent, hitent, infog, inwater, otherinfog, pc;
 	float squaredfogdist, waterfactor, vis, bestvis;
@@ -349,20 +375,20 @@ float rvmBot::BotEntityVisibleTest( int viewer, idVec3 eye, idAngles viewangles,
 
 /*
 ==================
-rvmBot::BotEntityVisible
+iceBot::BotEntityVisible
 ==================
 */
-float rvmBot::BotEntityVisible( int viewer, idVec3 eye, idAngles viewangles, float fov, int ent )
+float iceBot::BotEntityVisible( int viewer, idVec3 eye, idAngles viewangles, float fov, int ent )
 {
 	return BotEntityVisibleTest( viewer, eye, viewangles, fov, ent, true );
 }
 
 /*
 ==================
-rvmBot::BotUpdateBattleInventory
+iceBot::BotUpdateBattleInventory
 ==================
 */
-void rvmBot::BotUpdateBattleInventory( bot_state_t* bs, int enemy )
+void iceBot::BotUpdateBattleInventory( bot_state_t* bs, int enemy )
 {
 	idVec3 dir;
 	idEntity* entinfo;
@@ -378,10 +404,10 @@ void rvmBot::BotUpdateBattleInventory( bot_state_t* bs, int enemy )
 
 /*
 ==================
-rvmBot::BotAggression
+iceBot::BotAggression
 ==================
 */
-float rvmBot::BotAggression( bot_state_t* bs )
+float iceBot::BotAggression( bot_state_t* bs )
 {
 	//if the bot has quad
 	if( bs->inventory[INVENTORY_QUAD] )
@@ -467,10 +493,10 @@ float rvmBot::BotAggression( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotWantsToRetreat
+iceBot::BotWantsToRetreat
 ==================
 */
-int rvmBot::BotWantsToRetreat( bot_state_t* bs )
+int iceBot::BotWantsToRetreat( bot_state_t* bs )
 {
 	if( BotAggression( bs ) < 50 )
 	{
@@ -481,10 +507,10 @@ int rvmBot::BotWantsToRetreat( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotBattleUseItems
+iceBot::BotBattleUseItems
 ==================
 */
-void rvmBot::BotBattleUseItems( bot_state_t* bs )
+void iceBot::BotBattleUseItems( bot_state_t* bs )
 {
 	if( bs->inventory[INVENTORY_HEALTH] < 40 )
 	{
@@ -505,10 +531,10 @@ void rvmBot::BotBattleUseItems( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotFindEnemy
+iceBot::BotFindEnemy
 ==================
 */
-int rvmBot::BotFindEnemy( bot_state_t* bs, int curenemy )
+int iceBot::BotFindEnemy( bot_state_t* bs, int curenemy )
 {
 	int i, healthdecrease;
 	float f, alertness, easyfragger, vis;
@@ -687,10 +713,10 @@ int rvmBot::BotFindEnemy( bot_state_t* bs, int curenemy )
 
 /*
 ==================
-rvmBot::BotMoveToGoal
+iceBot::BotMoveToGoal
 ==================
 */
-void rvmBot::BotMoveToGoal( bot_state_t* bs, bot_goal_t* goal )
+void iceBot::BotMoveToGoal( bot_state_t* bs, bot_goal_t* goal )
 {
 	bs->currentGoal = *goal;
 	bs->currentGoal.framenum = gameLocal.framenum;
@@ -698,10 +724,10 @@ void rvmBot::BotMoveToGoal( bot_state_t* bs, bot_goal_t* goal )
 
 /*
 ==================
-rvmBot::BotAimAtEnemy
+iceBot::BotAimAtEnemy
 ==================
 */
-void rvmBot::BotAimAtEnemy( bot_state_t* bs )
+void iceBot::BotAimAtEnemy( bot_state_t* bs )
 {
 	int i, enemyvisible;
 	float dist, f, aim_skill, aim_accuracy, speed, reactiontime;
@@ -1087,10 +1113,10 @@ void rvmBot::BotAimAtEnemy( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotWantsToChase
+iceBot::BotWantsToChase
 ==================
 */
-bool rvmBot::BotWantsToChase( bot_state_t* bs )
+bool iceBot::BotWantsToChase( bot_state_t* bs )
 {
 	if( BotAggression( bs ) > 50 )
 	{
@@ -1103,10 +1129,10 @@ bool rvmBot::BotWantsToChase( bot_state_t* bs )
 
 /*
 ==================
-rvmBot::BotNearbyGoal
+iceBot::BotNearbyGoal
 ==================
 */
-int rvmBot::BotNearbyGoal( bot_state_t* bs, int tfl, bot_goal_t* ltg, float range )
+int iceBot::BotNearbyGoal( bot_state_t* bs, int tfl, bot_goal_t* ltg, float range )
 {
 	int ret;
 
@@ -1133,10 +1159,10 @@ int rvmBot::BotNearbyGoal( bot_state_t* bs, int tfl, bot_goal_t* ltg, float rang
 
 /*
 =======================
-rvmBot::BotGetRandomPointNearPosition
+iceBot::BotGetRandomPointNearPosition
 =======================
 */
-void rvmBot::BotGetRandomPointNearPosition( idVec3 point, idVec3& randomPoint, float radius )
+void iceBot::BotGetRandomPointNearPosition( idVec3 point, idVec3& randomPoint, float radius )
 {
 	idAAS* aas = gameLocal.GetBotAAS();
 	idAASFile* file = aas->GetAASFile();
@@ -1153,12 +1179,12 @@ void rvmBot::BotGetRandomPointNearPosition( idVec3 point, idVec3& randomPoint, f
 
 /*
 =======================
-rvmBot::BotMoveInRandomDirection
+iceBot::BotMoveInRandomDirection
 =======================
 */
-int rvmBot::BotMoveInRandomDirection( bot_state_t* bs )
+int iceBot::BotMoveInRandomDirection( bot_state_t* bs )
 {
-	rvmBot* ent = gameLocal.entities[bs->client]->Cast<rvmBot>();
+	iceBot* ent = gameLocal.entities[bs->client]->Cast<iceBot>();
 
 	//ent->ResetPathFinding();
 
@@ -1186,10 +1212,10 @@ int rvmBot::BotMoveInRandomDirection( bot_state_t* bs )
 
 /*
 ============
-rvmBot::ShowHideArea
+iceBot::ShowHideArea
 ============
 */
-void rvmBot::MoveToCoverPoint()
+void iceBot::MoveToCoverPoint()
 {
 	int areaNum, numObstacles;
 	idVec3 target;
@@ -1214,10 +1240,10 @@ void rvmBot::MoveToCoverPoint()
 
 /*
 ==================
-rvmBot::BotCheckAttack
+iceBot::BotCheckAttack
 ==================
 */
-void rvmBot::BotCheckAttack( bot_state_t* bs )
+void iceBot::BotCheckAttack( bot_state_t* bs )
 {
 	float points, reactiontime, fov, firethrottle;
 	int attackentity;

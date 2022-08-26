@@ -3,10 +3,10 @@
 
 #pragma once
 
-class rvmWeaponMachineGun : public rvmWeaponObject
+class iceWeaponMachineGun : public iceWeaponObject
 {
 public:
-	CLASS_PROTOTYPE( rvmWeaponMachineGun );
+	CLASS_PROTOTYPE( iceWeaponMachineGun );
 
 	virtual void			Init( idWeapon* weapon );
 

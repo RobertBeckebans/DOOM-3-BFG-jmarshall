@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponDoubleShotgun )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponDoubleShotgun )
 END_CLASS
 
 
@@ -43,22 +43,22 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponDoubleShotgun::Init
+iceWeaponDoubleShotgun::Init
 ===============
 */
-void rvmWeaponDoubleShotgun::Init( idWeapon* weapon )
+void iceWeaponDoubleShotgun::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 }
 
 /*
 ===============
-rvmWeaponDoubleShotgun::Raise
+iceWeaponDoubleShotgun::Raise
 ===============
 */
-stateResult_t rvmWeaponDoubleShotgun::Raise( stateParms_t* parms )
+stateResult_t iceWeaponDoubleShotgun::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -87,10 +87,10 @@ stateResult_t rvmWeaponDoubleShotgun::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponDoubleShotgun::Lower
+iceWeaponDoubleShotgun::Lower
 ===============
 */
-stateResult_t rvmWeaponDoubleShotgun::Lower( stateParms_t* parms )
+stateResult_t iceWeaponDoubleShotgun::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -119,10 +119,10 @@ stateResult_t rvmWeaponDoubleShotgun::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponDoubleShotgun::Idle
+iceWeaponDoubleShotgun::Idle
 ===============
 */
-stateResult_t rvmWeaponDoubleShotgun::Idle( stateParms_t* parms )
+stateResult_t iceWeaponDoubleShotgun::Idle( stateParms_t* parms )
 {
 	//float currentTime = 0;
 	float clip_size;
@@ -162,10 +162,10 @@ stateResult_t rvmWeaponDoubleShotgun::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponDoubleShotgun::Fire
+iceWeaponDoubleShotgun::Fire
 ===============
 */
-stateResult_t rvmWeaponDoubleShotgun::Fire( stateParms_t* parms )
+stateResult_t iceWeaponDoubleShotgun::Fire( stateParms_t* parms )
 {
 	int ammoClip = owner->AmmoInClip();
 
@@ -212,10 +212,10 @@ stateResult_t rvmWeaponDoubleShotgun::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponDoubleShotgun::Reload
+iceWeaponDoubleShotgun::Reload
 ===============
 */
-stateResult_t rvmWeaponDoubleShotgun::Reload( stateParms_t* parms )
+stateResult_t iceWeaponDoubleShotgun::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{
@@ -243,10 +243,10 @@ stateResult_t rvmWeaponDoubleShotgun::Reload( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponDoubleShotgun::EjectBrass
+iceWeaponDoubleShotgun::EjectBrass
 ===============
 */
-void rvmWeaponDoubleShotgun::EjectBrass()
+void iceWeaponDoubleShotgun::EjectBrass()
 {
 
 }

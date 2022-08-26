@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -28,6 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "precompiled.h"
 #pragma hdrstop
+
 #include "Game_local.h"
 
 
@@ -490,7 +492,7 @@ idActor::idActor()
 
 	waitState			= "";
 
-	blink_anim			= NULL;
+	blink_anim			= 0;
 	blink_time			= 0;
 	blink_min			= 0;
 	blink_max			= 0;
@@ -644,15 +646,21 @@ void idActor::Spawn()
 			}
 
 			jointName = kv->GetKey();
-			if( jointName.StripLeadingOnce( "copy_joint_world " ) )
+
+			// RB: TrenchBroom interop use copy_joint_world.<name> instead so we can build this up using the FGD files
+			if( jointName.StripLeadingOnce( "copy_joint_world " ) || jointName.StripLeadingOnce( "copy_joint_world." ) )
 			{
 				copyJoint.mod = JOINTMOD_WORLD_OVERRIDE;
 			}
 			else
 			{
-				jointName.StripLeadingOnce( "copy_joint " );
+				if( !jointName.StripLeadingOnce( "copy_joint " ) )
+				{
+					jointName.StripLeadingOnce( "copy_joint." );
+				}
 				copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;
 			}
+			// RB end
 
 			copyJoint.from = animator.GetJointHandle( jointName );
 			if( copyJoint.from == INVALID_JOINT )
@@ -1447,6 +1455,8 @@ idThread* idActor::ConstructScriptObject()
 
 	// call script object's constructor
 	constructor = scriptObject.GetConstructor();
+	
+	// jmarshall
 	if( constructor )
 	{
 		//gameLocal.Error( "Missing constructor on '%s' for entity '%s'", scriptObject.GetTypeName(), name.c_str() );
@@ -1456,6 +1466,7 @@ idThread* idActor::ConstructScriptObject()
 		// just set the current function on the script.  we'll execute in the subclasses.
 		scriptThread->CallFunction( this, constructor, true );
 	}
+	// jmarshall end
 
 	return scriptThread;
 }
@@ -1510,6 +1521,7 @@ void idActor::SetState( const char* statename )
 {
 	const function_t* newState;
 
+	// jmarshall
 	if( HasNativeFunction( statename ) )
 	{
 		stateThread.SetState( statename );
@@ -1519,6 +1531,7 @@ void idActor::SetState( const char* statename )
 		newState = GetScriptFunction( statename );
 		SetState( newState );
 	}
+	// jmarshall end
 }
 
 /*
@@ -2178,7 +2191,7 @@ void idActor::SetAnimState( int channel, const char* statename, int blendFrames 
 	func = scriptObject.GetFunction( statename );
 	if( !func )
 	{
-		//assert( 0 );
+		//jmarshall assert( 0 );
 		gameLocal.Error( "Can't find function '%s' in object '%s'", statename, scriptObject.GetTypeName() );
 	}
 
@@ -2868,7 +2881,15 @@ void idActor::SetupDamageGroups()
 	while( arg )
 	{
 		groupname = arg->GetKey();
-		groupname.Strip( "damage_zone " );
+
+		// RB: TrenchBroom interop use damage_zone.<name> instead so we can build this up using the FGD files
+		//groupname.Strip( "damage_zone " );
+		if( !groupname.StripLeadingOnce( "damage_zone " ) )
+		{
+			groupname.StripLeadingOnce( "damage_zone." );
+		}
+		// RB end
+
 		animator.GetJointList( arg->GetValue(), jointList );
 		for( i = 0; i < jointList.Num(); i++ )
 		{
@@ -2892,7 +2913,15 @@ void idActor::SetupDamageGroups()
 	{
 		scale = atof( arg->GetValue() );
 		groupname = arg->GetKey();
-		groupname.Strip( "damage_scale " );
+
+		// RB: TrenchBroom interop use damage_scale.<name> instead so we can build this up using the FGD files
+		//groupname.Strip( "damage_scale " );
+		if( !groupname.StripLeadingOnce( "damage_scale " ) )
+		{
+			groupname.StripLeadingOnce( "damage_scale." );
+		}
+		// RB end
+
 		for( i = 0; i < damageScale.Num(); i++ )
 		{
 			if( damageGroups[ i ] == groupname )
@@ -3735,7 +3764,7 @@ idActor::Event_HasAnim
 */
 void idActor::Event_HasAnim( int channel, const char* animname )
 {
-	if( GetAnim( channel, animname ) != NULL )
+	if( GetAnim( channel, animname ) != 0 )
 	{
 		idThread::ReturnFloat( 1.0f );
 	}
@@ -3973,11 +4002,13 @@ idActor::Event_SetState
 */
 void idActor::Event_SetState( const char* name )
 {
+	// jmarshall begin
 	if( HasNativeFunction( name ) )
 	{
 		stateThread.SetState( name );
 		return;
 	}
+	// jmarshall end
 
 	idealState = GetScriptFunction( name );
 	if( idealState == state )

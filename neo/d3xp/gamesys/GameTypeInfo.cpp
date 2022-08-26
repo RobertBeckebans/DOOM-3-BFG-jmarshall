@@ -3914,7 +3914,7 @@ bool idDebris::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponObject::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponObject::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 88310) { // Execute
 		Execute();
@@ -3944,7 +3944,7 @@ intptr_t rvmWeaponObject::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponObject::HasNativeFunction(const char *functionName) {
+bool iceWeaponObject::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 88310) { // Execute
 		return true;
@@ -4149,6 +4149,18 @@ intptr_t idWeapon::Invoke(const char *functionName, void *param1) {
 	if(functionNameHash == 199165) { // GetDeclEntityDef
 		return (intptr_t)GetDeclEntityDef();
 	};
+	if(functionNameHash == 170742) { // AlertMonsters
+		AlertMonsters();
+		return 0;
+	};
+	if(functionNameHash == 181199) { // UpdateNozzleFx
+		UpdateNozzleFx();
+		return 0;
+	};
+	if(functionNameHash == 251065) { // UpdateFlashPosition
+		UpdateFlashPosition();
+		return 0;
+	};
 	if(functionNameHash == 135992) { // Event_Clear
 		Event_Clear();
 		return 0;
@@ -4252,18 +4264,6 @@ intptr_t idWeapon::Invoke(const char *functionName, void *param1) {
 	};
 	if(functionNameHash == 96516) { // IsLinked
 		return (intptr_t)IsLinked();
-	};
-	if(functionNameHash == 170742) { // AlertMonsters
-		AlertMonsters();
-		return 0;
-	};
-	if(functionNameHash == 181199) { // UpdateNozzleFx
-		UpdateNozzleFx();
-		return 0;
-	};
-	if(functionNameHash == 251065) { // UpdateFlashPosition
-		UpdateFlashPosition();
-		return 0;
 	};
 	if(functionNameHash == 285326) { // Event_GrabberHasTarget
 		return (intptr_t)Event_GrabberHasTarget();
@@ -4432,6 +4432,15 @@ bool idWeapon::HasNativeFunction(const char *functionName) {
 	if(functionNameHash == 199165) { // GetDeclEntityDef
 		return true;
 	};
+	if(functionNameHash == 170742) { // AlertMonsters
+		return true;
+	};
+	if(functionNameHash == 181199) { // UpdateNozzleFx
+		return true;
+	};
+	if(functionNameHash == 251065) { // UpdateFlashPosition
+		return true;
+	};
 	if(functionNameHash == 135992) { // Event_Clear
 		return true;
 	};
@@ -4511,15 +4520,6 @@ bool idWeapon::HasNativeFunction(const char *functionName) {
 		return true;
 	};
 	if(functionNameHash == 96516) { // IsLinked
-		return true;
-	};
-	if(functionNameHash == 170742) { // AlertMonsters
-		return true;
-	};
-	if(functionNameHash == 181199) { // UpdateNozzleFx
-		return true;
-	};
-	if(functionNameHash == 251065) { // UpdateFlashPosition
 		return true;
 	};
 	if(functionNameHash == 285326) { // Event_GrabberHasTarget
@@ -5141,6 +5141,10 @@ intptr_t idPlayer::Invoke(const char *functionName, void *param1) {
 		Think();
 		return 0;
 	};
+	if(functionNameHash == 205759) { // UpdateLaserSight
+		UpdateLaserSight();
+		return 0;
+	};
 	if(functionNameHash == 45590) { // Hide
 		Hide();
 		return 0;
@@ -5698,6 +5702,9 @@ bool idPlayer::HasNativeFunction(const char *functionName) {
 		return true;
 	};
 	if(functionNameHash == 61762) { // Think
+		return true;
+	};
+	if(functionNameHash == 205759) { // UpdateLaserSight
 		return true;
 	};
 	if(functionNameHash == 45590) { // Hide
@@ -8235,6 +8242,10 @@ intptr_t idAI::Invoke(const char *functionName, void *param1) {
 	if(functionNameHash == 282905) { // ConstructScriptObject
 		return (intptr_t)ConstructScriptObject();
 	};
+	if(functionNameHash == 198399) { // CallConstructor
+		CallConstructor();
+		return 0;
+	};
 	if(functionNameHash == 88222) { // AI_Begin
 		AI_Begin();
 		return 0;
@@ -8253,10 +8264,6 @@ intptr_t idAI::Invoke(const char *functionName, void *param1) {
 	};
 	if(functionNameHash == 146357) { // sight_enemy
 		sight_enemy();
-		return 0;
-	};
-	if(functionNameHash == 198399) { // CallConstructor
-		CallConstructor();
 		return 0;
 	};
 	if(functionNameHash == 107792) { // EnemyDead
@@ -8783,6 +8790,9 @@ bool idAI::HasNativeFunction(const char *functionName) {
 	if(functionNameHash == 282905) { // ConstructScriptObject
 		return true;
 	};
+	if(functionNameHash == 198399) { // CallConstructor
+		return true;
+	};
 	if(functionNameHash == 88222) { // AI_Begin
 		return true;
 	};
@@ -8796,9 +8806,6 @@ bool idAI::HasNativeFunction(const char *functionName) {
 		return true;
 	};
 	if(functionNameHash == 146357) { // sight_enemy
-		return true;
-	};
-	if(functionNameHash == 198399) { // CallConstructor
 		return true;
 	};
 	if(functionNameHash == 107792) { // EnemyDead
@@ -9227,7 +9234,7 @@ bool idCombatNode::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmAI_Follower::Invoke(const char *functionName, void *param1) {
+intptr_t iceAI_Follower::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9259,7 +9266,7 @@ intptr_t rvmAI_Follower::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmAI_Follower::HasNativeFunction(const char *functionName) {
+bool iceAI_Follower::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9289,7 +9296,7 @@ bool rvmAI_Follower::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterBossVagary::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterBossVagary::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9326,7 +9333,7 @@ intptr_t rvmMonsterBossVagary::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmMonsterBossVagary::HasNativeFunction(const char *functionName) {
+bool iceMonsterBossVagary::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9359,7 +9366,7 @@ bool rvmMonsterBossVagary::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterDemonHellknight::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterDemonHellknight::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9390,7 +9397,7 @@ intptr_t rvmMonsterDemonHellknight::Invoke(const char *functionName, void *param
 
 };
 
-bool rvmMonsterDemonHellknight::HasNativeFunction(const char *functionName) {
+bool iceMonsterDemonHellknight::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9417,7 +9424,7 @@ bool rvmMonsterDemonHellknight::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterDemonImp::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterDemonImp::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9457,7 +9464,7 @@ intptr_t rvmMonsterDemonImp::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmMonsterDemonImp::HasNativeFunction(const char *functionName) {
+bool iceMonsterDemonImp::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9493,7 +9500,7 @@ bool rvmMonsterDemonImp::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterLostSoul::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterLostSoul::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9527,7 +9534,7 @@ intptr_t rvmMonsterLostSoul::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmMonsterLostSoul::HasNativeFunction(const char *functionName) {
+bool iceMonsterLostSoul::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9557,7 +9564,7 @@ bool rvmMonsterLostSoul::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterFlyingCacodemon::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterFlyingCacodemon::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9588,7 +9595,7 @@ intptr_t rvmMonsterFlyingCacodemon::Invoke(const char *functionName, void *param
 
 };
 
-bool rvmMonsterFlyingCacodemon::HasNativeFunction(const char *functionName) {
+bool iceMonsterFlyingCacodemon::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9615,7 +9622,7 @@ bool rvmMonsterFlyingCacodemon::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterZombie::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombie::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9643,7 +9650,7 @@ intptr_t rvmMonsterZombie::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmMonsterZombie::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombie::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9667,7 +9674,7 @@ bool rvmMonsterZombie::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterZombieSawyer::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombieSawyer::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 88222) { // AI_Begin
 		AI_Begin();
@@ -9691,7 +9698,7 @@ intptr_t rvmMonsterZombieSawyer::Invoke(const char *functionName, void *param1) 
 
 };
 
-bool rvmMonsterZombieSawyer::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombieSawyer::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 88222) { // AI_Begin
 		return true;
@@ -9712,7 +9719,7 @@ bool rvmMonsterZombieSawyer::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterZombieBernie::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombieBernie::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9740,7 +9747,7 @@ intptr_t rvmMonsterZombieBernie::Invoke(const char *functionName, void *param1) 
 
 };
 
-bool rvmMonsterZombieBernie::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombieBernie::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9764,7 +9771,7 @@ bool rvmMonsterZombieBernie::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterZombieMorgue::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombieMorgue::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9792,7 +9799,7 @@ intptr_t rvmMonsterZombieMorgue::Invoke(const char *functionName, void *param1) 
 
 };
 
-bool rvmMonsterZombieMorgue::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombieMorgue::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9816,7 +9823,7 @@ bool rvmMonsterZombieMorgue::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmMonsterZombieSecurityPistol::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombieSecurityPistol::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9853,7 +9860,7 @@ intptr_t rvmMonsterZombieSecurityPistol::Invoke(const char *functionName, void *
 
 };
 
-bool rvmMonsterZombieSecurityPistol::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombieSecurityPistol::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9886,7 +9893,7 @@ bool rvmMonsterZombieSecurityPistol::HasNativeFunction(const char *functionName)
 
 };
 
-intptr_t rvmMonsterZombieCommandoTentacle::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombieCommandoTentacle::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9925,7 +9932,7 @@ intptr_t rvmMonsterZombieCommandoTentacle::Invoke(const char *functionName, void
 
 };
 
-bool rvmMonsterZombieCommandoTentacle::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombieCommandoTentacle::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -9958,7 +9965,7 @@ bool rvmMonsterZombieCommandoTentacle::HasNativeFunction(const char *functionNam
 
 };
 
-intptr_t rvmMonsterZombieCommandoChaingun::Invoke(const char *functionName, void *param1) {
+intptr_t iceMonsterZombieCommandoChaingun::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		Init();
@@ -9995,7 +10002,7 @@ intptr_t rvmMonsterZombieCommandoChaingun::Invoke(const char *functionName, void
 
 };
 
-bool rvmMonsterZombieCommandoChaingun::HasNativeFunction(const char *functionName) {
+bool iceMonsterZombieCommandoChaingun::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 48744) { // Init
 		return true;
@@ -10028,7 +10035,7 @@ bool rvmMonsterZombieCommandoChaingun::HasNativeFunction(const char *functionNam
 
 };
 
-intptr_t rvmBot::Invoke(const char *functionName, void *param1) {
+intptr_t iceBot::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 63102) { // Spawn
 		Spawn();
@@ -10083,7 +10090,7 @@ intptr_t rvmBot::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmBot::HasNativeFunction(const char *functionName) {
+bool iceBot::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 63102) { // Spawn
 		return true;
@@ -10171,7 +10178,7 @@ bool idTestModel::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponFist::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponFist::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10195,7 +10202,7 @@ intptr_t rvmWeaponFist::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponFist::HasNativeFunction(const char *functionName) {
+bool iceWeaponFist::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10219,7 +10226,7 @@ bool rvmWeaponFist::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponPistol::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponPistol::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10240,7 +10247,7 @@ intptr_t rvmWeaponPistol::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponPistol::HasNativeFunction(const char *functionName) {
+bool iceWeaponPistol::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10261,7 +10268,7 @@ bool rvmWeaponPistol::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponFlashlight::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponFlashlight::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10290,7 +10297,7 @@ intptr_t rvmWeaponFlashlight::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponFlashlight::HasNativeFunction(const char *functionName) {
+bool iceWeaponFlashlight::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10317,7 +10324,7 @@ bool rvmWeaponFlashlight::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponPDA::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponPDA::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10338,7 +10345,7 @@ intptr_t rvmWeaponPDA::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponPDA::HasNativeFunction(const char *functionName) {
+bool iceWeaponPDA::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10359,7 +10366,7 @@ bool rvmWeaponPDA::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponShotgun::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponShotgun::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10380,7 +10387,7 @@ intptr_t rvmWeaponShotgun::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponShotgun::HasNativeFunction(const char *functionName) {
+bool iceWeaponShotgun::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10401,7 +10408,7 @@ bool rvmWeaponShotgun::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponDoubleShotgun::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponDoubleShotgun::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10426,7 +10433,7 @@ intptr_t rvmWeaponDoubleShotgun::Invoke(const char *functionName, void *param1) 
 
 };
 
-bool rvmWeaponDoubleShotgun::HasNativeFunction(const char *functionName) {
+bool iceWeaponDoubleShotgun::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10450,7 +10457,7 @@ bool rvmWeaponDoubleShotgun::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponMachineGun::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponMachineGun::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10471,7 +10478,7 @@ intptr_t rvmWeaponMachineGun::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponMachineGun::HasNativeFunction(const char *functionName) {
+bool iceWeaponMachineGun::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10492,7 +10499,7 @@ bool rvmWeaponMachineGun::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponPlasmaGun::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponPlasmaGun::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10513,7 +10520,7 @@ intptr_t rvmWeaponPlasmaGun::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponPlasmaGun::HasNativeFunction(const char *functionName) {
+bool iceWeaponPlasmaGun::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10534,7 +10541,7 @@ bool rvmWeaponPlasmaGun::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponChainGun::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponChainGun::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10567,7 +10574,7 @@ intptr_t rvmWeaponChainGun::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponChainGun::HasNativeFunction(const char *functionName) {
+bool iceWeaponChainGun::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10597,7 +10604,7 @@ bool rvmWeaponChainGun::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponRocketLauncher::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponRocketLauncher::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10622,7 +10629,7 @@ intptr_t rvmWeaponRocketLauncher::Invoke(const char *functionName, void *param1)
 
 };
 
-bool rvmWeaponRocketLauncher::HasNativeFunction(const char *functionName) {
+bool iceWeaponRocketLauncher::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10646,7 +10653,7 @@ bool rvmWeaponRocketLauncher::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponBFG::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponBFG::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10671,7 +10678,7 @@ intptr_t rvmWeaponBFG::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponBFG::HasNativeFunction(const char *functionName) {
+bool iceWeaponBFG::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10695,7 +10702,7 @@ bool rvmWeaponBFG::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponHandgrenade::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponHandgrenade::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 110318) { // OwnerDied
 		OwnerDied();
@@ -10736,7 +10743,7 @@ intptr_t rvmWeaponHandgrenade::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponHandgrenade::HasNativeFunction(const char *functionName) {
+bool iceWeaponHandgrenade::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 110318) { // OwnerDied
 		return true;
@@ -10772,7 +10779,7 @@ bool rvmWeaponHandgrenade::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponChainsaw::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponChainsaw::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10793,7 +10800,7 @@ intptr_t rvmWeaponChainsaw::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponChainsaw::HasNativeFunction(const char *functionName) {
+bool iceWeaponChainsaw::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;
@@ -10814,7 +10821,7 @@ bool rvmWeaponChainsaw::HasNativeFunction(const char *functionName) {
 
 };
 
-intptr_t rvmWeaponGrabber::Invoke(const char *functionName, void *param1) {
+intptr_t iceWeaponGrabber::Invoke(const char *functionName, void *param1) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return (intptr_t)Raise((stateParms_t *)param1);
@@ -10855,7 +10862,7 @@ intptr_t rvmWeaponGrabber::Invoke(const char *functionName, void *param1) {
 
 };
 
-bool rvmWeaponGrabber::HasNativeFunction(const char *functionName) {
+bool iceWeaponGrabber::HasNativeFunction(const char *functionName) {
 	int functionNameHash = idStr::Hash(functionName);
 	if(functionNameHash == 60556) { // Raise
 		return true;

@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -170,13 +171,13 @@ const idEventDef AI_TriggerFX( "triggerFX", "ss" );
 const idEventDef AI_StartEmitter( "startEmitter", "sss", 'e' );
 const idEventDef AI_GetEmitter( "getEmitter", "s", 'e' );
 const idEventDef AI_StopEmitter( "stopEmitter", "s" );
-const idEventDef AI_checkForEnemy( "checkForEnemy", "f", 'f' );
-const idEventDef AI_isAwake( "isAIAwake", NULL, 'f' );
+const idEventDef AI_checkForEnemy( "checkForEnemy", "f", 'f' ); // jmarshall
+const idEventDef AI_isAwake( "isAIAwake", NULL, 'f' ); // jmarshall
 
 
 CLASS_DECLARATION( idActor, idAI )
-EVENT( AI_isAwake,							idAI::Event_IsAwake )
-EVENT( AI_checkForEnemy,						idAI::Event_CheckForEnemy )
+EVENT( AI_isAwake,							idAI::Event_IsAwake ) // jmarshall
+EVENT( AI_checkForEnemy,					idAI::Event_CheckForEnemy ) // jmarshall
 EVENT( EV_Activate,							idAI::Event_Activate )
 EVENT( EV_Touch,							idAI::Event_Touch )
 EVENT( AI_FindEnemy,						idAI::Event_FindEnemy )
@@ -917,7 +918,7 @@ bool idAI::MeleeAttackToJoint( const char* jointname, const char* meleeDefName )
 	idVec3			end;
 	idMat3			axis;
 	trace_t			trace;
-	idEntity* hitEnt;
+	idEntity*		hitEnt;
 
 	joint = animator.GetJointHandle( jointname );
 	if( joint == INVALID_JOINT )
@@ -968,14 +969,14 @@ bool idAI::CanBecomeSolid()
 	int			i;
 	int			num;
 	bool		returnValue = true;
-	idEntity* hit;
+	idEntity* 	hit;
 	idClipModel* cm;
-	idClipModel* clipModels[MAX_GENTITIES];
+	idClipModel* clipModels[ MAX_GENTITIES ];
 
 	num = gameLocal.clip.ClipModelsTouchingBounds( physicsObj.GetAbsBounds(), MASK_MONSTERSOLID, clipModels, MAX_GENTITIES );
 	for( i = 0; i < num; i++ )
 	{
-		cm = clipModels[i];
+		cm = clipModels[ i ];
 
 		// don't check render entities
 		if( cm->IsRenderModel() )
@@ -2067,7 +2068,7 @@ void idAI::Event_ChargeAttack( const char* damageDef )
 
 /*
 =====================
-idAI::estChargeAttack
+idAI::TestChargeAttack
 =====================
 */
 float idAI::TestChargeAttack()
@@ -2135,7 +2136,7 @@ bool idAI::TestAnimMoveTowardEnemy( const char* animname )
 	idVec3			moveVec;
 	float			yaw;
 	idVec3			delta;
-	idActor* enemyEnt;
+	idActor*		enemyEnt;
 
 	enemyEnt = enemy.GetEntity();
 	if( !enemyEnt )

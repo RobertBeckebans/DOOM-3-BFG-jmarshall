@@ -3,7 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
-Copyright (C) 2016-2017 Dustin Land
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -1487,6 +1487,9 @@ idPlayer::idPlayer():
 	lastSndHitTime			= 0;
 	lastSavingThrowTime		= 0;
 
+	laserSightHandle	= -1;
+	memset( &laserSightRenderEntity, 0, sizeof( laserSightRenderEntity ) );
+
 	weapon					= NULL;
 	primaryObjective		= NULL;
 
@@ -1731,7 +1734,7 @@ void idPlayer::SetupWeaponEntity()
 	for( w = 0; w < MAX_WEAPONS; w++ )
 	{
 		weap = spawnArgs.GetString( va( "def_weapon%d", w ) );
-		if( weap != NULL && *weap != NULL )
+		if( weap != NULL && *weap != '\0' )
 		{
 			idWeapon::CacheWeapon( weap );
 		}
@@ -1992,6 +1995,11 @@ void idPlayer::Init()
 	flashlightBattery = flashlight_batteryDrainTimeMS.GetInteger();		// fully charged
 
 	aimAssist.Init( this );
+
+	// laser sight for 3DTV
+	memset( &laserSightRenderEntity, 0, sizeof( laserSightRenderEntity ) );
+	laserSightRenderEntity.hModel = renderModelManager->FindModel( "_BEAM" );
+	laserSightRenderEntity.customShader = declManager->FindMaterial( "stereoRenderLaserSight" );
 }
 
 /*
@@ -2887,6 +2895,13 @@ void idPlayer::Restore( idRestoreGame* savefile )
 
 	aimAssist.Init( this );
 
+	laserSightHandle = -1;
+
+	// re-init the laser model
+	memset( &laserSightRenderEntity, 0, sizeof( laserSightRenderEntity ) );
+	laserSightRenderEntity.hModel = renderModelManager->FindModel( "_BEAM" );
+	laserSightRenderEntity.customShader = declManager->FindMaterial( "stereoRenderLaserSight" );
+
 	for( int i = 0; i < MAX_PLAYER_PDA; i++ )
 	{
 		savefile->ReadBool( pdaHasBeenRead[i] );
@@ -3589,7 +3604,7 @@ void idPlayer::DrawHUD( idMenuHandler_HUD* _hudManager )
 
 			idMenuScreen_HUD* hud = _hudManager->GetHud();
 
-			if( weapon.GetEntity()->ShowCrosshair() )
+			if( weapon.GetEntity()->ShowCrosshair() && !IsGameStereoRendered() )
 			{
 				if( weapon.GetEntity()->GetGrabberState() == 1 || weapon.GetEntity()->GetGrabberState() == 2 )
 				{
@@ -4102,7 +4117,7 @@ bool idPlayer::GiveItem( idItem* item, unsigned int giveFlags )
 		return false;
 	}
 
-	if( idStr::FindText( item->GetName(), "weapon_flashlight" ) > -1 )
+	if( idStr::FindText( item->GetName(), "weapon_flashlight_new" ) > -1 )
 	{
 		return false;
 	}
@@ -4687,8 +4702,8 @@ bool idPlayer::GiveInventoryItem( idDict* item, unsigned int giveFlags )
 		int powerCellCount = 0;
 		for( int j = 0; j < inventory.items.Num(); j++ )
 		{
-			idDict* tmp = inventory.items[ j ];
-			if( tmp->GetInt( "inv_powercell" ) )
+			idDict* item = inventory.items[ j ];
+			if( item->GetInt( "inv_powercell" ) )
 			{
 				powerCellCount++;
 			}
@@ -4922,7 +4937,7 @@ idDict* idPlayer::FindInventoryItem( const char* name )
 	for( int i = 0; i < inventory.items.Num(); i++ )
 	{
 		const char* iname = inventory.items[i]->GetString( "inv_name" );
-		if( iname != NULL && *iname != NULL )
+		if( iname != NULL && *iname != '\0' )
 		{
 			if( idStr::Icmp( name, iname ) == 0 )
 			{
@@ -4991,8 +5006,8 @@ void idPlayer::RemoveInventoryItem( idDict* item )
 		int powerCellCount = 0;
 		for( int j = 0; j < inventory.items.Num(); j++ )
 		{
-			idDict* tmp = inventory.items[ j ];
-			if( tmp->GetInt( "inv_powercell" ) )
+			idDict* item = inventory.items[ j ];
+			if( item->GetInt( "inv_powercell" ) )
 			{
 				powerCellCount++;
 			}
@@ -5939,7 +5954,7 @@ void idPlayer::UpdateFlashlight()
 	// always make sure the weapon is correctly setup before accessing it
 	if( !flashlight.GetEntity()->IsLinked() )
 	{
-		flashlight.GetEntity()->GetWeaponDef( "weapon_flashlight", 0 );
+		flashlight.GetEntity()->GetWeaponDef( "weapon_flashlight_new", 0 );
 		flashlight.GetEntity()->SetIsPlayerFlashlight( true );
 
 		// adjust position / orientation of flashlight
@@ -6422,7 +6437,7 @@ void idPlayer::UpdateFocus()
 	// player identification -> names to the hud
 	if( common->IsMultiplayer() && IsLocallyControlled() )
 	{
-		end = start + viewAngles.ToForward() * 768.0f;
+		idVec3 end = start + viewAngles.ToForward() * 768.0f;
 		gameLocal.clip.TracePoint( trace, start, end, MASK_SHOT_BOUNDINGBOX, this );
 		int iclient = -1;
 		if( ( trace.fraction < 1.0f ) && ( trace.c.entityNum < MAX_CLIENTS ) )
@@ -8463,7 +8478,7 @@ void idPlayer::RunPhysics_RemoteClientCorrection()
 		const float serverSpeedSquared = physicsObj.GetLinearVelocity().LengthSqr();
 		const float clientSpeedSquared = usercmd.speedSquared;
 
-		if( std::abs( serverSpeedSquared - clientSpeedSquared ) > pm_clientAuthoritative_minSpeedSquared.GetFloat() )
+		if( fabsf( serverSpeedSquared - clientSpeedSquared ) > pm_clientAuthoritative_minSpeedSquared.GetFloat() )
 		{
 			idVec3 normalizedVelocity = physicsObj.GetLinearVelocity();
 
@@ -8736,6 +8751,66 @@ bool idPlayer::HandleGuiEvents( const sysEvent_t* ev )
 	}
 
 	return handled;
+}
+
+/*
+==============
+idPlayer::UpdateLaserSight
+==============
+*/
+idCVar	g_laserSightWidth( "g_laserSightWidth", "2.0", CVAR_FLOAT | CVAR_ARCHIVE, "laser sight beam width" );
+idCVar	g_laserSightLength( "g_laserSightLength", "250", CVAR_FLOAT | CVAR_ARCHIVE, "laser sight beam length" );
+
+void idPlayer::UpdateLaserSight()
+{
+	idVec3	muzzleOrigin;
+	idMat3	muzzleAxis;
+
+	// In Multiplayer, weapon might not have been spawned yet.
+	if( weapon.GetEntity() ==  NULL )
+	{
+		return;
+	}
+
+	if( !IsGameStereoRendered() ||
+			!weapon.GetEntity()->ShowCrosshair() ||
+			AI_DEAD ||
+			weapon->IsHidden() ||
+			!weapon->GetMuzzlePositionWithHacks( muzzleOrigin, muzzleAxis ) )
+	{
+		// hide it
+		laserSightRenderEntity.allowSurfaceInViewID = -1;
+		if( laserSightHandle == -1 )
+		{
+			laserSightHandle = gameRenderWorld->AddEntityDef( &laserSightRenderEntity );
+		}
+		else
+		{
+			gameRenderWorld->UpdateEntityDef( laserSightHandle, &laserSightRenderEntity );
+		}
+		return;
+	}
+
+	// program the beam model
+
+	// only show in the player's view
+	laserSightRenderEntity.allowSurfaceInViewID = entityNumber + 1;
+	laserSightRenderEntity.axis.Identity();
+
+	laserSightRenderEntity.origin = muzzleOrigin - muzzleAxis[0] * 2.0f;
+	idVec3&	target = *reinterpret_cast<idVec3*>( &laserSightRenderEntity.shaderParms[SHADERPARM_BEAM_END_X] );
+	target = muzzleOrigin + muzzleAxis[0] * g_laserSightLength.GetFloat();
+
+	laserSightRenderEntity.shaderParms[SHADERPARM_BEAM_WIDTH] = g_laserSightWidth.GetFloat();
+
+	if( IsGameStereoRendered() && laserSightHandle == -1 )
+	{
+		laserSightHandle = gameRenderWorld->AddEntityDef( &laserSightRenderEntity );
+	}
+	else
+	{
+		gameRenderWorld->UpdateEntityDef( laserSightHandle, &laserSightRenderEntity );
+	}
 }
 
 /*
@@ -9048,6 +9123,9 @@ void idPlayer::Think()
 
 	// determine if portal sky is in pvs
 	gameLocal.portalSkyActive = gameLocal.pvs.CheckAreasForPortalSky( gameLocal.GetPlayerPVS(), GetPhysics()->GetOrigin() );
+
+	// stereo rendering laser sight that replaces the crosshair
+	UpdateLaserSight();
 
 	// Show the respawn hud message if necessary.
 	if( common->IsMultiplayer() && ( minRespawnTime != maxRespawnTime ) )
@@ -9972,7 +10050,7 @@ void idPlayer::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& di
 		// Server will deal his damage normally
 		ServerDealDamage( finalDamage, *inflictor, *attacker, dir, damageDefName, location );
 // jmarshall
-		if( attacker->IsType( rvmBot::Type ) )
+		if( attacker->IsType( iceBot::Type ) )
 		{
 			attacker->InflictedDamageEvent( this );
 		}
@@ -11477,6 +11555,9 @@ void idPlayer::ClientThink( const int curTime, const float fraction, const bool 
 
 	LinkCombat();
 
+	// stereo rendering laser sight that replaces the crosshair
+	UpdateLaserSight();
+
 	if( gameLocal.isNewFrame && IsLocallyControlled() )
 	{
 		playerView.CalculateShake();
@@ -12214,7 +12295,7 @@ void idPlayer::RemoveAllButEssentialWeapons()
 	{
 		// This list probably ought to be placed int the player's def
 		if( kv->GetValue() == "weapon_fists" || kv->GetValue() == "weapon_soulcube" || kv->GetValue() == "weapon_pda"
-				|| kv->GetValue() == "weapon_flashlight" || kv->GetValue() == "weapon_flashlight" )
+				|| kv->GetValue() == "weapon_flashlight" || kv->GetValue() == "weapon_flashlight_new" )
 		{
 			continue;
 		}

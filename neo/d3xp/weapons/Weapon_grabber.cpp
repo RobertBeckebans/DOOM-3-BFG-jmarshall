@@ -6,7 +6,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponGrabber )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponGrabber )
 END_CLASS
 
 // blend times
@@ -28,12 +28,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponGrabber::Init
+iceWeaponGrabber::Init
 ===============
 */
-void rvmWeaponGrabber::Init( idWeapon* weapon )
+void iceWeaponGrabber::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 
@@ -52,10 +52,10 @@ void rvmWeaponGrabber::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponGrabber::Raise
+iceWeaponGrabber::Raise
 ===============
 */
-stateResult_t rvmWeaponGrabber::Raise( stateParms_t* parms )
+stateResult_t iceWeaponGrabber::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -84,10 +84,10 @@ stateResult_t rvmWeaponGrabber::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponGrabber::Lower
+iceWeaponGrabber::Lower
 ===============
 */
-stateResult_t rvmWeaponGrabber::Lower( stateParms_t* parms )
+stateResult_t iceWeaponGrabber::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -115,7 +115,7 @@ stateResult_t rvmWeaponGrabber::Lower( stateParms_t* parms )
 }
 /*
 ===============
-rvmWeaponGrabber::CanFire
+iceWeaponGrabber::CanFire
 
 Original grabber logic had this, so we prevent the fire action from going unless grabState is 1 or 2.
 
@@ -127,7 +127,7 @@ if ( grabState == 1 || grabState == 2 ) {
 }
 ===============
 */
-//bool rvmWeaponGrabber::CanFire()
+//bool iceWeaponGrabber::CanFire()
 //{
 //	int grabState = owner->Event_GrabberHasTarget();
 //	return grabState == 1 || grabState == 2;
@@ -135,10 +135,10 @@ if ( grabState == 1 || grabState == 2 ) {
 
 /*
 ===============
-rvmWeaponGrabber::Idle
+iceWeaponGrabber::Idle
 ===============
 */
-stateResult_t rvmWeaponGrabber::Idle( stateParms_t* parms )
+stateResult_t iceWeaponGrabber::Idle( stateParms_t* parms )
 {
 	int grabState = 0;
 
@@ -219,10 +219,10 @@ stateResult_t rvmWeaponGrabber::Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmWeaponGrabber::StartWarningSound
+iceWeaponGrabber::StartWarningSound
 =====================
 */
-void rvmWeaponGrabber::StartWarningSound()
+void iceWeaponGrabber::StartWarningSound()
 {
 	fireStartTime = gameLocal.realClientTime;
 	warningBeep1 = false;
@@ -233,10 +233,10 @@ void rvmWeaponGrabber::StartWarningSound()
 
 /*
 =====================
-rvmWeaponGrabber::StartActive
+iceWeaponGrabber::StartActive
 =====================
 */
-void rvmWeaponGrabber::StartActive()
+void iceWeaponGrabber::StartActive()
 {
 	owner->Event_StartWeaponParticle( "barrel_upper" );
 	owner->Event_StartWeaponLight( "light_barrel_upper" );
@@ -246,10 +246,10 @@ void rvmWeaponGrabber::StartActive()
 
 /*
 =====================
-rvmWeaponGrabber::StopActive
+iceWeaponGrabber::StopActive
 =====================
 */
-void rvmWeaponGrabber::StopActive()
+void iceWeaponGrabber::StopActive()
 {
 	owner->Event_StopWeaponParticle( "barrel_upper" );
 
@@ -260,10 +260,10 @@ void rvmWeaponGrabber::StopActive()
 
 /*
 ==================== =
-rvmWeaponGrabber::UpdateGuiLight
+iceWeaponGrabber::UpdateGuiLight
 ==================== =
 */
-void rvmWeaponGrabber::UpdateGuiLight()
+void iceWeaponGrabber::UpdateGuiLight()
 {
 
 	float newState = owner->Event_GrabberHasTarget();
@@ -295,10 +295,10 @@ void rvmWeaponGrabber::UpdateGuiLight()
 
 /*
 =====================
-rvmWeaponGrabber::UpdateWarningSound
+iceWeaponGrabber::UpdateWarningSound
 =====================
 */
-void rvmWeaponGrabber::UpdateWarningSound()
+void iceWeaponGrabber::UpdateWarningSound()
 {
 	float currentTime;
 	float elapsed;
@@ -331,10 +331,10 @@ void rvmWeaponGrabber::UpdateWarningSound()
 
 /*
 ===============
-rvmWeaponGrabber::Fire
+iceWeaponGrabber::Fire
 ===============
 */
-stateResult_t rvmWeaponGrabber::Fire( stateParms_t* parms )
+stateResult_t iceWeaponGrabber::Fire( stateParms_t* parms )
 {
 	//int grabState;
 	//
@@ -391,10 +391,10 @@ stateResult_t rvmWeaponGrabber::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponGrabber::Reload
+iceWeaponGrabber::Reload
 ===============
 */
-stateResult_t rvmWeaponGrabber::Reload( stateParms_t* parms )
+stateResult_t iceWeaponGrabber::Reload( stateParms_t* parms )
 {
 	return SRESULT_DONE;
 }

@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -272,12 +273,12 @@ public:
 	void					BecomeInactive( int flags );
 	void					UpdatePVSAreas( const idVec3& pos );
 	void					BecomeReplicated();
-
+	
+// jmarshall
 	float					GetFloat( const char* key );
 	const char*				GetKey( const char* key );
 	int						GetInt( const char* key );
 	bool					GetBool( const char* key );
-// jmarshall
 	virtual void			InflictedDamageEvent( idEntity* target ) { }
 // jmarshall end
 
@@ -308,6 +309,7 @@ public:
 	void					ClearPVSAreas();
 	bool					PhysicsTeamInPVS( pvsHandle_t pvsHandle );
 
+	// jmarshall
 	virtual void			CallNativeEvent( idStr& name ) { };
 
 	// animation
@@ -445,8 +447,6 @@ public:
 		EVENT_MAXEVENTS
 	};
 
-	void					Event_StartSound( const char* soundName, int channel, int netSync );
-
 	// Called on clients in an MP game, does the actual interpolation for the entity.
 	// This function will eventually replace ClientPredictionThink completely.
 	virtual void			ClientThink( const int curTime, const float fraction, const bool predict );
@@ -521,8 +521,6 @@ public:
 		return snapshotsReceived;
 	}
 
-	void					Event_SetShaderParm( int parmnum, float value );
-
 protected:
 	renderEntity_t			renderEntity;						// used to present a model to the renderer
 	int						modelDefHandle;						// handle to static renderer model
@@ -585,7 +583,7 @@ private:
 
 	// physics
 	// initialize the default physics
-	void					InitDefaultPhysics( const idVec3& origin, const idMat3& axis );
+	void					InitDefaultPhysics( const idVec3& origin, const idMat3& axis, const idDeclEntityDef* def );
 	// update visual position from the physics
 	void					UpdateFromPhysics( bool moveBack );
 	// get physics timestep
@@ -608,6 +606,8 @@ public:
 	idStr					GetNextKey( const char* prefix, const char* lastMatch );
 // jmarshall end
 
+	idVec3					GetOriginBrushOffset() const;
+
 	void					Event_GetName();
 	void					Event_SetName( const char* name );
 	void					Event_FindTargets();
@@ -625,6 +625,7 @@ public:
 	void					Event_SetModel( const char* modelname );
 	void					Event_SetSkin( const char* skinname );
 	void					Event_GetShaderParm( int parmnum );
+	void					Event_SetShaderParm( int parmnum, float value );
 	void					Event_SetShaderParms( float parm0, float parm1, float parm2, float parm3 );
 	void					Event_SetColor( float red, float green, float blue );
 	void					Event_GetColor();
@@ -634,6 +635,7 @@ public:
 	void					Event_CacheSoundShader( const char* soundName );
 	void					Event_StartSoundShader( const char* soundName, int channel );
 	void					Event_StopSound( int channel, int netSync );
+	void					Event_StartSound( const char* soundName, int channel, int netSync );
 	void					Event_FadeSound( int channel, float to, float over );
 	void					Event_GetWorldOrigin();
 	void					Event_SetWorldOrigin( idVec3 const& org );
@@ -647,10 +649,10 @@ public:
 	void					Event_GetAngularVelocity();
 	void					Event_SetSize( const idVec3& mins, const idVec3& maxs );
 	void					Event_GetSize();
-	idVec3					GetSize();
+	idVec3					GetSize(); // jmarshall
 	void					Event_GetMins();
 	void					Event_GetMaxs();
-	bool					Touches( idEntity* ent );
+	bool					Touches( idEntity* ent ); // jmarshall
 	void					Event_Touches( idEntity* ent );
 	void					Event_SetGuiParm( const char* key, const char* val );
 	void					Event_SetGuiFloat( const char* key, float f );
@@ -661,7 +663,7 @@ public:
 	void					Event_GetFloatKey( const char* key );
 	void					Event_GetVectorKey( const char* key );
 	void					Event_GetEntityKey( const char* key );
-	idEntity*				GetEntityKey( const char* key );
+	idEntity*				GetEntityKey( const char* key ); // jmarshall
 	void					Event_RestorePosition();
 	void					Event_UpdateCameraTarget();
 	void					Event_DistanceTo( idEntity* ent );

@@ -1,5 +1,31 @@
-// Monster_flying_lostsoul.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
@@ -16,25 +42,25 @@
 #define ATTACK_LOSTSOUL_CHARGE	ATTACK_SPECIAL1
 #define ATTACK_LOSTSOUL_RETREAT	ATTACK_SPECIAL2
 
-CLASS_DECLARATION( idAI, rvmMonsterLostSoul )
+CLASS_DECLARATION( idAI, iceMonsterLostSoul )
 END_CLASS
 
 /*
 ====================
-rvmMonsterLostSoul::Init
+iceMonsterLostSoul::Init
 ====================
 */
-void rvmMonsterLostSoul::Init()
+void iceMonsterLostSoul::Init()
 {
 
 }
 
 /*
 =================
-rvmMonsterLostSoul::AI_Begin
+iceMonsterLostSoul::AI_Begin
 =================
 */
-void rvmMonsterLostSoul::AI_Begin()
+void iceMonsterLostSoul::AI_Begin()
 {
 	fly_offset = GetFloatKey( "fly_offset" );
 	Event_SetState( "state_Begin" );
@@ -42,10 +68,10 @@ void rvmMonsterLostSoul::AI_Begin()
 
 /*
 =====================
-rvmMonsterLostSoul::state_Begin
+iceMonsterLostSoul::state_Begin
 =====================
 */
-stateResult_t rvmMonsterLostSoul::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterLostSoul::state_Begin( stateParms_t* parms )
 {
 	Event_SetMoveType( MOVETYPE_FLY );
 	noMeleeTime = 0;
@@ -56,10 +82,10 @@ stateResult_t rvmMonsterLostSoul::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterLostSoul::state_Idle
+iceMonsterLostSoul::state_Idle
 =====================
 */
-stateResult_t rvmMonsterLostSoul::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterLostSoul::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -80,10 +106,10 @@ stateResult_t rvmMonsterLostSoul::state_Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterLostSoul::do_attack
+iceMonsterLostSoul::do_attack
 =====================
 */
-void rvmMonsterLostSoul::do_attack( int attack_flags )
+void iceMonsterLostSoul::do_attack( int attack_flags )
 {
 	nextNoFOVAttack = gameLocal.SysScriptTime() + LOSTSOUL_NOFOVTIME;
 	if( attack_flags & ATTACK_LOSTSOUL_RETREAT )
@@ -102,10 +128,10 @@ void rvmMonsterLostSoul::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterLostSoul::check_attacks
+iceMonsterLostSoul::check_attacks
 =====================
 */
-int rvmMonsterLostSoul::check_attacks()
+int iceMonsterLostSoul::check_attacks()
 {
 	float range;
 	float currentTime;
@@ -144,10 +170,10 @@ int rvmMonsterLostSoul::check_attacks()
 
 /*
 =====================
-rvmMonsterLostSoul::combat_charge
+iceMonsterLostSoul::combat_charge
 =====================
 */
-stateResult_t rvmMonsterLostSoul::combat_charge( stateParms_t* parms )
+stateResult_t iceMonsterLostSoul::combat_charge( stateParms_t* parms )
 {
 	// rise up a bit
 	if( parms->stage == 0 )
@@ -208,10 +234,10 @@ stateResult_t rvmMonsterLostSoul::combat_charge( stateParms_t* parms )
 }
 /*
 =====================
-rvmMonsterLostSoul::combat_melee
+iceMonsterLostSoul::combat_melee
 =====================
 */
-stateResult_t rvmMonsterLostSoul::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterLostSoul::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -232,10 +258,10 @@ stateResult_t rvmMonsterLostSoul::combat_melee( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterLostSoul::combat_retreat
+iceMonsterLostSoul::combat_retreat
 =====================
 */
-stateResult_t rvmMonsterLostSoul::combat_retreat( stateParms_t* parms )
+stateResult_t iceMonsterLostSoul::combat_retreat( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{

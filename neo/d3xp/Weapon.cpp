@@ -3,7 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
-Copyright (C) 2016-2017 Dustin Land
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -38,22 +38,22 @@ If you have questions concerning this license or the applicable additional terms
 
 /***********************************************************************
 
-  rvmWeaponObject
+  idWeapon
 
 ***********************************************************************/
 
 const idEventDef EV_Weapon_Grabber_SetGrabDistance( "grabberGrabDistance", "f" );
 
-CLASS_DECLARATION( idClass, rvmWeaponObject )
+CLASS_DECLARATION( idClass, iceWeaponObject )
 EVENT( EV_Weapon_Grabber_SetGrabDistance, idWeapon::Event_GrabberSetGrabDistance )
 END_CLASS
 
 /*
 ==================
-rvmWeaponObject::Init
+iceWeaponObject::Init
 ==================
 */
-void rvmWeaponObject::Init( idWeapon* weapon )
+void iceWeaponObject::Init( idWeapon* weapon )
 {
 	next_attack = 0.0f;
 	owner = weapon;
@@ -65,10 +65,10 @@ void rvmWeaponObject::Init( idWeapon* weapon )
 
 /*
 ==================
-rvmWeaponObject::IsFiring
+iceWeaponObject::IsFiring
 ==================
 */
-bool rvmWeaponObject::IsFiring()
+bool iceWeaponObject::IsFiring()
 {
 	if( IsStateRunning( "Fire" ) )
 	{
@@ -85,10 +85,10 @@ bool rvmWeaponObject::IsFiring()
 
 /*
 ==================
-rvmWeaponObject::IsReloading
+iceWeaponObject::IsReloading
 ==================
 */
-bool rvmWeaponObject::IsReloading()
+bool iceWeaponObject::IsReloading()
 {
 	if( IsStateRunning( "Reload" ) )
 	{
@@ -100,10 +100,10 @@ bool rvmWeaponObject::IsReloading()
 
 /*
 ==================
-rvmWeaponObject::FindSound
+iceWeaponObject::FindSound
 ==================
 */
-const idSoundShader* rvmWeaponObject::FindSound( const char* name )
+const idSoundShader* iceWeaponObject::FindSound( const char* name )
 {
 	const char* soundName = owner->GetKey( name );
 	if( soundName == NULL || soundName[0] == 0 )
@@ -113,12 +113,6 @@ const idSoundShader* rvmWeaponObject::FindSound( const char* name )
 	return declManager->FindSound( soundName );
 }
 
-
-/***********************************************************************
-
-  idWeapon
-
-***********************************************************************/
 
 //
 // class def
@@ -330,11 +324,11 @@ void idWeapon::Save( idSaveGame* savefile ) const
 	//savefile->WriteObject( thread );
 	//savefile->WriteString( state );
 	//savefile->WriteString( idealState );
-// jmarshall end
 
 	savefile->WriteInt( animBlendFrames );
 	savefile->WriteInt( animDoneTime );
 	//savefile->WriteBool( isLinked );
+// jmarshall end
 
 	savefile->WriteObject( owner );
 	worldModel.Save( savefile );
@@ -494,11 +488,11 @@ void idWeapon::Restore( idRestoreGame* savefile )
 	//savefile->ReadObject( reinterpret_cast<idClass *&>( thread ) );
 	//savefile->ReadString( state );
 	//savefile->ReadString( idealState );
-// jmarshall end
 
 	savefile->ReadInt( animBlendFrames );
 	savefile->ReadInt( animDoneTime );
 	//savefile->ReadBool( isLinked );
+// jmarshall end
 
 	savefile->ReadObject( reinterpret_cast<idClass*&>( owner ) );
 	worldModel.Restore( savefile );
@@ -732,11 +726,6 @@ void idWeapon::Clear()
 	DeconstructScriptObject();
 	scriptObject.Free();
 
-	if( muzzleFlashHandle != -1 )
-	{
-		gameRenderWorld->FreeLightDef( muzzleFlashHandle );
-		muzzleFlashHandle = -1;
-	}
 	if( muzzleFlashHandle != -1 )
 	{
 		gameRenderWorld->FreeLightDef( muzzleFlashHandle );
@@ -1275,7 +1264,7 @@ void idWeapon::GetWeaponDef( const char* objectname, int ammoinclip )
 		delete currentWeaponObject;
 		currentWeaponObject = nullptr;
 	}
-	currentWeaponObject = static_cast<rvmWeaponObject*>( typeInfo->CreateInstance() );
+	currentWeaponObject = static_cast<iceWeaponObject*>( typeInfo->CreateInstance() );
 	currentWeaponObject->Init( this );
 	currentWeaponObject->CallSpawn();
 
@@ -1602,6 +1591,7 @@ idWeapon::UpdateSkin
 */
 bool idWeapon::UpdateSkin()
 {
+// jmarshall
 	//const function_t *func;
 	//
 	//if ( !isLinked ) {
@@ -1617,6 +1607,7 @@ bool idWeapon::UpdateSkin()
 	//// use the frameCommandThread since it's safe to use outside of framecommands
 	//gameLocal.frameCommandThread->CallFunction( this, func, true );
 	//gameLocal.frameCommandThread->Execute();
+// jmarshall
 
 	return true;
 }
@@ -1629,6 +1620,7 @@ idWeapon::FlashlightOn
 */
 void idWeapon::FlashlightOn()
 {
+// jmarshall
 	//const function_t *func;
 	//
 	//if ( !isLinked ) {
@@ -1644,6 +1636,7 @@ void idWeapon::FlashlightOn()
 	//// use the frameCommandThread since it's safe to use outside of framecommands
 	//gameLocal.frameCommandThread->CallFunction( this, func, true );
 	//gameLocal.frameCommandThread->Execute();
+// jmarshall
 
 	return;
 }
@@ -1656,6 +1649,7 @@ idWeapon::FlashlightOff
 */
 void idWeapon::FlashlightOff()
 {
+// jmarshall
 	//const function_t *func;
 	//
 	//if ( !isLinked ) {
@@ -1673,6 +1667,7 @@ void idWeapon::FlashlightOff()
 	//gameLocal.frameCommandThread->Execute();
 	//
 	//return;
+// jmarshall
 }
 
 /*
@@ -1928,6 +1923,14 @@ idWeapon::OwnerDied
 void idWeapon::OwnerDied()
 {
 	currentWeaponObject->OwnerDied();
+	
+	// Update the grabber effects
+	/*
+	if( /*!common->IsMultiplayer() && grabberState != -1 )
+	{
+		grabber.Update( owner, hide );
+	}
+	*/
 
 	Hide();
 	if( worldModel.GetEntity() )
@@ -2896,7 +2899,7 @@ const char* idWeapon::GetAmmoPickupNameForNum( ammo_t ammonum )
 
 	const char* name = GetAmmoNameForNum( ammonum );
 
-	if( name != NULL && *name != NULL )
+	if( name != NULL && *name != '\0' )
 	{
 		num = ammoDict->GetNumKeyVals();
 		for( i = 0; i < num; i++ )
@@ -4388,7 +4391,7 @@ void idWeapon::Event_Melee()
 						const char* decal;
 						// project decal
 						decal = weaponDef->dict.GetString( "mtr_strike" );
-						if( decal != NULL && *decal != NULL )
+						if( decal != NULL && *decal != '\0' )
 						{
 							gameLocal.ProjectDecal( tr.c.point, -tr.c.normal, 8.0f, true, 6.0, decal );
 						}

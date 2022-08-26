@@ -5,25 +5,25 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponPDA )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponPDA )
 END_CLASS
 
 /*
 ================
-rvmWeaponPDA::Init
+iceWeaponPDA::Init
 ================
 */
-void rvmWeaponPDA::Init( idWeapon* weapon )
+void iceWeaponPDA::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 }
 
 /*
 ================
-rvmWeaponPDA::Raise
+iceWeaponPDA::Raise
 ================
 */
-stateResult_t rvmWeaponPDA::Raise( stateParms_t* parms )
+stateResult_t iceWeaponPDA::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -51,10 +51,10 @@ stateResult_t rvmWeaponPDA::Raise( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponPDA::Lower
+iceWeaponPDA::Lower
 ================
 */
-stateResult_t rvmWeaponPDA::Lower( stateParms_t* parms )
+stateResult_t iceWeaponPDA::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -83,10 +83,10 @@ stateResult_t rvmWeaponPDA::Lower( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponPDA::Idle
+iceWeaponPDA::Idle
 ================
 */
-stateResult_t rvmWeaponPDA::Idle( stateParms_t* parms )
+stateResult_t iceWeaponPDA::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -114,20 +114,20 @@ stateResult_t rvmWeaponPDA::Idle( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponPDA::Fire
+iceWeaponPDA::Fire
 ================
 */
-stateResult_t rvmWeaponPDA::Fire( stateParms_t* parms )
+stateResult_t iceWeaponPDA::Fire( stateParms_t* parms )
 {
 	return SRESULT_DONE;
 }
 
 /*
 ================
-rvmWeaponPDA::Reload
+iceWeaponPDA::Reload
 ================
 */
-stateResult_t rvmWeaponPDA::Reload( stateParms_t* parms )
+stateResult_t iceWeaponPDA::Reload( stateParms_t* parms )
 {
 	return SRESULT_DONE;
 }

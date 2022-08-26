@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponFist )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponFist )
 END_CLASS
 
 #define RIFLE_NUMPROJECTILES	1
@@ -19,20 +19,20 @@ END_CLASS
 
 /*
 ================
-rvmWeaponFist::Init
+iceWeaponFist::Init
 ================
 */
-void rvmWeaponFist::Init( idWeapon* weapon )
+void iceWeaponFist::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 }
 
 /*
 ================
-rvmWeaponFist::Raise
+iceWeaponFist::Raise
 ================
 */
-stateResult_t rvmWeaponFist::Raise( stateParms_t* parms )
+stateResult_t iceWeaponFist::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -60,10 +60,10 @@ stateResult_t rvmWeaponFist::Raise( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFist::Lower
+iceWeaponFist::Lower
 ================
 */
-stateResult_t rvmWeaponFist::Lower( stateParms_t* parms )
+stateResult_t iceWeaponFist::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -92,10 +92,10 @@ stateResult_t rvmWeaponFist::Lower( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFist::Idle
+iceWeaponFist::Idle
 ================
 */
-stateResult_t rvmWeaponFist::Idle( stateParms_t* parms )
+stateResult_t iceWeaponFist::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -120,10 +120,10 @@ stateResult_t rvmWeaponFist::Idle( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFist::Fire
+iceWeaponFist::Fire
 ================
 */
-stateResult_t rvmWeaponFist::Fire( stateParms_t* parms )
+stateResult_t iceWeaponFist::Fire( stateParms_t* parms )
 {
 	enum FIRE_State
 	{
@@ -159,20 +159,20 @@ stateResult_t rvmWeaponFist::Fire( stateParms_t* parms )
 
 /*
 ================
-rvmWeaponFist::Reload
+iceWeaponFist::Reload
 ================
 */
-stateResult_t rvmWeaponFist::Reload( stateParms_t* parms )
+stateResult_t iceWeaponFist::Reload( stateParms_t* parms )
 {
 	return SRESULT_DONE;
 }
 
 /*
 ================
-rvmWeaponFist::GetFireAnim
+iceWeaponFist::GetFireAnim
 ================
 */
-const char* rvmWeaponFist::GetFireAnim()
+const char* iceWeaponFist::GetFireAnim()
 {
 	if( side )
 	{

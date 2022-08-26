@@ -3,7 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
-Copyright (C) 2016-2017 Dustin Land
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -286,6 +286,9 @@ public:
 
 	class idPlayerView		playerView;			// handles damage kicks and effects
 
+	renderEntity_t			laserSightRenderEntity;	// replace crosshair for 3DTV
+	qhandle_t				laserSightHandle;
+
 	bool					noclip;
 	bool					godmode;
 
@@ -445,6 +448,8 @@ public:
 
 	void					Spawn();
 	void					Think();
+
+	void					UpdateLaserSight();
 
 	// save games
 	void					Save( idSaveGame* savefile ) const;					// archives object for save game file

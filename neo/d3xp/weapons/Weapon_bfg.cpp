@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponBFG )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponBFG )
 END_CLASS
 
 #define BFG_MINRELEASETIME		0.05
@@ -26,12 +26,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponBFG::Init
+iceWeaponBFG::Init
 ===============
 */
-void rvmWeaponBFG::Init( idWeapon* weapon )
+void iceWeaponBFG::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 	fuse_start = 0;
@@ -45,10 +45,10 @@ void rvmWeaponBFG::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponBFG::Raise
+iceWeaponBFG::Raise
 ===============
 */
-stateResult_t rvmWeaponBFG::Raise( stateParms_t* parms )
+stateResult_t iceWeaponBFG::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -77,10 +77,10 @@ stateResult_t rvmWeaponBFG::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponBFG::Lower
+iceWeaponBFG::Lower
 ===============
 */
-stateResult_t rvmWeaponBFG::Lower( stateParms_t* parms )
+stateResult_t iceWeaponBFG::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -109,10 +109,10 @@ stateResult_t rvmWeaponBFG::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponBFG::Idle
+iceWeaponBFG::Idle
 ===============
 */
-stateResult_t rvmWeaponBFG::Idle( stateParms_t* parms )
+stateResult_t iceWeaponBFG::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -147,10 +147,10 @@ stateResult_t rvmWeaponBFG::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponBFG::Fire
+iceWeaponBFG::Fire
 ===============
 */
-stateResult_t rvmWeaponBFG::Fire( stateParms_t* parms )
+stateResult_t iceWeaponBFG::Fire( stateParms_t* parms )
 {
 	float time_held;
 	float power = 0.0f;
@@ -287,11 +287,11 @@ stateResult_t rvmWeaponBFG::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponBFG::OverCharge
+iceWeaponBFG::OverCharge
 ===============
 */
 
-void rvmWeaponBFG::OverCharge()
+void iceWeaponBFG::OverCharge()
 {
 	idStr	 entname;
 	idEntity* explosion;
@@ -325,10 +325,10 @@ void rvmWeaponBFG::OverCharge()
 
 /*
 ===============
-rvmWeaponBFG::Reload
+iceWeaponBFG::Reload
 ===============
 */
-stateResult_t rvmWeaponBFG::Reload( stateParms_t* parms )
+stateResult_t iceWeaponBFG::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{

@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponPistol )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponPistol )
 END_CLASS
 
 #define PISTOL_FIRERATE			0.4
@@ -22,12 +22,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponPistol::Init
+iceWeaponPistol::Init
 ===============
 */
-void rvmWeaponPistol::Init( idWeapon* weapon )
+void iceWeaponPistol::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 	spread = weapon->GetFloat( "spread" );
@@ -36,10 +36,10 @@ void rvmWeaponPistol::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponPistol::Raise
+iceWeaponPistol::Raise
 ===============
 */
-stateResult_t rvmWeaponPistol::Raise( stateParms_t* parms )
+stateResult_t iceWeaponPistol::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -68,10 +68,10 @@ stateResult_t rvmWeaponPistol::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponPistol::Lower
+iceWeaponPistol::Lower
 ===============
 */
-stateResult_t rvmWeaponPistol::Lower( stateParms_t* parms )
+stateResult_t iceWeaponPistol::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -100,10 +100,10 @@ stateResult_t rvmWeaponPistol::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponPistol::Idle
+iceWeaponPistol::Idle
 ===============
 */
-stateResult_t rvmWeaponPistol::Idle( stateParms_t* parms )
+stateResult_t iceWeaponPistol::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -136,10 +136,10 @@ stateResult_t rvmWeaponPistol::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponPistol::Fire
+iceWeaponPistol::Fire
 ===============
 */
-stateResult_t rvmWeaponPistol::Fire( stateParms_t* parms )
+stateResult_t iceWeaponPistol::Fire( stateParms_t* parms )
 {
 	int ammoClip = owner->AmmoInClip();
 
@@ -187,10 +187,10 @@ stateResult_t rvmWeaponPistol::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponPistol::Reload
+iceWeaponPistol::Reload
 ===============
 */
-stateResult_t rvmWeaponPistol::Reload( stateParms_t* parms )
+stateResult_t iceWeaponPistol::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{

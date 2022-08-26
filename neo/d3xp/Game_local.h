@@ -5,6 +5,7 @@ Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2014-2016 Robert Beckebans
 Copyright (C) 2014-2016 Kot in Action Creative Artel
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -72,7 +73,7 @@ class idEditEntities;
 class idLocationEntity;
 class idMenuHandler_Shell;
 class EnvironmentProbe; // RB
-class rvmBot;
+class iceBot;
 
 const int MAX_CLIENTS			= MAX_PLAYERS;
 const int MAX_CLIENTS_IN_PVS	= MAX_CLIENTS >> 3;
@@ -292,10 +293,10 @@ enum slowmoState_t
 	SLOWMO_STATE_RAMPDOWN
 };
 
-struct rvmGameDelayRemoveEntry_t
+struct iceGameDelayRemoveEntry_t
 {
-	int32_t removeTime;
-	idEntity* entity;
+	int32_t		removeTime;
+	idEntity*	entity;
 };
 
 //============================================================================
@@ -459,6 +460,10 @@ public:
 	void					MapRestart();
 	static void				MapRestart_f( const idCmdArgs& args );
 
+	idMapFile* 				GetLevelMap();
+	const char* 			GetMapName() const;
+	
+// jmarshall begin
 	float					SysScriptTime() const
 	{
 		return MS2SEC( realClientTime );
@@ -467,26 +472,27 @@ public:
 	{
 		return MS2SEC( time - previousTime );
 	}
-
-	idMapFile* 				GetLevelMap();
-	const char* 			GetMapName() const;
+	
 	void					DelayRemoveEntity( idEntity* entity, int delay );
 
 	bool					InfluenceActive() const;
 	idEntity*				GetEntity( const char* name );
-// jmarshall - bots
-	void					AddBot( const char* name );
-	int						TravelTimeToGoal( const idVec3& origin, const idVec3& goal );
-	int						GetBotItemEntry( const char* name );
-	void					Trace( trace_t& results, const idVec3& start, const idVec3& end, int contentMask, int passEntity );
-	void					AlertBots( idPlayer* player, idVec3 alert_position );
-// jmarshall end
+	
 	float					Random( float range );
 	float					RandomDelay( float min, float max );
 	float					RandomTime( float delay );
 	float					DelayTime( float delay );
 
 	idEntity*				Spawn( const char* classname );
+	
+// jmarshall - bots
+	void					AddBot( const char* name );
+	int						TravelTimeToGoal( const idVec3& origin, const idVec3& goal );
+	int						GetBotItemEntry( const char* name );
+	void					Trace( trace_t& results, const idVec3& start, const idVec3& end, int contentMask, int passEntity );
+	void					AlertBots( idPlayer* player, idVec3 alert_position );
+	
+// jmarshall end
 
 	int						NumAAS() const;
 	idAAS* 					GetAAS( int num ) const;
@@ -625,11 +631,11 @@ public:
 		return bot_aas;
 	}
 
-	void					RegisterBot( rvmBot* bot )
+	void					RegisterBot( iceBot* bot )
 	{
 		registeredBots.AddUnique( bot );
 	}
-	void					UnRegisterBot( rvmBot* bot )
+	void					UnRegisterBot( iceBot* bot )
 	{
 		registeredBots.Remove( bot );
 	}
@@ -798,8 +804,8 @@ private:
 // jmarshall
 	const idDeclEntityDef* botItemTable;;
 
-	idList<rvmBot*> registeredBots;
-	idList<rvmGameDelayRemoveEntry_t> delayRemoveEntities;
+	idList<iceBot*> registeredBots;
+	idList<iceGameDelayRemoveEntry_t> delayRemoveEntities;
 
 	idAAS*					bot_aas;
 // jmarshall end
@@ -938,7 +944,7 @@ typedef enum
 #define	MASK_OPAQUE					(CONTENTS_OPAQUE)
 #define	MASK_SHOT_RENDERMODEL		(CONTENTS_SOLID|CONTENTS_RENDERMODEL)
 #define	MASK_SHOT_BOUNDINGBOX		(CONTENTS_SOLID|CONTENTS_BODY)
-#define	MASK_SHOT		(CONTENTS_SOLID|CONTENTS_BODY|CONTENTS_CORPSE)
+#define	MASK_SHOT					(CONTENTS_SOLID|CONTENTS_BODY|CONTENTS_CORPSE) // jmarshall
 
 const float DEFAULT_GRAVITY			= 1066.0f;
 #define DEFAULT_GRAVITY_STRING		"1066"

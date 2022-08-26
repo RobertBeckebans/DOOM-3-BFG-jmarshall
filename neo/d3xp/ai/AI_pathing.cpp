@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -1787,6 +1788,7 @@ bool idAI::PredictTrajectory( const idVec3& firePos, const idVec3& target, float
 	return false;
 }
 
+// jmarshall begin
 /*
 =====================
 idAI::idle_followPathEntities
@@ -1854,3 +1856,5 @@ void idAI::idle_followPathEntities( idEntity* pathnode )
 	}
 	while( !( !current_path ) );
 }
+// jmarshall end
+

@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -73,10 +74,10 @@ typedef struct
 	renderLight_t	light;
 } WeaponLight_t;
 
-class rvmWeaponObject : public idClass
+class iceWeaponObject : public idClass
 {
 public:
-	CLASS_PROTOTYPE( rvmWeaponObject );
+	CLASS_PROTOTYPE( iceWeaponObject );
 
 	virtual void			Init( idWeapon* weapon );
 
@@ -259,63 +260,11 @@ public:
 	}
 
 	friend class idPlayer;
-public:
-	virtual void			CallNativeEvent( idStr& name ) override;
-
-	void					Event_SetLightParm( int parmnum, float value );
-	void					Event_SetLightParms( float parm0, float parm1, float parm2, float parm3 );
-
-	// script events
-	void					Event_Clear();
-	void					Event_GetOwner();
-	void					Event_SetWeaponStatus( float newStatus );
-	void					Event_WeaponReady();
-	void					Event_WeaponOutOfAmmo();
-	void					Event_WeaponReloading();
-	void					Event_WeaponHolstered();
-	void					Event_WeaponRising();
-	void					Event_WeaponLowering();
-	void					Event_UseAmmo( int amount );
-	void					Event_AddToClip( int amount );
-	void					Event_AmmoInClip();
-	int						AmmoAvailable();
-	void					Event_AmmoAvailable();
-	void					Event_TotalAmmoCount();
-	void					Event_ClipSize();
-	void					Event_PlayAnim( int channel, const char* animname, bool loop );
-	void					Event_PlayCycle( int channel, const char* animname );
-	bool					Event_AnimDone( int channel, int blendFrames );
-	void					Event_SetBlendFrames( int channel, int blendFrames );
-	void					Event_GetBlendFrames( int channel );
-	void					Event_Next();
-	void					Event_SetSkin( const char* skinname );
-	void					Event_Flashlight( int enable );
-	void					Event_GetLightParm( int parmnum );
-	void					Event_LaunchProjectiles( int num_projectiles, float spread, float fuseOffset, float launchPower, float dmgPower );
-	idEntity*				CreateProjectile();
-	void					Event_CreateProjectile();
-	void					Event_EjectBrass();
-	void					Event_Melee();
-	void					Event_GetWorldModel();
-	void					Event_AllowDrop( int allow );
-	void					Event_AutoReload();
-	void					Event_NetReload();
-	bool					Event_IsInvisible();
-	void					Event_NetEndReload();
-
-	void					EnterCinematic();
-	void					ExitCinematic();
-	void					NetCatchup();
-
-	bool					IsLinked()
-	{
-		return currentWeaponObject != NULL;
-	}
 private:
 	int						animBlendFrames;
 	int						animDoneTime;
-	bool					isPlayerFlashlight;
 	bool					isLinked;
+	bool					isPlayerFlashlight;
 
 	// precreated projectile
 	idEntity*				projectileEnt;
@@ -333,7 +282,7 @@ private:
 	bool					hide;
 	bool					disabled;
 
-	bool					isFlashLight;
+	bool					isFlashLight; // jmarshall
 
 	// berserk
 	int						berserk;
@@ -468,7 +417,60 @@ private:
 	void					MuzzleRise( idVec3& origin, idMat3& axis );
 	void					UpdateNozzleFx();
 	void					UpdateFlashPosition();
+	
+public:
+	virtual void			CallNativeEvent( idStr& name ) override;
 
+	void					Event_SetLightParm( int parmnum, float value );
+	void					Event_SetLightParms( float parm0, float parm1, float parm2, float parm3 );
+
+	// script events
+	void					Event_Clear();
+	void					Event_GetOwner();
+	void					Event_SetWeaponStatus( float newStatus );
+	void					Event_WeaponReady();
+	void					Event_WeaponOutOfAmmo();
+	void					Event_WeaponReloading();
+	void					Event_WeaponHolstered();
+	void					Event_WeaponRising();
+	void					Event_WeaponLowering();
+	void					Event_UseAmmo( int amount );
+	void					Event_AddToClip( int amount );
+	void					Event_AmmoInClip();
+	int						AmmoAvailable();
+	void					Event_AmmoAvailable();
+	void					Event_TotalAmmoCount();
+	void					Event_ClipSize();
+	void					Event_PlayAnim( int channel, const char* animname, bool loop );
+	void					Event_PlayCycle( int channel, const char* animname );
+	bool					Event_AnimDone( int channel, int blendFrames );
+	void					Event_SetBlendFrames( int channel, int blendFrames );
+	void					Event_GetBlendFrames( int channel );
+	void					Event_Next();
+	void					Event_SetSkin( const char* skinname );
+	void					Event_Flashlight( int enable );
+	void					Event_GetLightParm( int parmnum );
+	void					Event_LaunchProjectiles( int num_projectiles, float spread, float fuseOffset, float launchPower, float dmgPower );
+	idEntity*				CreateProjectile();
+	void					Event_CreateProjectile();
+	void					Event_EjectBrass();
+	void					Event_Melee();
+	void					Event_GetWorldModel();
+	void					Event_AllowDrop( int allow );
+	void					Event_AutoReload();
+	void					Event_NetReload();
+	bool					Event_IsInvisible();
+	void					Event_NetEndReload();
+
+	void					EnterCinematic();
+	void					ExitCinematic();
+	void					NetCatchup();
+
+	bool					IsLinked()
+	{
+		return currentWeaponObject != NULL;
+	}
+private:
 	idGrabber				grabber;
 	int						grabberState;
 public:
@@ -487,7 +489,8 @@ public:
 	void					Event_StartWeaponLight( const char* name );
 	void					Event_StopWeaponLight( const char* name );
 private:
-	rvmWeaponObject* currentWeaponObject;
+	// jmarshall
+	iceWeaponObject* 		currentWeaponObject;
 	bool					OutOfAmmo;
 };
 

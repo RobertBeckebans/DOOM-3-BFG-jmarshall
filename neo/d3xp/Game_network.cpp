@@ -1253,9 +1253,10 @@ void idGameLocal::ClientRunFrame( idUserCmdMgr& cmdMgr, bool lastPredictFrame, g
 			RunAllUserCmdsForPlayer( cmdMgr, ent->entityNumber );
 		}
 	}
-// jmarshall
+	// jmarshall
 	RunSharedThink();
-// jmarshall end
+	// jmarshall end
+	
 	// service any pending events
 	idEvent::ServiceEvents();
 

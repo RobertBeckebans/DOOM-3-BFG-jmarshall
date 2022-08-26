@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponMachineGun )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponMachineGun )
 END_CLASS
 
 #define MACHINEGUN_FIRERATE			0.1		// ~10 per second
@@ -23,12 +23,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponMachineGun::Init
+iceWeaponMachineGun::Init
 ===============
 */
-void rvmWeaponMachineGun::Init( idWeapon* weapon )
+void iceWeaponMachineGun::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 	spread = weapon->GetFloat( "spread" );
@@ -38,10 +38,10 @@ void rvmWeaponMachineGun::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponMachineGun::Raise
+iceWeaponMachineGun::Raise
 ===============
 */
-stateResult_t rvmWeaponMachineGun::Raise( stateParms_t* parms )
+stateResult_t iceWeaponMachineGun::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -70,10 +70,10 @@ stateResult_t rvmWeaponMachineGun::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponMachineGun::Lower
+iceWeaponMachineGun::Lower
 ===============
 */
-stateResult_t rvmWeaponMachineGun::Lower( stateParms_t* parms )
+stateResult_t iceWeaponMachineGun::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -102,10 +102,10 @@ stateResult_t rvmWeaponMachineGun::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponMachineGun::Idle
+iceWeaponMachineGun::Idle
 ===============
 */
-stateResult_t rvmWeaponMachineGun::Idle( stateParms_t* parms )
+stateResult_t iceWeaponMachineGun::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -132,10 +132,10 @@ stateResult_t rvmWeaponMachineGun::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponMachineGun::Fire
+iceWeaponMachineGun::Fire
 ===============
 */
-stateResult_t rvmWeaponMachineGun::Fire( stateParms_t* parms )
+stateResult_t iceWeaponMachineGun::Fire( stateParms_t* parms )
 {
 	int ammoClip = owner->AmmoInClip();
 
@@ -175,10 +175,10 @@ stateResult_t rvmWeaponMachineGun::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponMachineGun::Reload
+iceWeaponMachineGun::Reload
 ===============
 */
-stateResult_t rvmWeaponMachineGun::Reload( stateParms_t* parms )
+stateResult_t iceWeaponMachineGun::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{

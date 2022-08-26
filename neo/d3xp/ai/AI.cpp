@@ -3,7 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
-Copyright (C) 2016-2017 Dustin Land
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -305,6 +305,7 @@ void idAI::Save( idSaveGame* savefile ) const
 	harvestEnt.Save( savefile );
 }
 
+// jmarshall begin
 /*
 =====================
 idAI::combat_lost
@@ -437,6 +438,7 @@ bool idAI::TestAnimMove( const char* animname )
 
 	return path.endEvent == 0;
 }
+// jmarshall end
 
 /*
 =====================
@@ -446,7 +448,6 @@ idAI::Restore
 void idAI::Restore( idRestoreGame* savefile )
 {
 	bool		restorePhysics;
-	int			i;
 	int			num;
 	idBounds	bounds;
 
@@ -496,7 +497,7 @@ void idAI::Restore( idRestoreGame* savefile )
 	savefile->ReadInt( num );
 	missileLaunchOffset.SetGranularity( 1 );
 	missileLaunchOffset.SetNum( num );
-	for( i = 0; i < num; i++ )
+	for( int i = 0; i < num; i++ )
 	{
 		savefile->ReadVec3( missileLaunchOffset[ i ] );
 	}
@@ -522,8 +523,9 @@ void idAI::Restore( idRestoreGame* savefile )
 	savefile->ReadInt( chat_min );
 	savefile->ReadInt( chat_max );
 	savefile->ReadInt( chat_time );
-	savefile->ReadInt( i );
-	talk_state = static_cast<talkState_t>( i );
+	int tmp;
+	savefile->ReadInt( tmp );
+	talk_state = static_cast<talkState_t>( tmp );
 	talkTarget.Restore( savefile );
 
 	savefile->ReadInt( num_cinematics );
@@ -546,7 +548,7 @@ void idAI::Restore( idRestoreGame* savefile )
 	lookJoints.SetNum( num );
 	lookJointAngles.SetGranularity( 1 );
 	lookJointAngles.SetNum( num );
-	for( i = 0; i < num; i++ )
+	for( int i = 0; i < num; i++ )
 	{
 		savefile->ReadJoint( lookJoints[ i ] );
 		savefile->ReadAngles( lookJointAngles[ i ] );
@@ -554,7 +556,7 @@ void idAI::Restore( idRestoreGame* savefile )
 
 	savefile->ReadInt( num );
 	particles.SetNum( num );
-	for( i = 0; i < particles.Num(); i++ )
+	for( int i = 0; i < particles.Num(); i++ )
 	{
 		savefile->ReadParticle( particles[i].particle );
 		savefile->ReadInt( particles[i].time );
@@ -612,7 +614,7 @@ void idAI::Restore( idRestoreGame* savefile )
 
 
 	//Clean up the emitters
-	for( i = 0; i < funcEmitters.Num(); i++ )
+	for( int i = 0; i < funcEmitters.Num(); i++ )
 	{
 		funcEmitter_t* emitter = funcEmitters.GetIndex( i );
 		if( emitter->particle )
@@ -625,7 +627,7 @@ void idAI::Restore( idRestoreGame* savefile )
 
 	int emitterCount;
 	savefile->ReadInt( emitterCount );
-	for( i = 0; i < emitterCount; i++ )
+	for( int i = 0; i < emitterCount; i++ )
 	{
 		funcEmitter_t newEmitter;
 		memset( &newEmitter, 0, sizeof( newEmitter ) );
@@ -648,7 +650,7 @@ void idAI::Restore( idRestoreGame* savefile )
 
 }
 
-
+// jmarshall begin
 /*
 =====================
 idAI::FindEnemyInCombatNodes
@@ -701,7 +703,7 @@ idEntity* idAI::FindEnemyInCombatNodes()
 
 	return NULL;
 }
-
+// jmarshall end
 
 /*
 =====================
@@ -717,8 +719,8 @@ void idAI::Spawn()
 	jointHandle_t		joint;
 	idVec3				local_dir;
 	bool				talks;
-	float				teleportType;
-	idStr				triggerAnim;
+	float				teleportType; // jmarshall
+	idStr				triggerAnim; // jmarshall
 
 	if( !g_monsters.GetBool() )
 	{
@@ -793,7 +795,14 @@ void idAI::Spawn()
 	while( kv )
 	{
 		jointName = kv->GetKey();
-		jointName.StripLeadingOnce( "look_joint " );
+
+		// RB: TrenchBroom interop use look_joint.<name> instead so we can build this up using the FGD files
+		if( !jointName.StripLeadingOnce( "look_joint " ) )
+		{
+			jointName.StripLeadingOnce( "look_joint." );
+		}
+		// RB end
+
 		joint = animator.GetJointHandle( jointName );
 		if( joint == INVALID_JOINT )
 		{
@@ -977,6 +986,8 @@ void idAI::Spawn()
 	// init the move variables
 	StopMove( MOVE_STATUS_DONE );
 
+// jmarshall begin
+
 	// Only AI that derives off of ai_monster_base can support native AI.
 	supportsNative = scriptObject.GetFunction( "supports_native" ) != NULL;
 
@@ -1018,6 +1029,7 @@ void idAI::Spawn()
 			stateThread.SetState( "State_WakeUp" );
 		}
 	}
+// jmarshall end
 
 	spawnArgs.GetBool( "spawnClearMoveables", "0", spawnClearMoveables );
 }
@@ -1157,6 +1169,7 @@ void idAI::DormantEnd()
 	idActor::DormantEnd();
 }
 
+// jmarshall begin
 /*
 ======================
 idAI::checkForEnemy
@@ -1245,6 +1258,7 @@ bool idAI::checkForEnemy( float use_fov )
 	Event_SetEnemy( enemy );
 	return true;
 }
+// jmarshall
 
 /*
 =====================
@@ -1267,10 +1281,12 @@ void idAI::Think()
 
 	if( thinkFlags & TH_THINK )
 	{
+		// jmarshall begin
 		if( supportsNative )
 		{
 			stateThread.Execute();
 		}
+		// jmarshall end
 
 		// clear out the enemy when he dies or is hidden
 		idActor* enemyEnt = enemy.GetEntity();
@@ -1404,6 +1420,7 @@ idAI::LinkScriptVariables
 */
 void idAI::LinkScriptVariables()
 {
+// jmarshall begin
 	run_distance.LinkTo( scriptObject, "run_distance" );
 	walk_turn.LinkTo( scriptObject, "walk_turn" );
 	ambush.LinkTo( scriptObject, "ambush" );
@@ -1411,14 +1428,17 @@ void idAI::LinkScriptVariables()
 	stay_on_attackpath.LinkTo( scriptObject, "stay_on_attackpath" );
 	ignore_sight.LinkTo( scriptObject, "ignore_sight" );
 	idle_sight_fov.LinkTo( scriptObject, "idle_sight_fov" );
+// jmarshall end
 	AI_TALK.LinkTo(	scriptObject, "AI_TALK" );
 	AI_DAMAGE.LinkTo(	scriptObject, "AI_DAMAGE" );
 	AI_PAIN.LinkTo(	scriptObject, "AI_PAIN" );
 	AI_SPECIAL_DAMAGE.LinkTo(	scriptObject, "AI_SPECIAL_DAMAGE" );
 	AI_DEAD.LinkTo(	scriptObject, "AI_DEAD" );
+// jmarshall begin
 	AI_RUN.LinkTo(	scriptObject, "run" );
 	blocked.LinkTo( scriptObject, "blocked" );
 	AI_ATTACKING.LinkTo( scriptObject, "AI_ATTACKING" );
+// jmarshall end
 	AI_ENEMY_VISIBLE.LinkTo(	scriptObject, "AI_ENEMY_VISIBLE" );
 	AI_ENEMY_IN_FOV.LinkTo(	scriptObject, "AI_ENEMY_IN_FOV" );
 	AI_ENEMY_DEAD.LinkTo(	scriptObject, "AI_ENEMY_DEAD" );
@@ -1862,6 +1882,7 @@ void idAI::Killed( idEntity* inflictor, idEntity* attacker, int damage, const id
 
 	restartParticles = false;
 
+	// jmarshall
 	stateThread.SetState( "state_Killed" );
 	SetWaitState( "" );
 
@@ -2191,6 +2212,7 @@ bool idAI::EnemyPositionValid() const
 	return false;
 }
 
+// jmarshall begin
 /*
 ================
 idAI::PlayCustomAnim
@@ -2274,6 +2296,7 @@ void idAI::sight_enemy()
 		Event_SetNeverDormant( GetFloatKey( "neverdormant" ) );
 	}
 }
+// jmarshall end
 
 /*
 =====================
@@ -3002,7 +3025,7 @@ void idAI::DirectDamage( const char* meleeDefName, idEntity* ent )
 
 	if( !ent->fl.takedamage )
 	{
-		shader = declManager->FindSound( meleeDef->GetString( "snd_miss" ) );
+		const idSoundShader* shader = declManager->FindSound( meleeDef->GetString( "snd_miss" ) );
 		StartSoundShader( shader, SND_CHANNEL_DAMAGE, 0, false, NULL );
 		return;
 	}
@@ -3011,7 +3034,7 @@ void idAI::DirectDamage( const char* meleeDefName, idEntity* ent )
 	// do the damage
 	//
 	p = meleeDef->GetString( "snd_hit" );
-	if( p != NULL && *p != NULL )
+	if( p != NULL && *p != '\0' )
 	{
 		shader = declManager->FindSound( p );
 		StartSoundShader( shader, SND_CHANNEL_DAMAGE, 0, false, NULL );
@@ -3029,6 +3052,7 @@ void idAI::DirectDamage( const char* meleeDefName, idEntity* ent )
 	EndAttack();
 }
 
+// jmarshall begin
 /*
 =====================
 idAI::enemy_dead
@@ -3047,6 +3071,7 @@ void idAI::enemy_dead()
 		SetState( "state_Combat" );
 	}
 }
+// jmarshall end
 
 /*
 =====================
@@ -3132,7 +3157,7 @@ bool idAI::AttackMelee( const char* meleeDefName )
 	if( enemyEnt == NULL )
 	{
 		p = meleeDef->GetString( "snd_miss" );
-		if( p != NULL && *p != NULL )
+		if( p != NULL && *p != '\0' )
 		{
 			shader = declManager->FindSound( p );
 			StartSoundShader( shader, SND_CHANNEL_DAMAGE, 0, false, NULL );
@@ -3170,7 +3195,7 @@ bool idAI::AttackMelee( const char* meleeDefName )
 	{
 		// missed
 		p = meleeDef->GetString( "snd_miss" );
-		if( p != NULL && *p != NULL )
+		if( p != NULL && *p != '\0' )
 		{
 			shader = declManager->FindSound( p );
 			StartSoundShader( shader, SND_CHANNEL_DAMAGE, 0, false, NULL );
@@ -3182,7 +3207,7 @@ bool idAI::AttackMelee( const char* meleeDefName )
 	// do the damage
 	//
 	p = meleeDef->GetString( "snd_hit" );
-	if( p != NULL && *p != NULL )
+	if( p != NULL && *p != '\0' )
 	{
 		shader = declManager->FindSound( p );
 		StartSoundShader( shader, SND_CHANNEL_DAMAGE, 0, false, NULL );
@@ -3426,7 +3451,7 @@ void idAI::SetChatSound()
 		snd = NULL;
 	}
 
-	if( snd != NULL && *snd != NULL )
+	if( snd != NULL && *snd != '\0' )
 	{
 		chat_snd = declManager->FindSound( snd );
 
@@ -3563,7 +3588,7 @@ void idAI::TriggerParticles( const char* jointName )
 	}
 }
 
-
+// jmarshall begin
 /*
 ================
 idActor::ConstructScriptObject
@@ -3619,6 +3644,7 @@ void idAI::CallConstructor()
 
 	AI_Begin();
 }
+// jmarshall end
 
 void idAI::TriggerFX( const char* joint, const char* fx )
 {
@@ -3818,7 +3844,7 @@ bool idAI::UpdateAnimationControllers()
 	// Getting the joint positions causes the joints to be updated.  The IK gets joint positions itself (which
 	// are already up to date because of getting the joints in this function) and then sets their positions, which
 	// forces the heirarchy to be updated again next time we get a joint or present the model.  If IK is enabled,
-	// or if we have a seperate head, we end up transforming the joints twice per frame.  Characters with no
+	// or if we have a separate head, we end up transforming the joints twice per frame.  Characters with no
 	// head entity and no ik will only transform their joints once.  Set g_debuganim to the current entity number
 	// in order to see how many times an entity transforms the joints per frame.
 	idActor::UpdateAnimationControllers();

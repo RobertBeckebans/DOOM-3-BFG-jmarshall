@@ -1,12 +1,38 @@
-// Monster_zombie_security_pistol.cpp
-//
+/*
+===========================================================================
 
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
+
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmMonsterZombie, rvmMonsterZombieSecurityPistol )
+CLASS_DECLARATION( iceMonsterZombie, iceMonsterZombieSecurityPistol )
 END_CLASS
 
 #define ZSECP_RUNDISTANCE				192
@@ -29,10 +55,10 @@ END_CLASS
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::Init
+iceMonsterZombieSecurityPistol::Init
 =====================
 */
-void rvmMonsterZombieSecurityPistol::Init()
+void iceMonsterZombieSecurityPistol::Init()
 {
 	combat_node = NULL;
 
@@ -50,10 +76,10 @@ void rvmMonsterZombieSecurityPistol::Init()
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::AI_Begin
+iceMonsterZombieSecurityPistol::AI_Begin
 =====================
 */
-void rvmMonsterZombieSecurityPistol::AI_Begin()
+void iceMonsterZombieSecurityPistol::AI_Begin()
 {
 	run_distance = ZSECP_RUNDISTANCE;
 	walk_turn = ZSECP_WALKTURN;
@@ -64,10 +90,10 @@ void rvmMonsterZombieSecurityPistol::AI_Begin()
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::state_Begin
+iceMonsterZombieSecurityPistol::state_Begin
 =====================
 */
-stateResult_t rvmMonsterZombieSecurityPistol::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterZombieSecurityPistol::state_Begin( stateParms_t* parms )
 {
 	fire = false;
 	crouch_fire = false;
@@ -82,10 +108,10 @@ stateResult_t rvmMonsterZombieSecurityPistol::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::state_Idle
+iceMonsterZombieSecurityPistol::state_Idle
 =====================
 */
-stateResult_t rvmMonsterZombieSecurityPistol::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterZombieSecurityPistol::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -107,10 +133,10 @@ stateResult_t rvmMonsterZombieSecurityPistol::state_Idle( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::check_attacks
+iceMonsterZombieSecurityPistol::check_attacks
 =====================
 */
-int rvmMonsterZombieSecurityPistol::check_attacks()
+int iceMonsterZombieSecurityPistol::check_attacks()
 {
 	float currentTime;
 	int attack_flags;
@@ -194,10 +220,10 @@ int rvmMonsterZombieSecurityPistol::check_attacks()
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::do_attack
+iceMonsterZombieSecurityPistol::do_attack
 =====================
 */
-void rvmMonsterZombieSecurityPistol::do_attack( int attack_flags )
+void iceMonsterZombieSecurityPistol::do_attack( int attack_flags )
 {
 	nextNoFOVAttack = gameLocal.SysScriptTime() + ZSECP_NOFOVTIME;
 	if( attack_flags & ATTACK_DODGE_LEFT )
@@ -212,7 +238,7 @@ void rvmMonsterZombieSecurityPistol::do_attack( int attack_flags )
 	else if( attack_flags & ATTACK_COMBAT_NODE )
 	{
 		//combat_ainode(combat_node);
-		gameLocal.Error( "rvmMonsterZombieSecurityPistol::CombatAINode\n" );
+		gameLocal.Error( "iceMonsterZombieSecurityPistol::CombatAINode\n" );
 	}
 	else if( attack_flags & ATTACK_ZSECP_CROUCHFIRE )
 	{
@@ -228,10 +254,10 @@ void rvmMonsterZombieSecurityPistol::do_attack( int attack_flags )
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::stand_attack
+iceMonsterZombieSecurityPistol::stand_attack
 =====================
 */
-stateResult_t rvmMonsterZombieSecurityPistol::stand_attack( stateParms_t* parms )
+stateResult_t iceMonsterZombieSecurityPistol::stand_attack( stateParms_t* parms )
 {
 	//float endtime;
 	float left;
@@ -406,10 +432,10 @@ done:
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::crouch_attack
+iceMonsterZombieSecurityPistol::crouch_attack
 =====================
 */
-stateResult_t rvmMonsterZombieSecurityPistol::crouch_attack( stateParms_t* parms )
+stateResult_t iceMonsterZombieSecurityPistol::crouch_attack( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -487,10 +513,10 @@ done:
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::combat_dodge_left
+iceMonsterZombieSecurityPistol::combat_dodge_left
 =====================
 */
-stateResult_t rvmMonsterZombieSecurityPistol::combat_dodge_left( stateParms_t* parms )
+stateResult_t iceMonsterZombieSecurityPistol::combat_dodge_left( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -515,10 +541,10 @@ stateResult_t rvmMonsterZombieSecurityPistol::combat_dodge_left( stateParms_t* p
 
 /*
 =====================
-rvmMonsterZombieSecurityPistol::combat_dodge_right
+iceMonsterZombieSecurityPistol::combat_dodge_right
 =====================
 */
-stateResult_t rvmMonsterZombieSecurityPistol::combat_dodge_right( stateParms_t* parms )
+stateResult_t iceMonsterZombieSecurityPistol::combat_dodge_right( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{

@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -767,7 +768,7 @@ bool idProjectile::Collide( const trace_t& collision, const idVec3& velocity )
 			// reliable messages.
 // jmarshall - server also handles bot attacks.
 			bool isBot = false;
-			if( owner->IsType( rvmBot::Type ) && common->IsServer() && common->IsMultiplayer() )
+			if( owner->IsType( iceBot::Type ) && common->IsServer() && common->IsMultiplayer() )
 			{
 				isBot = true;
 			}

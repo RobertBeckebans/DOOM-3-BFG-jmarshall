@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponRocketLauncher )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponRocketLauncher )
 END_CLASS
 
 #define ROCKETLAUNCHER_LOWAMMO			1
@@ -23,12 +23,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponRocketLauncher::Init
+iceWeaponRocketLauncher::Init
 ===============
 */
-void rvmWeaponRocketLauncher::Init( idWeapon* weapon )
+void iceWeaponRocketLauncher::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	next_attack = 0;
 	spread = weapon->GetFloat( "spread" );
@@ -37,10 +37,10 @@ void rvmWeaponRocketLauncher::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponRocketLauncher::UpdateSkin
+iceWeaponRocketLauncher::UpdateSkin
 ===============
 */
-void rvmWeaponRocketLauncher::UpdateSkin()
+void iceWeaponRocketLauncher::UpdateSkin()
 {
 	idStr skinname;
 	int ammoClip;
@@ -68,10 +68,10 @@ void rvmWeaponRocketLauncher::UpdateSkin()
 
 /*
 ===============
-rvmWeaponRocketLauncher::Raise
+iceWeaponRocketLauncher::Raise
 ===============
 */
-stateResult_t rvmWeaponRocketLauncher::Raise( stateParms_t* parms )
+stateResult_t iceWeaponRocketLauncher::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -100,10 +100,10 @@ stateResult_t rvmWeaponRocketLauncher::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponRocketLauncher::Lower
+iceWeaponRocketLauncher::Lower
 ===============
 */
-stateResult_t rvmWeaponRocketLauncher::Lower( stateParms_t* parms )
+stateResult_t iceWeaponRocketLauncher::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -131,10 +131,10 @@ stateResult_t rvmWeaponRocketLauncher::Lower( stateParms_t* parms )
 }
 /*
 ===============
-rvmWeaponRocketLauncher::Idle
+iceWeaponRocketLauncher::Idle
 ===============
 */
-stateResult_t rvmWeaponRocketLauncher::Idle( stateParms_t* parms )
+stateResult_t iceWeaponRocketLauncher::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -160,10 +160,10 @@ stateResult_t rvmWeaponRocketLauncher::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponRocketLauncher::Fire
+iceWeaponRocketLauncher::Fire
 ===============
 */
-stateResult_t rvmWeaponRocketLauncher::Fire( stateParms_t* parms )
+stateResult_t iceWeaponRocketLauncher::Fire( stateParms_t* parms )
 {
 	int ammoClip = owner->AmmoInClip();
 
@@ -204,10 +204,10 @@ stateResult_t rvmWeaponRocketLauncher::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponRocketLauncher::Reload
+iceWeaponRocketLauncher::Reload
 ===============
 */
-stateResult_t rvmWeaponRocketLauncher::Reload( stateParms_t* parms )
+stateResult_t iceWeaponRocketLauncher::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{

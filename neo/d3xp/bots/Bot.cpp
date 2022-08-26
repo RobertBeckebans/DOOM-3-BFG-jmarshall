@@ -1,7 +1,35 @@
-// Bot.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
+#pragma hdrstop
+
 #include "../Game_local.h"
 
 idCVar bot_pathdebug( "bot_pathdebug", "0", CVAR_BOOL | CVAR_CHEAT, "force the bot to path to player" );
@@ -11,15 +39,15 @@ idCVar bot_showstate( "bot_showstate", "0", CVAR_BOOL | CVAR_CHEAT, "draws the b
 idCVar bot_debug( "bot_debug", "0", CVAR_BOOL, "shows debug info for the bot" );
 idCVar bot_skill( "bot_skill", "3", CVAR_INTEGER, "" );
 
-CLASS_DECLARATION( idPlayer, rvmBot )
+CLASS_DECLARATION( idPlayer, iceBot )
 END_CLASS
 
 /*
 ===================
-rvmBot::rvmBot
+iceBot::iceBot
 ===================
 */
-rvmBot::rvmBot()
+iceBot::iceBot()
 {
 	//bs.action = NULL;
 	hasSpawned = false;
@@ -28,20 +56,20 @@ rvmBot::rvmBot()
 
 /*
 ===================
-rvmBot::~rvmBot
+iceBot::~iceBot
 ===================
 */
-rvmBot::~rvmBot()
+iceBot::~iceBot()
 {
 	gameLocal.UnRegisterBot( this );
 }
 
 /*
 ==================
-rvmBot::SetEnemy
+iceBot::SetEnemy
 ==================
 */
-void rvmBot::SetEnemy( idPlayer* player, idVec3 origin )
+void iceBot::SetEnemy( idPlayer* player, idVec3 origin )
 {
 	if( bs.enemy == -1 )
 	{
@@ -55,10 +83,10 @@ void rvmBot::SetEnemy( idPlayer* player, idVec3 origin )
 
 /*
 ==================
-rvmBot::BotUpdateInventory
+iceBot::BotUpdateInventory
 ==================
 */
-void rvmBot::BotUpdateInventory()
+void iceBot::BotUpdateInventory()
 {
 	bs.inventory[INVENTORY_ARMOR]			= inventory.armor;
 	bs.inventory[INVENTORY_GAUNTLET]		= 1;
@@ -95,10 +123,10 @@ void rvmBot::BotUpdateInventory()
 
 /*
 ===================
-rvmBot::Spawn
+iceBot::Spawn
 ===================
 */
-void rvmBot::Spawn()
+void iceBot::Spawn()
 {
 	idStr botName;
 	char filename[256];
@@ -177,10 +205,10 @@ void rvmBot::Spawn()
 
 /*
 ===================
-rvmBot::Think
+iceBot::Think
 ===================
 */
-void rvmBot::BotMoveToGoalOrigin( idVec3 goalOrigin )
+void iceBot::BotMoveToGoalOrigin( idVec3 goalOrigin )
 {
 	bs.botinput.dir = ( goalOrigin - firstPersonViewOrigin );
 	idAngles desiredAngles = bs.botinput.dir.ToAngles();
@@ -202,10 +230,10 @@ void rvmBot::BotMoveToGoalOrigin( idVec3 goalOrigin )
 
 /*
 ===================
-rvmBot::SpawnToPoint
+iceBot::SpawnToPoint
 ===================
 */
-void rvmBot::SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_angles )
+void iceBot::SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_angles )
 {
 	idPlayer::SpawnToPoint( spawn_origin, spawn_angles );
 
@@ -217,10 +245,10 @@ void rvmBot::SpawnToPoint( const idVec3& spawn_origin, const idAngles& spawn_ang
 }
 /*
 ===================
-rvmBot::StateThreadChanged
+iceBot::StateThreadChanged
 ===================
 */
-void rvmBot::StateThreadChanged()
+void iceBot::StateThreadChanged()
 {
 	// Ensure if we are switching states, pop the last goal.
 	bs.ltg_time = 0;
@@ -228,10 +256,10 @@ void rvmBot::StateThreadChanged()
 
 /*
 ===================
-rvmBot::ServerThink
+iceBot::ServerThink
 ===================
 */
-void rvmBot::ServerThink()
+void iceBot::ServerThink()
 {
 	bs.origin = GetPhysics()->GetOrigin();
 	bs.eye = GetEyePosition();
@@ -296,10 +324,10 @@ void rvmBot::ServerThink()
 
 /*
 =======================
-rvmBot::Damage
+iceBot::Damage
 =======================
 */
-void rvmBot::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location )
+void iceBot::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location )
 {
 	idPlayer::Damage( inflictor, attacker, dir, damageDefName, damageScale, location );
 
@@ -323,10 +351,10 @@ void rvmBot::Damage( idEntity* inflictor, idEntity* attacker, const idVec3& dir,
 
 /*
 =======================
-rvmBot::InflictedDamageEvent
+iceBot::InflictedDamageEvent
 =======================
 */
-void rvmBot::InflictedDamageEvent( idEntity* target )
+void iceBot::InflictedDamageEvent( idEntity* target )
 {
 	idPlayer* player = target->Cast<idPlayer>();
 
@@ -339,10 +367,10 @@ void rvmBot::InflictedDamageEvent( idEntity* target )
 
 /*
 =======================
-rvmBot::PresenceTypeBoundingBox
+iceBot::PresenceTypeBoundingBox
 =======================
 */
-void rvmBot::PresenceTypeBoundingBox( int presencetype, idVec3& mins, idVec3& maxs )
+void iceBot::PresenceTypeBoundingBox( int presencetype, idVec3& mins, idVec3& maxs )
 {
 	int index;
 	//bounding box size for each presence type
@@ -381,10 +409,10 @@ void rvmBot::PresenceTypeBoundingBox( int presencetype, idVec3& mins, idVec3& ma
 
 /*
 ===================
-rvmBot::Think
+iceBot::Think
 ===================
 */
-void rvmBot::Think()
+void iceBot::Think()
 {
 	if( !hasSpawned )
 	{

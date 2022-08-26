@@ -3,6 +3,7 @@
 
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -45,6 +46,8 @@ const float	AI_FLY_DAMPENING			= 0.15f;
 const float	AI_HEARING_RANGE			= 2048.0f;
 const int	DEFAULT_FLY_OFFSET			= 68;
 
+// jmarshall begin
+
 //
 // attack flags
 //
@@ -72,6 +75,7 @@ const int	DEFAULT_FLY_OFFSET			= 68;
 #define ATTACK_ON_SIGHT			4
 
 #define ALL_PARTICLES	-1		// used with setSmokeVisibility
+// jmarshall end
 
 typedef struct ballistics_s
 {
@@ -105,6 +109,7 @@ typedef enum
 	MOVE_TO_ENEMYHEIGHT,
 	MOVE_TO_ENTITY,
 	MOVE_OUT_OF_RANGE,
+	//MOVE_TO_ATTACK_POSITION, // jmarshall
 	MOVE_TO_COVER,
 	MOVE_TO_POSITION,
 	MOVE_TO_POSITION_DIRECT,
@@ -275,17 +280,22 @@ public:
 
 	// Finds a path around dynamic obstacles.
 	static bool				FindPathAroundObstacles( const idPhysics* physics, const idAAS* aas, const idEntity* ignore, const idVec3& startPos, const idVec3& seekPos, obstaclePath_t& path );
+	
 	// Frees any nodes used for the dynamic obstacle avoidance.
 	static void				FreeObstacleAvoidanceNodes();
+	
 	// Predicts movement, returns true if a stop event was triggered.
 	static bool				PredictPath( const idEntity* ent, const idAAS* aas, const idVec3& start, const idVec3& velocity, int totalTime, int frameTime, int stopEvent, predictedPath_t& path );
+	
 	// Return true if the trajectory of the clip model is collision free.
 	static bool				TestTrajectory( const idVec3& start, const idVec3& end, float zVel, float gravity, float time, float max_height, const idClipModel* clip, int clipmask, const idEntity* ignore, const idEntity* targetEntity, int drawtime );
+	
 	// Finds the best collision free trajectory for a clip model.
 	static bool				PredictTrajectory( const idVec3& firePos, const idVec3& target, float projectileSpeed, const idVec3& projGravity, const idClipModel* clip, int clipmask, float max_height, const idEntity* ignore, const idEntity* targetEntity, int drawtime, idVec3& aimDir );
 
 	virtual void			Gib( const idVec3& dir, const char* damageDefName );
 
+// jmarshall begin
 protected:
 	virtual void			Init() { }
 
@@ -300,6 +310,7 @@ protected:
 	idScriptBool			stay_on_attackpath;		// used to disable enemy checks during attack_path
 	idScriptBool			ignore_sight;
 	idScriptBool			idle_sight_fov;
+// jmarshall end
 
 	// navigation
 	idAAS* 					aas;
@@ -422,7 +433,7 @@ protected:
 
 	bool					spawnClearMoveables;
 
-	bool					isAwake;
+	bool					isAwake; // jmarshall
 
 	idHashTable<funcEmitter_t> funcEmitters;
 
@@ -434,9 +445,9 @@ protected:
 	idScriptBool			AI_PAIN;
 	idScriptFloat			AI_SPECIAL_DAMAGE;
 	idScriptBool			AI_DEAD;
-	idScriptBool			AI_RUN;
-	idScriptBool			blocked; // its stupid they had two block states.
-	idScriptBool			AI_ATTACKING;
+	idScriptBool			AI_RUN; // jmarshall
+	idScriptBool			blocked; // jmarshall: its stupid they had two block states.
+	idScriptBool			AI_ATTACKING; // jmarshall
 	idScriptBool			AI_ENEMY_VISIBLE;
 	idScriptBool			AI_ENEMY_IN_FOV;
 	idScriptBool			AI_ENEMY_DEAD;
@@ -452,8 +463,8 @@ protected:
 	idScriptBool			AI_HIT_ENEMY;
 	idScriptBool			AI_PUSHED;
 
-	idScriptFloat			run_distance;
-	idScriptFloat			walk_turn;
+	idScriptFloat			run_distance; // jmarshall
+	idScriptFloat			walk_turn; // jmarshall
 
 	//
 	// ai/ai.cpp
@@ -466,14 +477,17 @@ protected:
 public:
 	int						ReactionTo( const idEntity* ent );
 
+// jmarshall begin
 	virtual idThread*		ConstructScriptObject();
 protected:
+	void					CallConstructor();
+
 	virtual void			AI_Begin() { };
 	virtual int				check_attacks()
 	{
 		return 0;
 	}
-	virtual void			do_attack( int attack_flags ) { }
+	virtual void			do_attack( int attack_flags ) {}
 
 	void					enemy_dead();
 
@@ -483,8 +497,7 @@ protected:
 	void					trigger_wakeup_targets();
 
 	void					sight_enemy();
-
-	void					CallConstructor();
+// jmarshall end
 
 	void					EnemyDead();
 	virtual bool			CanPlayChatterSounds() const;
@@ -535,6 +548,7 @@ protected:
 	bool					DirectMoveToPosition( const idVec3& pos );
 	bool					MoveToEnemyHeight();
 	bool					MoveOutOfRange( idEntity* entity, float range );
+	// bool					MoveToAttackPosition( idEntity* ent, int attack_anim ); // jmarshall
 	bool					MoveToEnemy();
 	bool					MoveToEntity( idEntity* ent );
 	bool					MoveToPosition( const idVec3& pos );
@@ -561,8 +575,10 @@ protected:
 	void					UpdateEnemyPosition();
 	void					SetEnemy( idActor* newEnemy );
 
+// jmarshall begin
 	bool					CanReachEntity( idEntity* ent );
 	bool					CanReachEnemy();
+// jmarshall end
 
 	// attacks
 	void					CreateProjectileClipModel() const;
@@ -586,27 +602,32 @@ protected:
 	void					UpdateParticles();
 	void					TriggerParticles( const char* jointName );
 
+// jmarshall begin
 	void					combat_lost();
 
 	idEntity*				GetCombatNode();
 
 	bool					TestAnimMove( const char* animname );
+// jmarshall end
 
 	void					TriggerFX( const char* joint, const char* fx );
 	idEntity*				StartEmitter( const char* name, const char* joint, const char* particle );
 	idEntity*				GetEmitter( const char* name );
 	void					StopEmitter( const char* name );
 
+// jmarshall begin
 	idEntity*				FindEnemyInCombatNodes();
 
 	// State utilities that are nested states.
 	stateResult_t			check_blocked( stateParms_t* parms, bool& result );
 	stateResult_t			combat_chase( stateParms_t* parms, bool& result );
+// jmarshall end
 
 	// AI script state management
 	void					LinkScriptVariables();
 	void					UpdateAIScript();
 
+// jmarshall begin
 	bool					MeleeAttackToJoint( const char* jointname, const char* meleeDefName );
 
 	idEntity*				GetClosestHiddenTarget( const char* type );
@@ -639,6 +660,7 @@ protected:
 	float					TestChargeAttack();
 
 	idVec3					GetEnemyEyePos();
+// jmarshall end
 
 	//
 	// ai/ai_events.cpp
@@ -693,6 +715,7 @@ protected:
 	void					Event_MoveToEnemy();
 	void					Event_MoveToEnemyHeight();
 	void					Event_MoveOutOfRange( idEntity* entity, float range );
+//	void					Event_MoveToAttackPosition( idEntity* entity, const char* attack_anim ); // jmarshall
 	void					Event_MoveToEntity( idEntity* ent );
 	void					Event_MoveToPosition( const idVec3& pos );
 	void					Event_SlideTo( const idVec3& pos, float time );
@@ -788,6 +811,8 @@ protected:
 	void					Event_StartEmitter( const char* name, const char* joint, const char* particle );
 	void					Event_GetEmitter( const char* name );
 	void					Event_StopEmitter( const char* name );
+	
+// jmarshall begin
 private:
 	// These are used by the lost combat state.
 	float					allow_attack;
@@ -800,6 +825,7 @@ private:
 
 	idStr					lastStateName;
 	stateParms_t			storedState;
+// jmarshall end
 };
 
 class idCombatNode : public idEntity
@@ -832,10 +858,10 @@ private:
 	void				Event_MarkUsed();
 };
 
-class rvmAI_Follower : public idAI
+class iceAI_Follower : public idAI
 {
 public:
-	CLASS_PROTOTYPE( rvmAI_Follower );
+	CLASS_PROTOTYPE( iceAI_Follower );
 
 	virtual void			Init() override;
 private:

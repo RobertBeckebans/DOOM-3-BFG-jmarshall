@@ -5,7 +5,7 @@
 #pragma hdrstop
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmWeaponObject, rvmWeaponChainGun )
+CLASS_DECLARATION( iceWeaponObject, iceWeaponChainGun )
 END_CLASS
 
 #define CHAINGUN_FIRE_SKIPFRAMES	7		// 6 shots per second
@@ -28,12 +28,12 @@ END_CLASS
 
 /*
 ===============
-rvmWeaponChainGun::Init
+iceWeaponChainGun::Init
 ===============
 */
-void rvmWeaponChainGun::Init( idWeapon* weapon )
+void iceWeaponChainGun::Init( idWeapon* weapon )
 {
-	rvmWeaponObject::Init( weapon );
+	iceWeaponObject::Init( weapon );
 
 	world_model = ( idAnimatedEntity* )owner->GetWorldModel();
 	world_barrel_joint = owner->GetAnimator()->GetJointHandle( "toob" );
@@ -52,10 +52,10 @@ void rvmWeaponChainGun::Init( idWeapon* weapon )
 
 /*
 ===============
-rvmWeaponChainGun::UpdateBarrel
+iceWeaponChainGun::UpdateBarrel
 ===============
 */
-void rvmWeaponChainGun::UpdateBarrel()
+void iceWeaponChainGun::UpdateBarrel()
 {
 	float currentTime;
 	//float t;
@@ -87,10 +87,10 @@ void rvmWeaponChainGun::UpdateBarrel()
 
 /*
 ===============
-rvmWeaponChainGun::SpinUp
+iceWeaponChainGun::SpinUp
 ===============
 */
-void rvmWeaponChainGun::SpinUp()
+void iceWeaponChainGun::SpinUp()
 {
 	start_rate = current_rate;
 	end_rate = CHAINGUN_BARREL_SPEED;
@@ -101,10 +101,10 @@ void rvmWeaponChainGun::SpinUp()
 
 /*
 ===============
-rvmWeaponChainGun::SpinDown
+iceWeaponChainGun::SpinDown
 ===============
 */
-void rvmWeaponChainGun::SpinDown()
+void iceWeaponChainGun::SpinDown()
 {
 	start_rate = current_rate;
 	end_rate = 0;
@@ -115,10 +115,10 @@ void rvmWeaponChainGun::SpinDown()
 
 /*
 ===============
-rvmWeaponChainGun::Raise
+iceWeaponChainGun::Raise
 ===============
 */
-stateResult_t rvmWeaponChainGun::Raise( stateParms_t* parms )
+stateResult_t iceWeaponChainGun::Raise( stateParms_t* parms )
 {
 	enum RisingState
 	{
@@ -147,10 +147,10 @@ stateResult_t rvmWeaponChainGun::Raise( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainGun::Lower
+iceWeaponChainGun::Lower
 ===============
 */
-stateResult_t rvmWeaponChainGun::Lower( stateParms_t* parms )
+stateResult_t iceWeaponChainGun::Lower( stateParms_t* parms )
 {
 	enum LoweringState
 	{
@@ -179,10 +179,10 @@ stateResult_t rvmWeaponChainGun::Lower( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainGun::Idle
+iceWeaponChainGun::Idle
 ===============
 */
-stateResult_t rvmWeaponChainGun::Idle( stateParms_t* parms )
+stateResult_t iceWeaponChainGun::Idle( stateParms_t* parms )
 {
 	enum IdleState
 	{
@@ -216,10 +216,10 @@ stateResult_t rvmWeaponChainGun::Idle( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainGun::Fire
+iceWeaponChainGun::Fire
 ===============
 */
-stateResult_t rvmWeaponChainGun::Fire( stateParms_t* parms )
+stateResult_t iceWeaponChainGun::Fire( stateParms_t* parms )
 {
 	float ammoClip;
 //	float currentTime;
@@ -294,10 +294,10 @@ stateResult_t rvmWeaponChainGun::Fire( stateParms_t* parms )
 
 /*
 ===============
-rvmWeaponChainGun::Reload
+iceWeaponChainGun::Reload
 ===============
 */
-stateResult_t rvmWeaponChainGun::Reload( stateParms_t* parms )
+stateResult_t iceWeaponChainGun::Reload( stateParms_t* parms )
 {
 	enum RELOAD_State
 	{

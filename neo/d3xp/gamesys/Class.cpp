@@ -4,6 +4,7 @@
 Doom 3 BFG Edition GPL Source Code
 Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
 Copyright (C) 2012 Robert Beckebans
+Copyright (C) 2021 Justin Marshall
 
 This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").
 
@@ -37,8 +38,10 @@ instancing of objects.
 #define protected	public
 #define TYPEINFO_IGNORE
 #define _ALLOW_KEYWORD_MACROS
+
+#include "precompiled.h"
 #pragma hdrstop
-#include "../precompiled.h"
+
 #include "../Game_local.h"
 #include "GameTypeInfo.h"
 
@@ -1439,5 +1442,22 @@ void idClass::ExportScriptEvents_f( const idCmdArgs& args )
 	}
 
 	delete[] set;
+}
+
+void idClass::EditLights_f( const idCmdArgs& args )
+{
+	if( g_editEntityMode.GetInteger() != 1 )
+	{
+		g_editEntityMode.SetInteger( 1 );
+
+		// turn off com_smp multithreading so we can load and check light textures on main thread
+		com_editors |= EDITOR_LIGHT;
+	}
+	else
+	{
+		g_editEntityMode.SetInteger( 0 );
+
+		com_editors &= ~EDITOR_LIGHT;
+	}
 }
 // RB end

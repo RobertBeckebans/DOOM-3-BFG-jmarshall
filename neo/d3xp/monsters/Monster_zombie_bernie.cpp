@@ -1,41 +1,66 @@
-// Monster_zombie_bernie.cpp
-//
+/*
+===========================================================================
 
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
 
 #include "../Game_local.h"
 
-CLASS_DECLARATION( rvmMonsterZombie, rvmMonsterZombieBernie )
+CLASS_DECLARATION( iceMonsterZombie, iceMonsterZombieBernie )
 END_CLASS
 
 /*
 =================
-rvmMonsterZombieBernie::Init
+iceMonsterZombieBernie::Init
 =================
 */
-void rvmMonsterZombieBernie::Init()
+void iceMonsterZombieBernie::Init()
 {
 
 }
 
 /*
 =================
-rvmMonsterZombieBernie::AI_Begin
+iceMonsterZombieBernie::AI_Begin
 =================
 */
-void rvmMonsterZombieBernie::AI_Begin()
+void iceMonsterZombieBernie::AI_Begin()
 {
 	Event_SetState( "state_Begin" );
 }
 
 /*
 =====================
-rvmMonsterZombieBernie::state_Begin
+iceMonsterZombieBernie::state_Begin
 =====================
 */
-stateResult_t rvmMonsterZombieBernie::state_Begin( stateParms_t* parms )
+stateResult_t iceMonsterZombieBernie::state_Begin( stateParms_t* parms )
 {
 	Event_AnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 8 );
 	Event_AnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 8 );
@@ -47,10 +72,10 @@ stateResult_t rvmMonsterZombieBernie::state_Begin( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieBernie::state_Idle
+iceMonsterZombieBernie::state_Idle
 =====================
 */
-stateResult_t rvmMonsterZombieBernie::state_Idle( stateParms_t* parms )
+stateResult_t iceMonsterZombieBernie::state_Idle( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -71,7 +96,7 @@ stateResult_t rvmMonsterZombieBernie::state_Idle( stateParms_t* parms )
 monster_zombie::combat_melee
 =====================
 */
-stateResult_t rvmMonsterZombieBernie::combat_melee( stateParms_t* parms )
+stateResult_t iceMonsterZombieBernie::combat_melee( stateParms_t* parms )
 {
 	if( parms->stage == 0 )
 	{
@@ -100,10 +125,10 @@ stateResult_t rvmMonsterZombieBernie::combat_melee( stateParms_t* parms )
 
 /*
 =====================
-rvmMonsterZombieBernie::check_attacks
+iceMonsterZombieBernie::check_attacks
 =====================
 */
-int rvmMonsterZombieBernie::check_attacks()
+int iceMonsterZombieBernie::check_attacks()
 {
 	int attack_flags;
 
@@ -118,10 +143,10 @@ int rvmMonsterZombieBernie::check_attacks()
 
 /*
 =====================
-rvmMonsterZombieBernie::do_attack
+iceMonsterZombieBernie::do_attack
 =====================
 */
-void rvmMonsterZombieBernie::do_attack( int attack_flags )
+void iceMonsterZombieBernie::do_attack( int attack_flags )
 {
 	if( attack_flags & ATTACK_MELEE )
 	{

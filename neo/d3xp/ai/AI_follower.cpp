@@ -1,12 +1,38 @@
-// AI_follower.cpp
-//
+/*
+===========================================================================
+
+Doom 3 BFG Edition GPL Source Code
+Copyright (C) 1993-2012 id Software LLC, a ZeniMax Media company.
+Copyright (C) 2021 Justin Marshall
+
+This file is part of the Doom 3 BFG Edition GPL Source Code ("Doom 3 BFG Edition Source Code").  
+
+Doom 3 BFG Edition Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Doom 3 BFG Edition Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Doom 3 BFG Edition Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the Doom 3 BFG Edition Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU General Public License which accompanied the Doom 3 BFG Edition Source Code.  If not, please request a copy in writing from id Software at the address below.
+
+If you have questions concerning this license or the applicable additional terms, you may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+
+===========================================================================
+*/
 
 #include "precompiled.h"
 #pragma hdrstop
 
 #include "../Game_local.h"
 
-CLASS_DECLARATION( idAI, rvmAI_Follower )
+CLASS_DECLARATION( idAI, iceAI_Follower )
 END_CLASS
 
 #define FOLLOW_MAXDIST	120
@@ -15,17 +41,17 @@ END_CLASS
 
 /*
 ================
-rvmAI_Follower::Init
+iceAI_Follower::Init
 ================
 */
-void rvmAI_Follower::Init()
+void iceAI_Follower::Init()
 {
 	inCustomAnim = false;
 	AI_RUN = false;
 
-	//float mod;
-	//mod = getIntKey("head_look");
-	//setBoneMod(mod);
+	int mod;
+	spawnArgs.GetInt( "head_look", 0, mod );
+	Event_SetJointMod( mod );
 
 	leader = NULL;
 
@@ -42,10 +68,10 @@ void rvmAI_Follower::Init()
 
 /*
 ================
-rvmAI_Follower::state_idle
+iceAI_Follower::state_idle
 ================
 */
-stateResult_t rvmAI_Follower::state_idle( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_idle( stateParms_t* parms )
 {
 	Event_StopMove();
 	Event_SetTalkTarget( NULL );
@@ -55,10 +81,10 @@ stateResult_t rvmAI_Follower::state_idle( stateParms_t* parms )
 
 /*
 ================
-rvmAI_Follower::state_idle_frame
+iceAI_Follower::state_idle_frame
 ================
 */
-stateResult_t rvmAI_Follower::state_idle_frame( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_idle_frame( stateParms_t* parms )
 {
 	if( AI_TALK )
 	{
@@ -73,10 +99,10 @@ stateResult_t rvmAI_Follower::state_idle_frame( stateParms_t* parms )
 
 /*
 ================
-rvmAI_Follower::state_idle_frame
+iceAI_Follower::state_idle_frame
 ================
 */
-stateResult_t rvmAI_Follower::state_talk_anim( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_talk_anim( stateParms_t* parms )
 {
 	if( AnimDone( ANIMCHANNEL_TORSO, 0 ) )
 	{
@@ -90,10 +116,10 @@ stateResult_t rvmAI_Follower::state_talk_anim( stateParms_t* parms )
 
 /*
 ================
-rvmAI_Follower::state_follow
+iceAI_Follower::state_follow
 ================
 */
-stateResult_t rvmAI_Follower::state_follow( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_follow( stateParms_t* parms )
 {
 	leader = talkTarget.GetEntity();
 	if( !leader )
@@ -109,10 +135,10 @@ stateResult_t rvmAI_Follower::state_follow( stateParms_t* parms )
 
 /*
 ================
-rvmAI_Follower::state_follow_frame
+iceAI_Follower::state_follow_frame
 ================
 */
-stateResult_t rvmAI_Follower::state_follow_frame( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_follow_frame( stateParms_t* parms )
 {
 	Event_LookAtEntity( leader, 0.1f );
 
@@ -143,10 +169,10 @@ stateResult_t rvmAI_Follower::state_follow_frame( stateParms_t* parms )
 
 /*
 ================
-rvmAI_Follower::state_get_closer
+iceAI_Follower::state_get_closer
 ================
 */
-stateResult_t rvmAI_Follower::state_get_closer( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_get_closer( stateParms_t* parms )
 {
 	bool switchState = !( !AI_DEST_UNREACHABLE && !AI_MOVE_DONE && ( DistanceTo( leader ) > FOLLOW_MINDIST ) );
 	if( switchState )
@@ -174,10 +200,10 @@ stateResult_t rvmAI_Follower::state_get_closer( stateParms_t* parms )
 
 /*
 ================
-rvmAI_Follower::state_killed
+iceAI_Follower::state_killed
 ================
 */
-stateResult_t rvmAI_Follower::state_killed( stateParms_t* parms )
+stateResult_t iceAI_Follower::state_killed( stateParms_t* parms )
 {
 	Event_StopMove();
 	return SRESULT_DONE;
